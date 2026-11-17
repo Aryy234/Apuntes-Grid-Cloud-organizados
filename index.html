@@ -1,0 +1,532 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computación Grid y Cloud — Apuntes</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:17px/1.7 system-ui,sans-serif;color:#203044;background:#f2f5f9}aside{position:fixed;width:285px;height:100vh;overflow:auto;background:#122b3a;color:white;padding:30px 22px}aside a{display:block;color:#d8e9f0;text-decoration:none;margin:14px 0;font-size:14px}main{margin-left:285px;max-width:1120px;padding:40px}header,article{background:white;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}h1,h2,h3{line-height:1.25;color:#124d64}h1{font-size:30px}h2{font-size:24px;margin-top:32px}h3{font-size:20px}a{color:#087795}img{max-width:100%;height:auto;border-radius:6px}figure{margin:24px 0}figcaption{font-size:12px;color:#607182}pre{padding:20px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13px/1.6 Consolas,monospace}code{font-size:.9em}p{margin:12px 0}.bullet{padding-left:16px}small{color:#607182}@media(max-width:850px){aside{position:static;width:auto;height:auto}main{margin:0;padding:14px}header,article{padding:22px}}@media print{aside{display:none}main{margin:0;padding:0}article{break-before:page}pre{white-space:pre-wrap}img{max-height:650px}}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px;text-align:left}th{background:#eef5f8}blockquote{border-left:4px solid #087795;margin:18px 0;padding:4px 18px;background:#f2f7fa}</style></head><body><aside><strong>GRID & CLOUD</strong><p>Cuaderno de clases</p><a href="#01-fundamentos">1. Fundamentos de computación en la nube</a><a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a><a href="#04-user-data">4. Automatización inicial con User Data</a><a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a><a href="#06-terraform">6. Infraestructura como código con Terraform</a><a href="#07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a><a href="#08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a></aside><main><header id="inicio"><small>CLASES HASTA EL 12 DE NOVIEMBRE DE 2026</small><h1>Computación Grid y Cloud</h1><p>Nueve temas · Actualizado el 17 de noviembre de 2026</p><p>Imágenes originales y ejemplos de clase. El taller incluye aclaraciones técnicas con sus fuentes.</p><a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a></header><article id="01-fundamentos"><h1>1. Fundamentos de computación en la nube</h1>
+<p>Clase: 15/10/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p>La computación en la nube permite acceder a recursos tecnológicos alojados en infraestructura remota. </p>
+<p>Tres conceptos principales:</p>
+<ul>
+<li>aprovisionamiento de recursos/servicios tecnológicos bajo un esquema <em>bajo demanda</em>   </li>
+<li>a <em>través de una red</em> (internet)   </li>
+<li>bajo un esquema <em>pago por uso</em></li>
+</ul>
+<h2><strong>Modelos de Servicio en la Nube:</strong></h2>
+<ul>
+<li><strong>IaaS:</strong> infraestructura como servicio: permite aprovisionar recursos tecnológicos, por ejemplo, un servidor virtual  </li>
+<li><strong>PaaS:</strong> Plataforma como servicio, me otorga una plataforma de alguna solución tecnológica, por ejemplo me brinda herramientas como base de datos, API etc etc  </li>
+<li><strong>SaaS:</strong> Software como servicio, por ejemplo el gmail, outlook, utilizado por usuarios finales</li>
+</ul>
+<p><img loading="lazy" src="imagenes/image1.png" alt="Material de clase — image1"> </p>
+<h2><strong>Modelos de Implementación.</strong></h2>
+<ul>
+<li><strong>Nube Pública:</strong> se despliega y yo puedo acceder a través de internet desde cualquier región geográfica  </li>
+<li><strong>Nube Privada:</strong> (<em>soberanía de los datos:</em> hay políticas que los datos no salgan del país) se despliega y yo puedo acceder a través de INTRANET pero solo dentro de una región geográfica y de una empresa, un ejemplo AWS outposts  </li>
+<li><strong>Nube Híbrida:</strong> mezcla de pública y privada dependiendo de los intereses del cliente   </li>
+<li><strong>Nube Comunitaria:</strong> servidores, almacenamiento, aplicaciones y servicios— que son gestionados de manera conjunta por un grupo de usuarios con intereses alineados.</li>
+</ul>
+<p><img loading="lazy" src="imagenes/image2.png" alt="Material de clase — image2"></p>
+<h2><strong>Ventajas:</strong></h2>
+<p><strong>CAPEX (Gasto de Capital - Capital Expenditure):</strong></p>
+<p>Inversión en la adquisición o mejora de activos de largo plazo para expandir el negocio.</p>
+<p>Se registra en el balance general y su costo se deprecia o amortizar gradualmente en varios años.</p>
+<p><strong>OPEX (Gasto Operativo - Operational Expenditure):</strong></p>
+<p>Costos continuos y recurrentes del día a día necesarios para mantener la operación en marcha.</p>
+<p>Se deduce por completo en el estado de resultados dentro del mismo período fiscal en que ocurre.</p>
+<h3>1. Cambiar gastos de capital por gastos variables</h3>
+<p><img loading="lazy" src="imagenes/image3.png" alt="Material de clase — image3"> </p>
+<h3>2. Economías de escala</h3>
+<p><img loading="lazy" src="imagenes/image4.png" alt="Material de clase — image4"> </p>
+<h3>3. Obtener recursos bajo demanda</h3>
+<p>Obtener recursos bajo demanda</p>
+<p><img loading="lazy" src="imagenes/image5.png" alt="Material de clase — image5"> </p>
+<h3>4. Aumentar la velocidad y la agilidad</h3>
+<p><img loading="lazy" src="imagenes/image6.png" alt="Material de clase — image6"> </p>
+<h3>5. Reducir la operación y el mantenimiento de centros de datos</h3>
+<p><img loading="lazy" src="imagenes/image7.png" alt="Material de clase — image7"> </p>
+<h3>6. Adquirir escala mundial en minutos</h3>
+<p><img loading="lazy" src="imagenes/image8.png" alt="Material de clase — image8"></p>
+</article>
+<article id="02-ec2"><h1>2. Servicios de AWS y Amazon EC2</h1>
+<p>Clase: 15/10/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<h2>Categorías:</h2>
+<p><img loading="lazy" src="imagenes/image9.png" alt="Material de clase — image9"> </p>
+<h3>Categoría Informática</h3>
+<p>Un ejemplo</p>
+<p><strong>EC2 (Amazon Elastic Compute Cloud):</strong> Servicio de computación en la nube que permite crear y administrar <strong>servidores virtuales (llamados instancias)</strong> bajo demanda con capacidad de cómputo escalable.</p>
+<ul>
+<li><p><strong>Nombre completo:</strong> Amazon Elastic Compute Cloud.</p>
+</li>
+<li><p><strong>Función principal:</strong> Permite aprovisionar máquinas virtuales en minutos con la configuración que elijas de CPU, memoria RAM, almacenamiento y sistema operativo (Linux, Windows, etc.).</p>
+</li>
+<li><p><strong>Elasticidad:</strong> Puedes aumentar o reducir la potencia y cantidad de servidores según el tráfico o la demanda de tu aplicación.</p>
+</li>
+<li><p><strong>Modelo de cobro:</strong> Pago por uso (por segundo o por hora), convirtiendo los costos de infraestructura física (CAPEX) en gastos operativos variables (OPEX).</p>
+</li>
+</ul>
+<p><strong>Los AMIs (Amazon Machine Image):</strong> son imágenes de máquina virtual preconfiguradas que incluyen el sistema operativo y el software necesario para lanzar instancias en la nube. Sirven como plantillas reutilizables para desplegar servidores idénticos de forma rápida y consistente.</p>
+<p><strong>Instancias:</strong> Son entornos virtuales o físicos donde se ejecutan las cargas de trabajo, definidos por la conformación de la familia (tipo de hardware) y el tamaño (capacidad de recursos).  </p>
+<p>La conformación determina cuántos recursos (CPU, memoria) se asignan según la familia y el tamaño elegido.</p>
+<p><strong>Familia:</strong> Define el tipo de procesador y la cantidad de memoria que tendrá la instancia, agrupando configuraciones según el caso de uso (cómputo, memoria, propósito general).  </p>
+<p>Cada familia ofrece perfiles específicos de CPU y RAM para optimizar rendimiento y costo.</p>
+<p><strong>Pares de claves:</strong> Son el mecanismo de autenticación basado en criptografía asimétrica, donde se crean una llave pública y una privada para acceder a las instancias.  </p>
+<p>La llave pública se instala en la instancia y la privada la guarda el usuario para autenticarse de forma segura sin contraseña.</p>
+<p><strong>GP e IO — aclaración:</strong> En el apartado de almacenamiento, gp2/gp3 e io1/io2 son tipos de volúmenes EBS, no familias de instancias EC2.  </p>
+<p>Los volúmenes de propósito general sirven para cargas variadas; los de IOPS aprovisionadas se orientan a cargas que requieren rendimiento de entrada/salida consistente.</p>
+<p><img loading="lazy" src="imagenes/image10.png" alt="Material de clase — image10"></p>
+</article>
+<article id="03-redes-seguridad"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
+<p>Clase: 20/10/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p><strong>VPC ID:</strong> Es el identificador único que AWS asigna a una Virtual Private Cloud, es decir, una red lógica aislada dentro de la nube donde despliegas tus recursos (servidores, bases de datos, etc.). Sirve para referenciar esa red específica en configuraciones, APIs y otros servicios. </p>
+<p><strong>Security Groups:</strong> </p>
+<p>Son firewalls virtuales que <em>controlan el tráfico de entrada y salida (se configuran)</em> de tus instancias (como EC2), permitiendo solo los puertos, protocolos y orígenes que definen. Son <em>stateful</em>: si permites una conexión de entrada, la respuesta sale automáticamente sin regla adicional.</p>
+<p><strong>Regla de entrada (Inbound):</strong> Define qué tráfico externo puede llegar a tu instancia, indicando protocolo, puerto y origen; por ejemplo, SSH (TCP puerto 22) permite conectarte de forma remota a un servidor Linux, idealmente restringido a tu IP.</p>
+<p><strong>Regla de salida (Outbound):</strong> Define qué tráfico puede salir de tu instancia hacia otros destinos (internet, otras redes o servicios); por defecto en AWS permite todo el tráfico saliente. La regla de salida que se crea por defecto es la de internet</p>
+<h2>Ampliación de clase — 2026-11-12</h2>
+<p>Última actualización: 2026-11-17</p>
+<h3>Stateful y stateless</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Comportamiento</th>
+<th>Tráfico de respuesta</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Security Group</td>
+<td>Stateful: sigue el estado de las conexiones.</td>
+<td>La respuesta de una conexión permitida se autoriza automáticamente.</td>
+</tr>
+<tr>
+<td>Network ACL</td>
+<td>Stateless: evalúa entrada y salida por separado.</td>
+<td>Deben permitirse ambos sentidos, incluidos los puertos de retorno necesarios.</td>
+</tr>
+</tbody></table>
+<h3>Permitir NFS desde otro Security Group</h3>
+<p>En el grupo del destino de montaje EFS, permite entrada TCP 2049 con el grupo de EC2 como origen. En EC2, permite la salida correspondiente. La referencia al grupo evita enumerar individualmente las IP de las instancias asociadas; también deben cumplirse las rutas y los demás controles de red.</p>
+<p><code>0.0.0.0/0</code> abarca todas las direcciones IPv4. Una regla así no crea por sí sola acceso desde Internet: también depende de la conectividad. En este taller, restringe SSH a tu IP y NFS al grupo de EC2.</p>
+<p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
+<p>Fuentes: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html">AWS: Security Groups y ACL</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: seguridad de red EFS</a>.</p>
+</article>
+<article id="04-user-data"><h1>4. Automatización inicial con User Data</h1>
+<p>Clase: 22/10/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p><strong>User Data:</strong> permite pasar un script o configuración a una instancia (en AWS EC2), que se ejecuta solo en el primer arranque.</p>
+<p><strong>Configuración:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+sudo dnf update -y
+sudo dnf install -y httpd
+sudo systemctl enable --now httpd
+IP=$(hostname -I | awk &#39;{print $1}&#39;)
+USUARIO=$(whoami)
+HOSTNAME=$(hostname)
+FECHA=$(date)
+sudo tee /var/www/html/index.html &gt; /dev/null &lt;&lt; EOF
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Mi primer servidor en AWS&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 { color: #38bdf8; }
+    p { color: #94a3b8; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;¡Hola Ariel Elizalde desde EC2!&lt;/h1&gt;
+  &lt;h1&gt;IP: $IP&lt;/h1&gt;
+  &lt;h1&gt;Usuario: $USUARIO&lt;/h1&gt;
+  &lt;h1&gt;Hostname: $HOSTNAME&lt;/h1&gt;
+  &lt;h1&gt;Fecha: $FECHA&lt;/h1&gt;
+  &lt;p&gt;Apache está funcionando en mi instancia de AWS.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+EOF
+</code></pre>
+<p> Las “instrucciones” son comandos automáticos (bash o cloud-config) como instalar paquetes, crear usuarios o levantar servicios, para que la instancia se configure sola.</p>
+<p><strong>cloud-init.log</strong> (<code>/var/log/cloud-init.log</code>): Registro detallado de los eventos internos de cloud-init, el servicio que ejecuta la configuración inicial de la instancia; sirve para diagnosticar qué etapas se ejecutaron y cuáles fallaron.</p>
+<p><strong>cloud-init-output.log</strong> (<code>/var/log/cloud-init-output.log</code>): Captura la salida estándar y los errores de los comandos de tu script de User Data; es el primero que se revisa para depurar fallos del script.</p>
+</article>
+<article id="05-herramientas-aws"><h1>5. Consola, AWS CLI y SDK</h1>
+<p>Clase: 27/10/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p><strong>Mecanismos de acceso e interacción con AWS</strong> (o <em>Herramientas de gestión e interfaces de AWS</em>)</p>
+<ul>
+<li><p><strong>AWS Web (Consola de administración):</strong> Interfaz gráfica accesible desde cualquier navegador para configurar y supervisar tus recursos visualmente. Es ideal para tareas exploratorias, monitoreo en tiempo real y administraciones manuales sin tocar la terminal.</p>
+</li>
+<li><p><strong>AWS CLI por consola:</strong> Herramienta que permite interactuar con los servicios de AWS ejecutando comandos directos en la terminal. Permite automatizar despliegues por medio de scripts y ejecutar operaciones repetitivas con rapidez.</p>
+<ul>
+<li>Configuración inicial  <ul>
+<li>access key  </li>
+<li>secret key  </li>
+<li>session token</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-bash">aws ec2 run-instances --image-id ami-XXXXXXXX --instance-type t3.micro --key-name MiKeyPair --count 1
+</code></pre>
+<ul>
+<li><p>--image-id: Sistema operativo que usará el servidor (ID de la AMI).  </p>
+</li>
+<li><p>--instance-type: Capacidad de hardware (CPU y RAM, ej. t3.micro).  </p>
+</li>
+<li><p>--key-name: Nombre de tu clave SSH registrada en AWS (sin extensión .pem).  </p>
+</li>
+<li><p>--count: Número de servidores que se van a crear.</p>
+</li>
+<li><p><strong>SDK (Software Development Kit):</strong> Conjunto de librerías para lenguajes específicos (Python, Node.js, Java) que integra AWS dentro de tus programas. Facilita que tus aplicaciones se conecten, envíen datos o controlen la infraestructura desde su propio código.</p>
+</li>
+</ul>
+</article>
+<article id="06-terraform"><h1>6. Infraestructura como código con Terraform</h1>
+<p>Clase: 05/11/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p><strong>Terraform:</strong></p>
+<p>Es una herramienta de codigo abierto, IasCodigo permite definir crear, actualizar o eliminar (CRUD) mediante archivos de configuración, el archivo principal de terraform se llama main, su archivos extension .tf, permite automatizar, de manera declarativa intensiones no el paso a paso</p>
+</article>
+<article id="07-almacenamiento"><h1>7. Almacenamiento: EBS, EFS y NFS</h1>
+<p>Clase: 10/11/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p>Categorías de Almacenamiento:</p>
+<p>Persistente: Es un almacenamiento que perdura en el tiempo</p>
+<ul>
+<li>Storage EC2:  <ul>
+<li>Amazon <strong>EBS (Elastic Block Store)</strong>, servicio de almacenamiento persistente por bloques independientes que trabajan en conjunto  <ul>
+<li><strong>gp3 o gp2</strong> (propósito general; gp3 corresponde a la tercera generación): se usa para cualquier cosa, para ámbitos generales  </li>
+<li><strong>io1 e io2</strong> (input-output de primera o segunda generación): tipos de volúmenes de alto rendimiento por ejemplo para instalar recursos como base de datos ejemplo un CRUD, optimizada para la escritura y lectura</li>
+</ul>
+</li>
+<li>Amazon <strong>EFS (Elastic File System)</strong>, servicio administrado, permite  varias instancias almacenen de manera compartida sobre este sistema de almacenamiento de red a través del protocolo NFS.  <ul>
+<li><strong>NFS</strong> (<strong>Network File System</strong> o <em>Sistema de Archivos de Red</em>) es un protocolo distribuido de nivel de aplicación basado en la arquitectura cliente-servidor, que permite a un equipo acceder, leer y escribir archivos y directorios remotos a través de una red IP como si estuvieran almacenados en su propio disco local.   </li>
+<li><img loading="lazy" src="imagenes/image11.png" alt="Material de clase — image11">  </li>
+<li>Network es un punto de acceso a cada una de las zonas de disponibilidad</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>No Persistente: (Efímero) es volátil mientras el proceso está en ejecución existe y si se termina también se termina o borra ese almacenamiento </p>
+<p>Recuerda tenemos que montar un disco cuando colocamos un nuevo disco en el servidor</p>
+<h2>Ampliación de clase — 2026-11-12</h2>
+<p>Última actualización: 2026-11-17</p>
+<h3>EBS frente a EFS</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>EBS</th>
+<th>EFS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tipo</td>
+<td>Almacenamiento en bloques.</td>
+<td>Sistema de archivos compartido.</td>
+</tr>
+<tr>
+<td>Uso en el taller</td>
+<td>Volumen de 10 GiB de la instancia 1, montado en /disco2.</td>
+<td>Mismo sistema de archivos montado en /efs1 de las dos instancias.</td>
+</tr>
+<tr>
+<td>Preparación</td>
+<td>Identificar el volumen; formatear solo si está vacío y sin sistema de archivos.</td>
+<td>Instalar amazon-efs-utils y montar por red con TLS.</td>
+</tr>
+<tr>
+<td>Acceso</td>
+<td>Volumen dedicado en este ejercicio; Multi-Attach es una opción específica de io1/io2.</td>
+<td>Varios clientes acceden a los mismos archivos mediante NFS.</td>
+</tr>
+</tbody></table>
+<h3>NFS y archivos compartidos</h3>
+<p>NFS permite montar un sistema de archivos remoto como un directorio local. Para EFS, la conectividad NFS utiliza TCP 2049. Leer desde la segunda instancia el archivo escrito en la primera verifica acceso al mismo almacenamiento, no una copia sincronizada entre discos.</p>
+<h3>Elasticidad y disponibilidad</h3>
+<p>EFS administra la infraestructura y ajusta el almacenamiento a los archivos guardados. La facturación puede incluir otros componentes además de capacidad. EFS Regional guarda datos en varias zonas de disponibilidad; EFS One Zone usa una sola. No todos los sistemas EFS tienen la misma distribución entre zonas.</p>
+<p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
+<p>Fuentes: <a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html">AWS: Multi-Attach de EBS</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</p>
+</article>
+<article id="08-practica-ebs"><h1>8. Práctica: conexión SSH y montaje de EBS</h1>
+<p>Clase: 10/11/2026</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<blockquote>
+<p>Antes de formatear, identifica el dispositivo correcto con <code>lsblk -f</code>. El comando <code>mkfs</code> elimina datos del volumen seleccionado. Los nombres de dispositivo pueden variar entre instancias.</p>
+</blockquote>
+<h2>1. Conexión a la instancia EC2</h2>
+<ol>
+<li><strong>Conectar por SSH a Amazon Linux 2023</strong><pre><code class="language-bash">ssh -i &quot;mi-primera-llaves-ae.pem&quot; ec2-user@ec2-54-87-193-187.compute-1.amazonaws.com
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Inicia una sesión remota segura por SSH hacia la instancia utilizando tu archivo de llave privada (<code>.pem</code>).</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>2. Inspección de discos disponibles</h2>
+<ol start="2">
+<li><p><strong>Listar dispositivos de bloque y tamaños</strong></p>
+<pre><code class="language-bash">lsblk
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Muestra los discos y particiones conectados al servidor con su tamaño (<code>20G</code> en <code>xvda</code> y <code>10G</code> en <code>xvdb</code>), tipo y punto de montaje.</li>
+</ul>
+</li>
+<li><p><strong>Verificar sistemas de archivos y UUID</strong></p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Lista los dispositivos junto con su tipo de sistema de archivos (<code>FSTYPE</code>), identificador <code>UUID</code> y espacio disponible. Permite comprobar que el disco nuevo (<code>xvdb</code>) está vacío y sin formato.</li>
+</ul>
+</li>
+<li><p><strong>Consultar metadatos del nuevo disco</strong></p>
+<pre><code class="language-bash">sudo blkid /dev/sdb
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Consulta el <code>UUID</code> y formato del disco <code>/dev/sdb</code>. Al estar recién creado, no devuelve información.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>3. Formateo y montaje del nuevo volumen</h2>
+<ol start="5">
+<li><p><strong>Crear el directorio de montaje</strong></p>
+<pre><code class="language-bash">sudo mkdir -p /disco2
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Crea la carpeta <code>/disco2</code> con permisos de administrador, la cual funcionará como punto de montaje para acceder al disco.</li>
+</ul>
+</li>
+<li><p><strong>Formatear el volumen con sistema de archivos XFS</strong></p>
+<pre><code class="language-bash">sudo mkfs -t xfs /dev/sdb
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Formatea el disco <code>/dev/sdb</code> asignándole el sistema de archivos <strong>XFS</strong> <em>(sin este paso previo, <code>mount</code> arroja error de superbloque/formato inválido)</em>.</li>
+</ul>
+</li>
+<li><p><strong>Montar el disco en el sistema</strong></p>
+<pre><code class="language-bash">sudo mount /dev/sdb /disco2
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Vincula el disco ya formateado dentro de <code>/disco2</code> para que el sistema operativo pueda leer y escribir en él.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>4. Verificación y prueba de escritura</h2>
+<ol start="8">
+<li><p><strong>Comprobar espacio disponible y tipo de formato</strong></p>
+<pre><code class="language-bash">df -hT
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Muestra el espacio libre y usado de todos los discos en formato legible (<code>GB</code>/<code>MB</code>) junto con su sistema de archivos (<code>xfs</code>), confirmando que <code>/disco2</code> está activo <em>(reemplaza a <code>df</code> y corrige el error de escritura <code>df -ht</code>)</em>.</li>
+</ul>
+</li>
+<li><p><strong>Crear un archivo de prueba en el volumen</strong></p>
+<pre><code class="language-bash">echo &quot;texto de prueba&quot; | sudo tee /disco2/prueba.txt
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Crea el archivo <code>prueba.txt</code> dentro del nuevo disco con permisos de administrador y escribe una línea de texto para validar la escritura.</li>
+</ul>
+</li>
+<li><p><strong>Leer el archivo creado</strong></p>
+<pre><code class="language-bash">cat /disco2/prueba.txt
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Muestra en pantalla el contenido de <code>prueba.txt</code> para confirmar que los datos se guardaron correctamente.</li>
+</ul>
+</li>
+<li><p><strong>Verificación final de montaje y formato</strong></p>
+<pre><code class="language-bash">lsblk -f
+</code></pre>
+<ul>
+<li><strong>Para qué sirve:</strong> Comprueba que <code>xvdb</code> ya cuenta con formato <code>xfs</code>, un <code>UUID</code> propio asignado y punto de montaje activo en <code>/disco2</code>.</li>
+</ul>
+</li>
+</ol>
+</article>
+<article id="09-taller-ebs-efs"><h1>9. Taller de almacenamiento EBS y EFS</h1>
+<p>Fecha de clase: 2026-11-12</p>
+<p>Última actualización: 2026-11-17</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<h2>1. Objetivo</h2>
+<p>Aprovisionar y configurar almacenamiento en bloque dedicado (<strong>Amazon EBS</strong>) y almacenamiento de archivos en red compartido (<strong>Amazon EFS</strong>) sobre instancias <strong>Amazon Linux 2023</strong>, aplicando reglas de seguridad mediante <strong>Security Groups</strong> y validando el acceso a los mismos archivos desde dos servidores EC2.</p>
+<hr>
+<h2>2. Conceptos Clave</h2>
+<ul>
+<li><strong>Amazon EBS (Elastic Block Store):</strong> Almacenamiento en bloques. En este taller se utiliza un volumen dedicado a la primera instancia. Solo se formatea si es nuevo y no contiene un sistema de archivos; existen configuraciones Multi-Attach para determinados volúmenes io1/io2.</li>
+<li><strong>Amazon EFS (Elastic File System):</strong> Sistema de archivos en red administrado basado en el protocolo <strong>NFSv4</strong> (puerto <strong>TCP 2049</strong>). Permite que <strong>múltiples instancias EC2</strong> lean y escriban los mismos archivos al mismo tiempo y crece automáticamente.</li>
+<li><strong>Security Group (Stateful):</strong> Firewall virtual con memoria (si permite entrar tráfico, deja salir la respuesta). Por seguridad, el EFS no se abre al mundo (<code>0.0.0.0/0</code>), sino únicamente al <strong>Security Group de las instancias EC2</strong>.</li>
+</ul>
+<hr>
+<h2>3. Fase 1: Configuración en la Consola Web de AWS</h2>
+<h3>A. Configurar los Security Groups (VPC / EC2)</h3>
+<ol>
+<li><strong>Security Group para las instancias EC2 (<code>sg-ec2</code>):</strong><ul>
+<li><strong>Regla de entrada:</strong> Puerto <code>22</code> (SSH) desde tu IP pública actual (<code>/32</code>) para conectarte por terminal.</li>
+</ul>
+</li>
+<li><strong>Security Group para el EFS (<code>sge-efs-ae</code>):</strong><ul>
+<li><strong>Regla de entrada:</strong> Tipo <code>NFS</code> (Puerto <code>TCP 2049</code>) poniendo como <strong>Origen</strong> el ID del Security Group de tus EC2 (<code>sg-ec2</code>).</li>
+</ul>
+</li>
+</ol>
+<h3>B. Lanzar las dos instancias EC2 (Amazon Linux 2023)</h3>
+<ol>
+<li><strong>Instancia 1 (Principal):</strong><ul>
+<li>Seleccionar <strong>Amazon Linux 2023</strong>, tipo <code>t3.micro</code> y tu par de claves (<code>.pem</code>).</li>
+<li>En <strong>Configuración de red</strong>, elegir la VPC por defecto y asignar <code>sg-ec2</code>.</li>
+<li>En <strong>Configurar almacenamiento</strong>, mantener el disco raíz (<code>8 GiB</code>) y hacer clic en <strong>Agregar nuevo volumen</strong> para añadir un disco EBS de <strong><code>10 GiB</code></strong>.</li>
+</ul>
+</li>
+<li><strong>Instancia 2 (Secundaria):</strong><ul>
+<li>Lanzar una segunda instancia <strong>Amazon Linux 2023</strong> en la <strong>misma VPC</strong>, con el <strong>mismo Security Group (<code>sg-ec2</code>)</strong> y la misma llave <code>.pem</code>.</li>
+</ul>
+</li>
+</ol>
+<h3>C. Crear el Sistema de Archivos EFS</h3>
+<ol>
+<li>Ir al servicio <strong>Amazon EFS</strong> en la consola de AWS y hacer clic en <strong>Crear sistema de archivos</strong>.</li>
+<li>Asignar un nombre, seleccionar la <strong>misma VPC</strong> de las instancias EC2 y hacer clic en <strong>Personalizar</strong>.</li>
+<li>En el paso de <strong>Acceso a la red</strong>, reemplazar el Security Group por defecto de cada Zona de Disponibilidad por el grupo <strong><code>sge-efs-ae</code></strong> (puerto 2049 abierto).</li>
+<li>Finalizar la creación y copiar el <strong>ID del sistema de archivos</strong> (ejemplo: <code>fs-02d737f8f33137fd6</code>).</li>
+</ol>
+<hr>
+<blockquote>
+<p><strong>Requisitos de red:</strong> verifica que existan destinos de montaje EFS disponibles en las zonas usadas por las instancias, que DNS funcione y que las reglas de salida de EC2 permitan TCP 2049 hacia EFS.</p>
+</blockquote>
+<h2>4. Fase 2: Formatear y Montar el Disco EBS (10 GB) en Instancia 1</h2>
+<p>Conéctate por SSH a la <strong>Instancia 1</strong> y ejecuta los siguientes comandos:</p>
+<ol>
+<li><p><strong>Identificar el nombre del disco nuevo de 10 GB:</strong></p>
+<pre><code class="language-bash">lsblk
+lsblk -f
+</code></pre>
+<blockquote>
+<p><em>Nota:</em> En instancias <code>t3</code>, los volúmenes se presentan como dispositivos NVMe. <code>/dev/nvme1n1</code> es solo el nombre del ejemplo: confirma el dispositivo y su tamaño con <code>lsblk</code> y el sistema de archivos con <code>lsblk -f</code> antes de continuar.</p>
+</blockquote>
+</li>
+<li><p><strong>Crear la carpeta que servirá como punto de montaje:</strong></p>
+<pre><code class="language-bash">sudo mkdir -p /disco2
+</code></pre>
+</li>
+<li><p><strong>Formatear únicamente el volumen nuevo y vacío con XFS:</strong></p>
+<blockquote>
+<p><code>mkfs</code> puede destruir los datos existentes. No lo ejecutes sobre el disco raíz ni sobre un volumen que ya contenga datos. Sustituye el dispositivo del ejemplo por el que hayas identificado.</p>
+</blockquote>
+<pre><code class="language-bash">sudo mkfs -t xfs /dev/nvme1n1
+</code></pre>
+<blockquote>
+<p><em>Importante:</em> Un volumen nuevo sin sistema de archivos necesita formateo para este uso. Uno restaurado desde una instantánea puede estar ya formateado: no lo vuelvas a formatear.</p>
+</blockquote>
+</li>
+<li><p><strong>Montar el disco en la carpeta <code>/disco2</code>:</strong></p>
+<pre><code class="language-bash">sudo mount /dev/nvme1n1 /disco2
+</code></pre>
+</li>
+<li><p><strong>Comprobar el montaje y realizar prueba de escritura:</strong></p>
+<pre><code class="language-bash">df -hT
+echo &quot;texto de prueba&quot; | sudo tee /disco2/prueba.txt
+cat /disco2/prueba.txt
+</code></pre>
+</li>
+</ol>
+<hr>
+<h2>5. Fase 3: Instalar y Montar Amazon EFS en Instancia 1</h2>
+<p>En la misma terminal SSH de la <strong>Instancia 1</strong>:</p>
+<ol>
+<li><p><strong>Instalar la librería oficial de utilidades EFS y crear la carpeta <code>/efs1</code>:</strong></p>
+<pre><code class="language-bash">sudo dnf install -y amazon-efs-utils
+sudo mkdir -p /efs1
+</code></pre>
+</li>
+<li><p><strong>Montar el EFS usando su ID (cifrado con TLS):</strong></p>
+<p>El ID mostrado es el ejemplo de clase. Sustitúyelo en ambas instancias por el ID de tu sistema de archivos.</p>
+<pre><code class="language-bash">sudo mount -t efs -o tls fs-02d737f8f33137fd6:/ /efs1
+</code></pre>
+</li>
+<li><p><strong>Verificar el montaje y crear un archivo compartido:</strong></p>
+<pre><code class="language-bash">df -hT /efs1
+echo &quot;Hola desde EC2 en Amazon EFS&quot; | sudo tee /efs1/prueba.txt
+cat /efs1/prueba.txt
+</code></pre>
+</li>
+</ol>
+<hr>
+<h2>6. Fase 4: Conectar la Instancia 2 y Comprobar el Acceso Compartido</h2>
+<p>Abre una segunda ventana de terminal, conéctate por SSH a la <strong>Instancia 2</strong> y enlázala al mismo EFS:</p>
+<ol>
+<li><p><strong>Instalar utilidades EFS, crear <code>/efs1</code> y montar el mismo EFS:</strong></p>
+<pre><code class="language-bash">sudo dnf install -y amazon-efs-utils
+sudo mkdir -p /efs1
+sudo mount -t efs -o tls fs-02d737f8f33137fd6:/ /efs1
+</code></pre>
+</li>
+<li><p><strong>Listar y leer el archivo creado desde la Instancia 1:</strong></p>
+<pre><code class="language-bash">ls -la /efs1
+cat /efs1/prueba.txt
+</code></pre>
+</li>
+<li><p><strong>Escribir desde la Instancia 2 para validar lectura y escritura compartidas:</strong></p>
+<pre><code class="language-bash">echo &quot;Hola desde la segunda instancia&quot; | sudo tee -a /efs1/prueba.txt
+cat /efs1/prueba.txt
+</code></pre>
+<blockquote>
+<p>Al ejecutar <code>cat /efs1/prueba.txt</code> nuevamente en la <strong>Instancia 1</strong>, deben verse ambas líneas tras completar la escritura. Se accede al mismo sistema de archivos; no se sincronizan dos discos locales.</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2>7. Resumen de Comandos Útiles de Verificación</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Comando</th>
+<th align="left">Función</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>lsblk -f</code></td>
+<td align="left">Lista discos conectados, formato (<code>xfs</code>), <code>UUID</code> y puntos de montaje.</td>
+</tr>
+<tr>
+<td align="left"><code>df -hT</code></td>
+<td align="left">Muestra el espacio usado/disponible en GB/MB y el tipo de sistema (<code>xfs</code>, <code>nfs4</code>).</td>
+</tr>
+<tr>
+<td align="left"><code>ls -la /efs1</code></td>
+<td align="left">Lista todos los archivos (incluidos ocultos) y permisos dentro del EFS.</td>
+</tr>
+<tr>
+<td align="left"><code>cat /efs1/prueba.txt</code></td>
+<td align="left">Muestra en pantalla el contenido del archivo de texto.</td>
+</tr>
+</tbody></table>
+<h2>8. Alcance del taller</h2>
+<p>Los comandos realizan montajes manuales. Para volver a montar automáticamente después de un reinicio se requiere una configuración adicional, como <code>/etc/fstab</code>. Un montaje manual no implica que los datos almacenados se borren al reiniciar.</p>
+<h2>9. Conceptos relacionados</h2>
+<ul>
+<li><a href="#03-redes-seguridad">Stateful, stateless y reglas entre Security Groups</a>.</li>
+<li><a href="#07-almacenamiento">Comparación entre EBS, EFS y NFS</a>.</li>
+</ul>
+<h2>Fuentes de las aclaraciones</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-using-volumes.html">AWS: preparar y montar volúmenes EBS</a>.</li>
+<li><a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: reglas de red para EFS</a>.</li>
+<li><a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</li>
+</ul>
+</article></main></body></html>
