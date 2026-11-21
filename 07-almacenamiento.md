@@ -45,3 +45,27 @@ EFS administra la infraestructura y ajusta el almacenamiento a los archivos guar
 [Ver taller completo](09-taller-ebs-efs.md).
 
 Fuentes: [AWS: Multi-Attach de EBS](https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html), [AWS: destinos de montaje EFS](https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html).
+
+---
+
+## Complemento — Curso AWS Academy (Módulos 2 y 4)
+
+*(Apuntes del curso oficial de AWS Academy que complementan los conceptos de almacenamiento).*
+
+### 1. ¿Qué es un Bucket de Amazon S3? (Resolución de consulta — Módulo 4)
+
+*(En el Módulo 4 surgió la duda: «¿qué es eso de bucket de S3?» al estudiar políticas basadas en recursos).*
+
+* **Amazon S3 (Simple Storage Service):** Es el servicio de **almacenamiento de objetos** de AWS (a diferencia de EBS que guarda *bloques* y EFS que guarda *archivos en red NFS*). Sirve para guardar cualquier tipo de archivo (imágenes, copias de seguridad, logs, videos) desde cualquier lugar por Internet.
+* **Bucket («cubeta» o contenedor):** Es la carpeta raíz o contenedor principal donde guardas tus archivos (objetos) dentro de Amazon S3.
+  * Cada bucket tiene un **nombre único a nivel mundial** (ej. `mis-apuntes-cloud-2026`).
+  * Por defecto es **totalmente privado**, pero permite adjuntarle directamente una **política basada en recursos** (*Bucket Policy*) para definir quién puede leer o subir archivos en él.
+
+### 2. Cifrado de datos en reposo (Módulo 4)
+
+* **Datos en reposo:** Son los datos almacenados físicamente en un medio persistente (como un volumen **EBS**, un sistema **EFS** o un bucket de **S3**).
+* **Cómo se protegen:** El cifrado codifica los datos con una **clave secreta** (administrada mediante **AWS KMS**) para que sean ilegibles en disco; solo quien posea permisos sobre esa clave puede descifrarlos y leerlos.
+
+### 3. Modelo de cobro del almacenamiento (Módulo 2)
+
+* En AWS el almacenamiento se factura principalmente **por GB almacenado al mes** (según el tipo de disco o clase de almacenamiento), más posibles cargos por solicitudes o transferencia de datos hacia fuera de la región.

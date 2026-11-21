@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computación Grid y Cloud — Apuntes</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:17px/1.7 system-ui,sans-serif;color:#203044;background:#f2f5f9}aside{position:fixed;width:285px;height:100vh;overflow:auto;background:#122b3a;color:white;padding:30px 22px}aside a{display:block;color:#d8e9f0;text-decoration:none;margin:14px 0;font-size:14px}main{margin-left:285px;max-width:1120px;padding:40px}header,article{background:white;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}h1,h2,h3{line-height:1.25;color:#124d64}h1{font-size:30px}h2{font-size:24px;margin-top:32px}h3{font-size:20px}a{color:#087795}img{max-width:100%;height:auto;border-radius:6px}figure{margin:24px 0}figcaption{font-size:12px;color:#607182}pre{padding:20px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13px/1.6 Consolas,monospace}code{font-size:.9em}p{margin:12px 0}.bullet{padding-left:16px}small{color:#607182}@media(max-width:850px){aside{position:static;width:auto;height:auto}main{margin:0;padding:14px}header,article{padding:22px}}@media print{aside{display:none}main{margin:0;padding:0}article{break-before:page}pre{white-space:pre-wrap}img{max-height:650px}}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px;text-align:left}th{background:#eef5f8}blockquote{border-left:4px solid #087795;margin:18px 0;padding:4px 18px;background:#f2f7fa}</style></head><body><aside><strong>GRID & CLOUD</strong><p>Cuaderno de clases</p><a href="#01-fundamentos">1. Fundamentos de computación en la nube</a><a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a><a href="#04-user-data">4. Automatización inicial con User Data</a><a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a><a href="#06-terraform">6. Infraestructura como código con Terraform</a><a href="#07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a><a href="#08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a></aside><main><header id="inicio"><small>CLASES HASTA EL 12 DE NOVIEMBRE DE 2026</small><h1>Computación Grid y Cloud</h1><p>Nueve temas · Actualizado el 17 de noviembre de 2026</p><p>Imágenes originales y ejemplos de clase. El taller incluye aclaraciones técnicas con sus fuentes.</p><a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a></header><article id="01-fundamentos"><h1>1. Fundamentos de computación en la nube</h1>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computación Grid y Cloud — Apuntes</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:17px/1.7 system-ui,sans-serif;color:#203044;background:#f2f5f9}aside{position:fixed;width:285px;height:100vh;overflow:auto;background:#122b3a;color:white;padding:30px 22px}aside a{display:block;color:#d8e9f0;text-decoration:none;margin:14px 0;font-size:14px}main{margin-left:285px;max-width:1120px;padding:40px}header,article{background:white;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}h1,h2,h3{line-height:1.25;color:#124d64}h1{font-size:30px}h2{font-size:24px;margin-top:32px}h3{font-size:20px}a{color:#087795}img{max-width:100%;height:auto;border-radius:6px}figure{margin:24px 0}figcaption{font-size:12px;color:#607182}pre{padding:20px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13px/1.6 Consolas,monospace}code{font-size:.9em}p{margin:12px 0}.bullet{padding-left:16px}small{color:#607182}@media(max-width:850px){aside{position:static;width:auto;height:auto}main{margin:0;padding:14px}header,article{padding:22px}}@media print{aside{display:none}main{margin:0;padding:0}article{break-before:page}pre{white-space:pre-wrap}img{max-height:650px}}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px;text-align:left}th{background:#eef5f8}blockquote{border-left:4px solid #087795;margin:18px 0;padding:4px 18px;background:#f2f7fa}.diagram-box{background:#f8fbfd;border:1px solid #dce4eb;border-radius:10px;padding:18px;margin:18px 0;overflow-x:auto}</style></head><body><aside><strong>GRID & CLOUD</strong><p>Cuaderno de clases</p><a href="#01-fundamentos">1. Fundamentos de computación en la nube</a><a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a><a href="#04-user-data">4. Automatización inicial con User Data</a><a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a><a href="#06-terraform">6. Infraestructura como código con Terraform</a><a href="#07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a><a href="#08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a><a href="#10-economia-facturacion">10. Economía, Facturación y Soporte (Curso AWS)</a><a href="#11-seguridad-iam">11. Seguridad, IAM y Gobernanza (Curso AWS)</a></aside><main><header id="inicio"><small>CLASES Y CURSO AWS HASTA EL 21 DE NOVIEMBRE DE 2026</small><h1>Computación Grid y Cloud</h1><p>Once temas · Actualizado el 21 de noviembre de 2026</p><p>Incluye apuntes de clase, talleres prácticos e integración clasificada de los Módulos 1 al 4 del Curso de AWS Academy.</p><a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a></header><article id="01-fundamentos"><h1>1. Fundamentos de computación en la nube</h1>
 <p>Clase: 15/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <p>La computación en la nube permite acceder a recursos tecnológicos alojados en infraestructura remota. </p>
@@ -43,6 +43,53 @@
 <p><img loading="lazy" src="imagenes/image7.png" alt="Material de clase — image7"> </p>
 <h3>6. Adquirir escala mundial en minutos</h3>
 <p><img loading="lazy" src="imagenes/image8.png" alt="Material de clase — image8"></p>
+<hr>
+<h2>Complemento — Curso AWS Academy (Módulos 1 y 3)</h2>
+<p><em>(Apuntes del curso oficial de AWS Academy que complementan los fundamentos de computación en la nube).</em></p>
+<h3>1. ¿Qué es un Servicio Web? (Módulo 1)</h3>
+<p>Es cualquier software disponible a través de Internet que se comunica mediante un formato estandarizado (como <strong>XML</strong> o <strong>JSON</strong>) para enviar solicitudes y recibir respuestas a través de una <strong>API</strong> (Interfaz de Programación de Aplicaciones).</p>
+<h3>2. Marco de Adopción de la Nube de AWS — AWS CAF (Módulo 1)</h3>
+<p>El <strong>AWS Cloud Adoption Framework (CAF)</strong> organiza la transición a la nube en <strong>6 perspectivas</strong> divididas en dos bloques:</p>
+<table>
+<thead>
+<tr><th>Bloque</th><th>Perspectiva</th><th>Enfoque principal</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Capacidades empresariales</strong></td><td><strong>Negocio</strong></td><td>Alinear la tecnología con las necesidades y objetivos del negocio.</td></tr>
+<tr><td></td><td><strong>Personas (Gente)</strong></td><td>Formación técnica, cultura organizacional y dotación de personal.</td></tr>
+<tr><td></td><td><strong>Gobernanza</strong></td><td>Controlar riesgos, costos y cumplimiento de objetivos empresariales.</td></tr>
+<tr><td><strong>Capacidades técnicas</strong></td><td><strong>Plataforma</strong></td><td>Diseñar, entender y comunicar la arquitectura de los sistemas en la nube.</td></tr>
+<tr><td></td><td><strong>Seguridad</strong></td><td>Cumplir los objetivos de confidencialidad, integridad y protección de datos.</td></tr>
+<tr><td></td><td><strong>Operaciones</strong></td><td>Definir cómo se ejecuta, monitorea y mantiene el negocio día a día.</td></tr>
+</tbody>
+</table>
+<h3>3. Infraestructura Global de AWS (Módulo 3)</h3>
+<p><em>(Complementa la ventaja 6: «Adquirir escala mundial en minutos»).</em></p>
+<ul>
+<li><strong>Región de AWS:</strong> Área geográfica física e independiente del mundo (ej. <code>us-east-1</code>).<ul>
+<li>Cada región contiene varias Zonas de Disponibilidad.</li>
+<li>Se comunican entre sí mediante una red troncal privada de fibra óptica de AWS.</li>
+<li><strong>Importante:</strong> La replicación de datos entre regiones <strong>no es automática</strong>; la controla y configura el cliente según sus necesidades.</li>
+</ul></li>
+<li><strong>Zona de Disponibilidad (AZ — Availability Zone):</strong> Partición completamente aislada de la infraestructura dentro de una Región.<ul>
+<li>Está formada por <strong>uno o más centros de datos discretos</strong> interconectados con enlaces privados de alta velocidad y baja latencia.</li>
+<li>Están diseñadas para <strong>aislar fallos</strong>: si una zona falla, las demás siguen operando.</li>
+<li><em>Recomendación:</em> Desplegar recursos y replicar datos en al menos <strong>dos Zonas de Disponibilidad</strong> para lograr alta resiliencia.</li>
+</ul></li>
+<li><strong>Centros de datos de AWS:</strong> Instalaciones físicas seguras donde se almacenan y procesan los datos. Cuentan con energía, refrigeración, redes y conectividad redundantes.</li>
+<li><strong>Ubicaciones de borde (Edge Locations) y Amazon CloudFront:</strong><ul>
+<li><strong>Amazon CloudFront:</strong> Red de entrega de contenido (<strong>CDN</strong>) que distribuye archivos, videos o páginas a usuarios finales con <strong>baja latencia</strong>.</li>
+<li><strong>Ubicaciones de borde:</strong> Cientos de puntos distribuidos en ciudades de todo el mundo (incluso en países donde no existe una Región de AWS) para guardar copias en caché cerca del usuario.</li>
+<li><strong>Cachés de borde regionales:</strong> Almacenan contenido de acceso menos frecuente para no tener que ir hasta el servidor de origen.</li>
+</ul></li>
+</ul>
+<h3>4. Características clave de la infraestructura en la nube (Módulo 3)</h3>
+<ul>
+<li><strong>Elasticidad:</strong> Capacidad de <strong>aumentar o reducir automáticamente</strong> los recursos de forma dinámica según la demanda en tiempo real.</li>
+<li><strong>Escalabilidad:</strong> Capacidad de un sistema para <strong>admitir el crecimiento</strong> planificado sin perder rendimiento (agregando más servidores o potenciando los existentes).</li>
+<li><strong>Tolerancia a fallos (errores):</strong> Capacidad de seguir funcionando sin interrupción aunque falle uno de sus componentes internos, gracias a la <strong>redundancia integrada</strong>.</li>
+<li><strong>Alta disponibilidad:</strong> Garantía de que el sistema permanezca operativo y accesible (cerca del 24/7) con un tiempo de inactividad mínimo ante cualquier circunstancia.</li>
+</ul>
 </article>
 <article id="02-ec2"><h1>2. Servicios de AWS y Amazon EC2</h1>
 <p>Clase: 15/10/2026</p>
@@ -53,14 +100,10 @@
 <p>Un ejemplo</p>
 <p><strong>EC2 (Amazon Elastic Compute Cloud):</strong> Servicio de computación en la nube que permite crear y administrar <strong>servidores virtuales (llamados instancias)</strong> bajo demanda con capacidad de cómputo escalable.</p>
 <ul>
-<li><p><strong>Nombre completo:</strong> Amazon Elastic Compute Cloud.</p>
-</li>
-<li><p><strong>Función principal:</strong> Permite aprovisionar máquinas virtuales en minutos con la configuración que elijas de CPU, memoria RAM, almacenamiento y sistema operativo (Linux, Windows, etc.).</p>
-</li>
-<li><p><strong>Elasticidad:</strong> Puedes aumentar o reducir la potencia y cantidad de servidores según el tráfico o la demanda de tu aplicación.</p>
-</li>
-<li><p><strong>Modelo de cobro:</strong> Pago por uso (por segundo o por hora), convirtiendo los costos de infraestructura física (CAPEX) en gastos operativos variables (OPEX).</p>
-</li>
+<li><p><strong>Nombre completo:</strong> Amazon Elastic Compute Cloud.</p></li>
+<li><p><strong>Función principal:</strong> Permite aprovisionar máquinas virtuales en minutos con la configuración que elijas de CPU, memoria RAM, almacenamiento y sistema operativo (Linux, Windows, etc.).</p></li>
+<li><p><strong>Elasticidad:</strong> Puedes aumentar o reducir la potencia y cantidad de servidores según el tráfico o la demanda de tu aplicación.</p></li>
+<li><p><strong>Modelo de cobro:</strong> Pago por uso (por segundo o por hora), convirtiendo los costos de infraestructura física (CAPEX) en gastos operativos variables (OPEX).</p></li>
 </ul>
 <p><strong>Los AMIs (Amazon Machine Image):</strong> son imágenes de máquina virtual preconfiguradas que incluyen el sistema operativo y el software necesario para lanzar instancias en la nube. Sirven como plantillas reutilizables para desplegar servidores idénticos de forma rápida y consistente.</p>
 <p><strong>Instancias:</strong> Son entornos virtuales o físicos donde se ejecutan las cargas de trabajo, definidos por la conformación de la familia (tipo de hardware) y el tamaño (capacidad de recursos).  </p>
@@ -72,6 +115,27 @@
 <p><strong>GP e IO — aclaración:</strong> En el apartado de almacenamiento, gp2/gp3 e io1/io2 son tipos de volúmenes EBS, no familias de instancias EC2.  </p>
 <p>Los volúmenes de propósito general sirven para cargas variadas; los de IOPS aprovisionadas se orientan a cargas que requieren rendimiento de entrada/salida consistente.</p>
 <p><img loading="lazy" src="imagenes/image10.png" alt="Material de clase — image10"></p>
+<hr>
+<h2>Complemento — Curso AWS Academy (Módulo 2)</h2>
+<p><em>(Apuntes del curso oficial de AWS Academy que complementan el cobro y reserva de instancias EC2).</em></p>
+<h3>1. Cómo se cobra Amazon EC2 (Informática)</h3>
+<ul>
+<li><strong>Por tiempo de ejecución:</strong> Se factura por <strong>hora o por segundo</strong> (según el sistema operativo), únicamente mientras la instancia está en estado activo (<em>running</em>).</li>
+<li><strong>Por tipo de instancia:</strong> El precio varía según la familia, cantidad de vCPU, memoria RAM y región seleccionada.</li>
+</ul>
+<h3>2. Modalidades de pago de Instancias Reservadas (1 o 3 años)</h3>
+<p>Al comprometerse a usar EC2 por <strong>1 o 3 años</strong>, AWS ofrece importantes descuentos frente al pago bajo demanda (<em>On-Demand</em>). A mayor pago inicial, mayor es el descuento:</p>
+<table>
+<thead>
+<tr><th>Sigla</th><th>Nombre completo</th><th>Cómo funciona</th><th>Nivel de descuento</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>AURI</strong></td><td><em>All Upfront Reserved Instance</em> (Pago inicial completo)</td><td>Se paga el <strong>100 %</strong> de la reserva al inicio del contrato.</td><td><strong>Máximo descuento</strong></td></tr>
+<tr><td><strong>PURI</strong></td><td><em>Partial Upfront Reserved Instance</em> (Pago inicial parcial)</td><td>Se paga una parte por adelantado y el resto en cuotas mensuales.</td><td><strong>Descuento intermedio</strong></td></tr>
+<tr><td><strong>NURI</strong></td><td><em>No Upfront Reserved Instance</em> (Sin pago inicial)</td><td><strong>$0</strong> de pago inicial; todo se divide en cuotas mensuales durante el plazo.</td><td><strong>Descuento menor</strong> (pero superior a bajo demanda)</td></tr>
+</tbody>
+</table>
+<blockquote><p><strong>Nota sobre el Panel de Amazon EC2:</strong> El panel de EC2 solo muestra el <strong>estado operativo actual</strong> de tus instancias, volúmenes y límites en esa región. <strong>No</strong> sirve para consultar historiales de facturación (para eso se utiliza <strong>AWS Cost Explorer</strong>).</p></blockquote>
 </article>
 <article id="03-redes-seguridad"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
 <p>Clase: 20/10/2026</p>
@@ -108,6 +172,30 @@
 <p><code>0.0.0.0/0</code> abarca todas las direcciones IPv4. Una regla así no crea por sí sola acceso desde Internet: también depende de la conectividad. En este taller, restringe SSH a tu IP y NFS al grupo de EC2.</p>
 <p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
 <p>Fuentes: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html">AWS: Security Groups y ACL</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: seguridad de red EFS</a>.</p>
+<hr>
+<h2>Complemento — Curso AWS Academy (Módulo 4: Seguridad de red y datos)</h2>
+<p><em>(Apuntes del curso oficial de AWS Academy que complementan la seguridad de red y protección de aplicaciones. Para identidad, permisos IAM y gobernanza, consulta el tema <a href="#11-seguridad-iam">11. Seguridad, IAM y Gobernanza en AWS</a>).</em></p>
+<h3>1. Ubicación de VPC y Security Groups en el Modelo de Responsabilidad Compartida</h3>
+<ul>
+<li><strong>Responsabilidad del cliente (Seguridad «EN» la nube):</strong> Configurar correctamente los <strong>Security Groups</strong>, las reglas de firewall, las tablas de ruteo de la VPC, el sistema operativo y el cifrado de los datos.</li>
+<li><strong>Responsabilidad de AWS (Seguridad «DE» la nube):</strong> Proteger el cableado físico, los switches, routers físicos y los centros de datos donde corre la red virtual.</li>
+</ul>
+<h3>2. Cifrado de datos en tránsito: TLS, HTTP y HTTPS</h3>
+<p><em>(Resolución de la nota de investigación del Módulo 4 sobre datos que viajan por la red).</em></p>
+<ul>
+<li><strong>Datos en tránsito:</strong> Son todos los datos que se están moviendo activamente a través de una red (por ejemplo, entre el navegador de un cliente y tu instancia EC2, o entre una EC2 y Amazon EFS).</li>
+<li><strong>TLS (Transport Layer Security):</strong> Es el protocolo estándar abierto (sucesor de SSL) que <strong>cifra la comunicación en red</strong> extremo a extremo para que nadie pueda interceptar ni alterar la información en el camino. <em>(En el taller 09 lo usamos al montar EFS con <code>-o tls</code>)</em>.</li>
+<li><strong>HTTP vs. HTTPS:</strong><ul>
+<li><strong>HTTP</strong> (<em>Hypertext Transfer Protocol</em> — Puerto <strong>TCP 80</strong>): Envía la información en <strong>texto plano</strong> sin cifrar; cualquiera que intercepte la red puede leer contraseñas o datos.</li>
+<li><strong>HTTPS</strong> (<em>HTTP Secure</em> — Puerto <strong>TCP 443</strong>): Es exactamente HTTP pero protegido por una capa de <strong>TLS</strong>. Cifra todo el tráfico entre el usuario y el servidor y verifica la identidad del sitio mediante certificados digitales.</li>
+</ul></li>
+</ul>
+<h3>3. AWS Shield (Protección de red contra ataques DDoS)</h3>
+<ul>
+<li><strong>¿Qué es?</strong> Servicio administrado de protección contra ataques de <strong>Denegación de Servicio Distribuido (DDoS)</strong> <em>(corregido de «DDoD» en el apunte original)</em>.</li>
+<li><strong>Cómo funciona:</strong> Monitorea el tráfico de red de forma permanente y aplica mitigaciones automáticas e inmediatas para evitar que tráfico malicioso sature tus servidores, minimizando la latencia y el tiempo de inactividad.</li>
+<li><strong>Niveles:</strong> <em>AWS Shield Standard</em> (gratuito y activo por defecto en todas las cuentas) y <em>AWS Shield Advanced</em> (protección avanzada de pago).</li>
+</ul>
 </article>
 <article id="04-user-data"><h1>4. Automatización inicial con User Data</h1>
 <p>Clase: 22/10/2026</p>
@@ -192,6 +280,20 @@ EOF
 <li><p><strong>SDK (Software Development Kit):</strong> Conjunto de librerías para lenguajes específicos (Python, Node.js, Java) que integra AWS dentro de tus programas. Facilita que tus aplicaciones se conecten, envíen datos o controlen la infraestructura desde su propio código.</p>
 </li>
 </ul>
+<hr>
+<h2>Complemento — Curso AWS Academy (Módulos 1 y 4)</h2>
+<p><em>(Apuntes del curso oficial de AWS Academy que complementan los mecanismos de acceso e interacción).</em></p>
+<h3>Tipos de credenciales y acceso para un usuario IAM (Módulo 4)</h3>
+<p>Cuando se crea un usuario en AWS IAM, se le pueden habilitar dos formas de acceso independientes, cada una con sus propias credenciales:</p>
+<table>
+<thead>
+<tr><th>Tipo de acceso</th><th>Herramientas que habilita</th><th>Credenciales requeridas</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Acceso a la Consola de Administración</strong></td><td>Navegador web (interfaz gráfica de AWS).</td><td>1. <strong>ID de cuenta</strong> (12 dígitos) o alias.<br>2. <strong>Nombre de usuario IAM</strong>.<br>3. <strong>Contraseña IAM</strong>.<br>4. <em>(Recomendado)</em> Código <strong>MFA</strong> (autenticación multifactor).</td></tr>
+<tr><td><strong>Acceso mediante programación</strong></td><td><strong>AWS CLI</strong>, <strong>AWS SDK</strong> y llamadas directas a la <strong>API</strong> (en formato XML/JSON).</td><td>1. <strong>ID de clave de acceso</strong> (<em>Access Key ID</em>).<br>2. <strong>Clave de acceso secreta</strong> (<em>Secret Access Key</em>). <em>(Nota: en el apunte original figuraba como «clave remota», su nombre oficial es <strong>Secret Access Key</strong>)</em>.</td></tr>
+</tbody>
+</table>
 </article>
 <article id="06-terraform"><h1>6. Infraestructura como código con Terraform</h1>
 <p>Clase: 05/11/2026</p>
@@ -260,6 +362,26 @@ EOF
 <p>EFS administra la infraestructura y ajusta el almacenamiento a los archivos guardados. La facturación puede incluir otros componentes además de capacidad. EFS Regional guarda datos en varias zonas de disponibilidad; EFS One Zone usa una sola. No todos los sistemas EFS tienen la misma distribución entre zonas.</p>
 <p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
 <p>Fuentes: <a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html">AWS: Multi-Attach de EBS</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</p>
+<hr>
+<h2>Complemento — Curso AWS Academy (Módulos 2 y 4)</h2>
+<p><em>(Apuntes del curso oficial de AWS Academy que complementan los conceptos de almacenamiento).</em></p>
+<h3>1. ¿Qué es un Bucket de Amazon S3? (Resolución de consulta — Módulo 4)</h3>
+<ul>
+<li><strong>Amazon S3 (Simple Storage Service):</strong> Servicio de <strong>almacenamiento de objetos</strong> de AWS (a diferencia de EBS que guarda <em>bloques</em> y EFS que guarda <em>archivos en red NFS</em>). Sirve para guardar cualquier tipo de archivo (imágenes, copias de seguridad, logs, videos) desde cualquier lugar por Internet.</li>
+<li><strong>Bucket («cubeta» o contenedor):</strong> Es la carpeta raíz o contenedor principal donde guardas tus archivos (objetos) dentro de Amazon S3.<ul>
+<li>Cada bucket tiene un <strong>nombre único a nivel mundial</strong> (ej. <code>mis-apuntes-cloud-2026</code>).</li>
+<li>Por defecto es <strong>totalmente privado</strong>, pero permite adjuntarle directamente una <strong>política basada en recursos</strong> (<em>Bucket Policy</em>) para definir quién puede leer o subir archivos en él.</li>
+</ul></li>
+</ul>
+<h3>2. Cifrado de datos en reposo (Módulo 4)</h3>
+<ul>
+<li><strong>Datos en reposo:</strong> Son los datos almacenados físicamente en un medio persistente (como un volumen <strong>EBS</strong>, un sistema <strong>EFS</strong> o un bucket de <strong>S3</strong>).</li>
+<li><strong>Cómo se protegen:</strong> El cifrado codifica los datos con una <strong>clave secreta</strong> (administrada mediante <strong>AWS KMS</strong>) para que sean ilegibles en disco; solo quien posea permisos sobre esa clave puede descifrarlos y leerlos.</li>
+</ul>
+<h3>3. Modelo de cobro del almacenamiento (Módulo 2)</h3>
+<ul>
+<li>En AWS el almacenamiento se factura principalmente <strong>por GB almacenado al mes</strong> (según el tipo de disco o clase de almacenamiento), más posibles cargos por solicitudes o transferencia de datos hacia fuera de la región.</li>
+</ul>
 </article>
 <article id="08-practica-ebs"><h1>8. Práctica: conexión SSH y montaje de EBS</h1>
 <p>Clase: 10/11/2026</p>
@@ -529,4 +651,209 @@ cat /efs1/prueba.txt
 <li><a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: reglas de red para EFS</a>.</li>
 <li><a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</li>
 </ul>
+</article>
+<article id="10-economia-facturacion"><h1>10. Economía, Facturación y Soporte en AWS (Curso AWS — Módulo 2)</h1>
+<p>Fecha de apuntes: 2026-11-21</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<blockquote><p><strong>Paréntesis:</strong> Estos apuntes pertenecen al <strong>Módulo 2 del curso de AWS (AWS Academy: Economía y Facturación de la Nube)</strong> y complementan los conceptos económicos vistos en <a href="#01-fundamentos">1. Fundamentos de computación en la nube</a> (CAPEX vs. OPEX y economías de escala) y <a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a>.</p></blockquote>
+<h2>1. Tres factores fundamentales de costo en AWS</h2>
+<p>La filosofía principal de AWS es <strong>pagar solo por lo que se utiliza</strong>, sin contratos obligatorios a largo plazo. Los tres impulsores de costo principales son:</p>
+<ol>
+<li><strong>Informática (Cómputo):</strong> Se cobra por <strong>hora o por segundo</strong> de ejecución y varía según el <strong>tipo y familia de instancia</strong> (vCPU y RAM).</li>
+<li><strong>Almacenamiento:</strong> Se cobra normalmente por <strong>GB almacenado</strong> al mes.</li>
+<li><strong>Transferencia de datos:</strong><ul>
+<li><strong>Datos de entrada (desde Internet hacia AWS):</strong> Generalmente <strong>gratuitos</strong>.</li>
+<li><strong>Datos de salida (desde AWS hacia Internet o hacia otra Región):</strong> <strong>Se cobran por GB</strong> (de forma agregada).</li>
+<li><strong>Dentro de la misma Zona de Disponibilidad (con IP privada):</strong> Suele ser gratuito.</li>
+</ul></li>
+</ol>
+<hr>
+<h2>2. Filosofía de precios y Economías de Escala</h2>
+<p><em>(Resolución de la nota de investigación: «¿Cómo funciona "pagar menos si usa más" y cómo se relaciona con Economías de escala?»).</em></p>
+<ul>
+<li><strong>Paga menos cuando usas más (Descuentos por volumen):</strong> En servicios de almacenamiento (como Amazon S3) o transferencia de datos, AWS aplica precios escalonados por niveles (<em>tiers</em>). Cuantos más GB consumas al mes, <strong>más barato te cuesta cada GB adicional</strong>.</li>
+<li><strong>Paga menos cuando reservas:</strong> Si comprometes capacidad por 1 o 3 años (<strong>AURI, PURI, NURI</strong> en EC2 o RDS), obtienes hasta un 72 % de descuento frente al pago bajo demanda.</li>
+<li><strong>Relación con las Economías de Escala (Paga aún menos a medida que AWS crece):</strong> Como AWS agrupa el consumo de millones de clientes en todo el mundo, compra hardware, energía y ancho de banda a costos unitarios mucho más bajos que cualquier empresa individual. AWS traslada ese ahorro reduciendo periódicamente los precios de sus servicios para todos los clientes.</li>
+</ul>
+<hr>
+<h2>3. Costo Total de Propiedad (TCO) y Calculadora de Precios</h2>
+<ul>
+<li><strong>Costo Total de Propiedad (TCO — <em>Total Cost of Ownership</em>):</strong> Estimación financiera que identifica tanto los <strong>costos directos</strong> (servidores, licencias) como los <strong>costos indirectos</strong> (electricidad, refrigeración, espacio físico, personal de mantenimiento) de mantener un sistema local frente a llevarlo a la nube. Es útil para comparar infraestructura <em>on-premises</em> contra AWS, presupuestar cargas de trabajo y armar un <strong>caso de negocio</strong>.</li>
+<li><strong>Calculadora de precios de AWS (<em>AWS Pricing Calculator</em>):</strong> Herramienta web gratuita que permite crear <strong>estimaciones detalladas del costo mensual</strong> de arquitecturas y casos prácticos antes de desplegarlos en AWS.</li>
+</ul>
+<hr>
+<h2>4. Servicios sin costo adicional vs. recursos que sí cobran</h2>
+<table>
+<thead>
+<tr><th>Servicios gratuitos (sin costo adicional)</th><th>Qué sí genera cobro al usarlos</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Amazon VPC</strong> (Red virtual privada)</td><td>Componentes opcionales como NAT Gateway o VPN.</td></tr>
+<tr><td><strong>AWS IAM</strong> (Identidades y accesos)</td><td>Totalmente gratuito.</td></tr>
+<tr><td><strong>Facturación consolidada</strong> (<em>Consolidated Billing</em>)</td><td>El consumo real de cada cuenta miembro.</td></tr>
+<tr><td><strong>AWS Auto Scaling</strong>, <strong>AWS CloudFormation</strong>, <strong>AWS Elastic Beanstalk</strong>, <strong>AWS OpsWorks</strong></td><td>Las instancias <strong>Amazon EC2</strong>, volúmenes <strong>Amazon EBS</strong>, balanceadores o bases de datos <strong>Amazon RDS</strong> que estas herramientas aprovisionen automáticamente.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>5. Herramientas de monitoreo de costos vs. estado operativo</h2>
+<table>
+<thead>
+<tr><th>Herramienta</th><th>Función principal</th><th>¿Muestra historial financiero de facturación?</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>AWS Cost Explorer</strong> (Explorador de costos)</td><td>Visualizar, analizar y proyectar los <strong>costos y el consumo</strong> de AWS a lo largo del tiempo mediante gráficos y filtros.</td><td><strong>Sí</strong> (es la herramienta oficial de análisis de costos).</td></tr>
+<tr><td><strong>Panel de Amazon EC2</strong></td><td>Muestra el estado operativo actual de las instancias, volúmenes y límites de la región.</td><td><strong>No.</strong></td></tr>
+<tr><td><strong>AWS Trusted Advisor</strong></td><td>Inspecciona tu cuenta y da recomendaciones automáticas en <strong>5 categorías</strong>: optimización de costos, seguridad, tolerancia a fallos, rendimiento y cuotas de servicio.</td><td><strong>No</strong> (da consejos de ahorro, no historial de facturas).</td></tr>
+<tr><td><strong>AWS CloudTrail (en S3)</strong></td><td>Registra quién hizo qué llamada a la API y cuándo para <strong>auditoría de seguridad</strong>.</td><td><strong>No.</strong></td></tr>
+</tbody>
+</table>
+<hr>
+<h2>6. Planes de Soporte de AWS (AWS Support)</h2>
+<table>
+<thead>
+<tr><th>Plan</th><th>Para quién está pensado</th><th>Cobertura y canales</th><th>AWS Trusted Advisor</th><th>Tiempo de respuesta crítico y TAM</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>1. Basic</strong></td><td>Todas las cuentas (incluido <strong>gratis</strong> por defecto).</td><td>Atención 24/7 solo para facturación y cuenta; foros y documentación. <em>(Sin soporte técnico)</em>.</td><td>Solo comprobaciones básicas.</td><td>Sin SLA técnico. No incluye TAM.</td></tr>
+<tr><td><strong>2. Developer</strong></td><td>Entornos de <strong>prueba y desarrollo</strong>.</td><td>Soporte técnico por <strong>correo electrónico</strong> en horario laboral.</td><td>Solo comprobaciones básicas.</td><td><code>&lt; 24 h</code> / <code>&lt; 12 h</code> según gravedad. No incluye TAM.</td></tr>
+<tr><td><strong>3. Business</strong></td><td>Entornos de <strong>producción</strong>.</td><td>Soporte técnico <strong>24/7 por teléfono, chat y correo</strong>.</td><td><strong>Acceso completo</strong> a todas las comprobaciones.</td><td><strong><code>&lt; 1 hora</code></strong> si un sistema de producción cae. No incluye TAM.</td></tr>
+<tr><td><strong>4. Enterprise</strong></td><td>Cargas de trabajo de <strong>misión crítica</strong>.</td><td>Soporte 24/7 completo + <strong>Conserjería de facturación</strong>.</td><td><strong>Acceso completo</strong> a todas las comprobaciones.</td><td><strong><code>&lt; 15 minutos</code></strong> ante caída crítica. <strong>Incluye un TAM</strong> (Administrador Técnico de Cuentas dedicado).</td></tr>
+</tbody>
+</table>
+</article>
+<article id="11-seguridad-iam"><h1>11. Seguridad, IAM y Gobernanza en AWS (Curso AWS — Módulos 2 y 4)</h1>
+<p>Fecha de apuntes: 2026-11-21</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<blockquote><p><strong>Paréntesis:</strong> Estos apuntes pertenecen a los <strong>Módulos 2 y 4 del curso de AWS (AWS Academy: Seguridad en la nube de AWS y Gobernanza)</strong> y complementan los temas de <a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a> y <a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a>.</p></blockquote>
+<h2>1. Modelo de Responsabilidad Compartida de AWS</h2>
+<table>
+<thead>
+<tr><th>Responsable</th><th>Lema oficial</th><th>Qué administra y protege</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>El Cliente</strong></td><td>Seguridad <strong>«EN»</strong> la nube (<em>Dentro de la nube</em>)</td><td>- <strong>Datos del cliente</strong> y su <strong>cifrado</strong> (en reposo y en tránsito).<br>- Aplicaciones, gestión de usuarios y permisos (<strong>IAM</strong>).<br>- Configuración del <strong>Sistema Operativo</strong>, parches y actualizaciones (ej. en EC2).<br>- Configuración de red y firewalls (<strong>Security Groups</strong>, Network ACLs).</td></tr>
+<tr><td><strong>AWS</strong></td><td>Seguridad <strong>«DE»</strong> la nube (<em>De la infraestructura base</em>)</td><td>- <strong>Hardware físico:</strong> servidores, discos, cables y mantenimiento físico.<br>- <strong>Infraestructura global:</strong> Regiones, Zonas de Disponibilidad, Centros de datos y Ubicaciones de borde.<br>- <strong>Capa de software de virtualización</strong> subyacente (Cómputo, Almacenamiento, Bases de datos y Redes físicas).</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>2. AWS Identity and Access Management (IAM)</h2>
+<p><strong>Definición:</strong> Servicio gratuito que permite <strong>administrar de forma segura el acceso</strong> a los servicios y recursos de AWS.</p>
+<ul>
+<li><strong>Recurso:</strong> Cualquier objeto o entidad dentro de una cuenta con el que se puede trabajar (ej. una instancia EC2, un bucket de S3 o un volumen EBS).</li>
+<li><strong>¿Qué controla IAM?</strong> <strong>Quién</strong> puede acceder (<em>Autenticación</em>), <strong>a qué</strong> recursos y qué acciones puede realizar (<em>Autorización</em>), y <strong>cómo</strong> obtiene acceso (Consola web o Programación CLI/SDK).</li>
+</ul>
+<h3>A. Componentes principales de IAM</h3>
+<ol>
+<li><strong>Usuario de IAM (Persona o aplicación):</strong> Identidad permanente que representa a una persona o servicio. Por defecto comienza <strong>sin ningún permiso</strong>.</li>
+<li><strong>Grupo de IAM:</strong> Colección de <strong>usuarios de IAM</strong> que comparten los mismos permisos (ej. <code>Desarrolladores</code>). Un usuario puede estar en varios grupos; no hay grupo predeterminado y <strong>los grupos no pueden anidarse</strong>.</li>
+<li><strong>Rol de IAM:</strong> Identidad con permisos específicos que <strong>no pertenece a una sola persona</strong> ni usa contraseñas permanentes. Lo <strong>asume temporalmente</strong> un usuario, aplicación o <strong>servicio de AWS</strong> (ej. una instancia EC2) y entrega <strong>credenciales temporales</strong>.</li>
+<li><strong>Política de IAM:</strong> Documento <strong>JSON</strong> que define explícitamente qué acciones están <strong>permitidas (<code>Allow</code>)</strong> o <strong>denegadas (<code>Deny</code>)</strong> sobre qué recursos.</li>
+</ol>
+<h3>B. Aclaración de consultas sobre Políticas, Entidades y Permisos</h3>
+<ul>
+<li><strong>¿Qué es una «Entidad» en IAM?</strong> Son los objetos de identidad de IAM a los que puedes adjuntar una política: un <strong>Usuario de IAM</strong>, un <strong>Grupo de IAM</strong> o un <strong>Rol de IAM</strong>.</li>
+<li><strong>Políticas basadas en identidad vs. basadas en recursos:</strong><ul>
+<li><strong>Basadas en identidad:</strong> Se adjuntan a un <strong>Usuario, Grupo o Rol</strong> (dicen qué puede hacer esa identidad).</li>
+<li><strong>Basadas en recursos:</strong> Se adjuntan directamente al <strong>recurso</strong>, como una <em>Bucket Policy</em> en un <strong>bucket de Amazon S3</strong> (dicen a quién deja entrar ese recurso).</li>
+</ul></li>
+<li><strong>Evaluación de permisos (Implícito vs. Explícito):</strong><ol>
+<li><strong>Denegación implícita (por defecto):</strong> Todo está denegado inicialmente si no hay una política que lo autorice.</li>
+<li><strong>Autorización explícita (<code>Allow</code>):</strong> Concede el permiso si no existe ningún <code>Deny</code>.</li>
+<li><strong>Denegación explícita (<code>Deny</code>):</strong> Prohíbe expresamente la acción y <strong>SIEMPRE gana</strong> sobre cualquier <code>Allow</code>.</li>
+</ol></li>
+<li><strong>Práctica recomendada:</strong> Aplicar siempre el <strong>Principio de mínimo privilegio</strong>.</li>
+</ul>
+<h3>C. Corrección del flujo jerárquico y Diagrama de IAM</h3>
+<blockquote>
+<p><strong>Corrección clave sobre tu nota original:</strong> En AWS <strong>un Grupo NO se asocia directamente a un Rol</strong>. Las <strong>Políticas JSON</strong> se adjuntan directamente al <strong>Grupo</strong> (para equipos de personas) <strong>O</strong> se adjuntan a un <strong>Rol</strong> (para servicios como EC2 o accesos temporales):</p>
+<ul>
+<li><strong>Ruta 2A (Para personas):</strong> 1. Crear <strong>Política</strong> &rarr; 2. Crear <strong>Grupo</strong> y adjuntarle la Política &rarr; 3. Crear <strong>Usuario</strong> y agregarlo al Grupo.</li>
+<li><strong>Ruta 2B (Para servicios o acceso temporal):</strong> 1. Crear <strong>Política</strong> &rarr; 2. Crear <strong>Rol</strong> y adjuntarle la Política &rarr; 3. El servicio (ej. <strong>EC2</strong>) o usuario <strong>asume el Rol</strong> con credenciales temporales.</li>
+</ul>
+</blockquote>
+<div class="diagram-box">
+<svg viewBox="0 0 880 430" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo jerárquico de componentes AWS IAM">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#087795"/>
+    </marker>
+  </defs>
+  <!-- Paso 1: Política -->
+  <rect x="270" y="15" width="340" height="72" rx="10" fill="#124d64" stroke="#087795" stroke-width="2"/>
+  <text x="440" y="43" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="16" font-weight="bold">1. Política de IAM (Documento JSON)</text>
+  <text x="440" y="66" text-anchor="middle" fill="#d8e9f0" font-family="system-ui,sans-serif" font-size="13">Define permisos: Allow / Deny sobre acciones y recursos</text>
+
+  <!-- Flechas desde Política hacia Grupo y Rol -->
+  <path d="M 350 87 L 220 148" stroke="#087795" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="245" y="115" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="12" font-weight="bold">Se adjunta a</text>
+
+  <path d="M 530 87 L 660 148" stroke="#087795" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="635" y="115" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="12" font-weight="bold">Se adjunta a</text>
+
+  <!-- Ruta 2A: Grupo y Usuario -->
+  <rect x="40" y="152" width="360" height="70" rx="10" fill="#eef5f8" stroke="#087795" stroke-width="2"/>
+  <text x="220" y="180" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="15" font-weight="bold">2A. Grupo de IAM (ej. Desarrolladores)</text>
+  <text x="220" y="202" text-anchor="middle" fill="#203044" font-family="system-ui,sans-serif" font-size="13">Agrupa usuarios con los mismos permisos</text>
+
+  <rect x="40" y="262" width="360" height="65" rx="10" fill="#ffffff" stroke="#124d64" stroke-width="2"/>
+  <text x="220" y="290" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="15" font-weight="bold">3A. Usuario de IAM (Persona, ej. Ariel)</text>
+  <text x="220" y="311" text-anchor="middle" fill="#203044" font-family="system-ui,sans-serif" font-size="13">Pertenece al grupo y hereda sus políticas</text>
+
+  <path d="M 220 262 L 220 226" stroke="#087795" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <text x="268" y="248" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="12">Pertenece a</text>
+
+  <!-- Ruta 2B: Rol y Servicio EC2 -->
+  <rect x="480" y="152" width="360" height="70" rx="10" fill="#eef5f8" stroke="#087795" stroke-width="2"/>
+  <text x="660" y="180" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="15" font-weight="bold">2B. Rol de IAM (Credenciales temporales)</text>
+  <text x="660" y="202" text-anchor="middle" fill="#203044" font-family="system-ui,sans-serif" font-size="13">Sin dueño fijo; se asume cuando se necesita</text>
+
+  <rect x="480" y="262" width="360" height="65" rx="10" fill="#ffffff" stroke="#124d64" stroke-width="2"/>
+  <text x="660" y="290" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="15" font-weight="bold">3B. Servicio AWS / App (ej. Instancia EC2)</text>
+  <text x="660" y="311" text-anchor="middle" fill="#203044" font-family="system-ui,sans-serif" font-size="13">Asume el Rol para operar sin guardar claves fijas</text>
+
+  <path d="M 660 262 L 660 226" stroke="#087795" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <text x="705" y="248" text-anchor="middle" fill="#124d64" font-family="system-ui,sans-serif" font-size="12">Asume el rol</text>
+
+  <!-- Paso 4: Recurso AWS -->
+  <rect x="220" y="355" width="440" height="62" rx="10" fill="#142a39" stroke="#087795" stroke-width="2"/>
+  <text x="440" y="382" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="15" font-weight="bold">4. Recurso Protegido en AWS (ej. Bucket Amazon S3 / RDS)</text>
+  <text x="440" y="403" text-anchor="middle" fill="#d8e9f0" font-family="system-ui,sans-serif" font-size="13">Recibe las peticiones autorizadas del Usuario o del Rol</text>
+
+  <path d="M 220 327 L 340 355" stroke="#087795" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 660 327 L 540 355" stroke="#087795" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+</svg>
+</div>
+<h3>D. Usuario Raíz (Root User) y MFA</h3>
+<ul>
+<li><strong>Prácticas recomendadas al abrir la cuenta:</strong> No usar el usuario raíz para tareas diarias, <strong>eliminar sus claves de acceso programáticas</strong> (<em>Access Key ID</em> y <em>Secret Access Key</em>), <strong>activar MFA</strong> y crear un usuario administrador en IAM.</li>
+<li><strong>Tareas exclusivas del Usuario Raíz:</strong> Cambiar o cancelar el plan de soporte de AWS, modificar datos principales de la cuenta (correo, nombre), cerrar la cuenta de AWS o restaurar permisos de un administrador IAM.</li>
+</ul>
+<hr>
+<h2>3. AWS Organizations y Políticas de Control de Servicios (SCP)</h2>
+<ul>
+<li><strong>AWS Organizations:</strong> Permite consolidar varias cuentas de AWS y administrarlas de forma centralizada mediante <strong>Unidades Organizativas (OU)</strong>, facturación consolidada y creación automatizada de cuentas por API.</li>
+<li><strong>Los 4 pasos para configurar AWS Organizations:</strong><ol>
+<li>Crear la organización e invitar o crear las cuentas miembro.</li>
+<li>Crear las <strong>Unidades Organizativas (OU)</strong> para agrupar cuentas.</li>
+<li>Crear las <strong>Políticas de Control de Servicios (SCP)</strong> en JSON.</li>
+<li>Adjuntar y probar las SCP en las OU o cuentas.</li>
+</ol></li>
+<li><strong>Políticas de Control de Servicios (SCP):</strong> Establecen el <strong>límite máximo de permisos</strong> para las cuentas de una organización. Tienen sintaxis similar a IAM, pero <strong>NO conceden permisos por sí solas</strong> (solo fijan el tope de lo que IAM puede autorizar en cada cuenta).</li>
+</ul>
+<hr>
+<h2>4. Servicios de Cifrado, Autenticación, Auditoría y Conformidad</h2>
+<table>
+<thead>
+<tr><th>Servicio / Concepto</th><th>Función clave en AWS (Módulo 4)</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>AWS KMS</strong> (<em>Key Management Service</em>)</td><td>Crea y administra <strong>claves de cifrado</strong> para datos en reposo. Usa módulos de seguridad de hardware (<strong>HSM</strong>) bajo el estándar <strong>FIPS 140-2</strong> y se integra con CloudTrail.</td></tr>
+<tr><td><strong>Amazon Cognito</strong></td><td>Agrega <strong>control de acceso, registro e inicio de sesión</strong> a aplicaciones web y móviles. Escala a millones de usuarios y admite proveedores como Google, Facebook, Amazon y Microsoft Active Directory.</td></tr>
+<tr><td><strong>AWS Shield</strong></td><td>Protección administrada contra ataques <strong>DDoS</strong> con detección continua y mitigación automática.</td></tr>
+<tr><td><strong>AWS CloudTrail</strong></td><td>Registra y audita <strong>todas las llamadas a la API y actividad de usuarios</strong> en la cuenta (los logs pueden guardarse en Amazon S3).</td></tr>
+<tr><td><strong>AWS Config</strong></td><td>Evalúa, audita y monitorea el <strong>historial y cambios de configuración de los recursos</strong> de AWS comparándolos contra las configuraciones deseadas.</td></tr>
+<tr><td><strong>AWS Artifact</strong></td><td>Portal autoservicio para descargar <strong>informes de seguridad, certificaciones (ISO, SOC, PCI) y conformidad</strong> de AWS.</td></tr>
+<tr><td><strong>Programas de Conformidad</strong></td><td>Se clasifican en: 1. <strong>Certificaciones y acreditaciones</strong>, 2. <strong>Leyes, regulaciones y privacidad</strong>, y 3. <strong>Alineaciones y marcos de trabajo</strong>.</td></tr>
+</tbody>
+</table>
 </article></main></body></html>

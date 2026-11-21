@@ -23,9 +23,9 @@ Este apartado lo mantiene el asistente al actualizar los documentos organizados.
 
 - Archivo de entrada creado: 2026-11-17.
 - Última clase incluida en la organización inicial: 2026-11-10.
-- Clases procesadas desde este archivo: 2026-11-12 — Taller de almacenamiento EBS y EFS.
-- Última actualización de los documentos organizados: 2026-11-17.
-- Archivos actualizados: 03-redes-seguridad.md, 07-almacenamiento.md y 09-taller-ebs-efs.md; índice y HTML regenerados.
+- Clases procesadas desde este archivo: 2026-11-12 — Taller de almacenamiento EBS y EFS; 2026-11-21 — Apuntes de Curso AWS (Módulos 1 al 4).
+- Última actualización de los documentos organizados: 2026-11-21.
+- Archivos actualizados: 01-fundamentos.md, 02-ec2.md, 03-redes-seguridad.md, 05-herramientas-aws.md, 07-almacenamiento.md, 09-taller-ebs-efs.md, 10-economia-facturacion.md y 11-seguridad-iam.md; índice y HTML regenerados.
 - Se conserva una copia de referencia en `.control/entrada-procesada.md` para detectar futuras correcciones, incluso en fechas anteriores.
 - En cada actualización se registrarán las fechas incorporadas o corregidas. La última fecha no será el único criterio: también se revisarán cambios en clases anteriores.
 

@@ -1,25 +1,33 @@
 # Computación Grid y Cloud
 
-Apuntes organizados · 15 de octubre al 12 de noviembre de 2026
+Apuntes organizados · 15 de octubre al 21 de noviembre de 2026
 
 Abre **index.html** en el navegador para leer todos los temas. También puedes consultar cada archivo Markdown por separado. Mantén la carpeta `imagenes` junto a los documentos; contiene las 11 imágenes originales, sin pérdida de calidad. No se necesita conexión a internet.
 
 ## Índice
 
-1. [Fundamentos de computación en la nube](01-fundamentos.md)
-2. [Servicios de AWS y Amazon EC2](02-ec2.md)
-3. [Redes y seguridad: VPC y Security Groups](03-redes-seguridad.md)
+1. [Fundamentos de computación en la nube](01-fundamentos.md) *(+ Complemento Curso AWS: Módulos 1 y 3)*
+2. [Servicios de AWS y Amazon EC2](02-ec2.md) *(+ Complemento Curso AWS: Módulo 2)*
+3. [Redes y seguridad: VPC y Security Groups](03-redes-seguridad.md) *(+ Complemento Curso AWS: Módulo 4)*
 4. [Automatización inicial con User Data](04-user-data.md)
-5. [Consola, AWS CLI y SDK](05-herramientas-aws.md)
+5. [Consola, AWS CLI y SDK](05-herramientas-aws.md) *(+ Complemento Curso AWS: Módulo 4)*
 6. [Infraestructura como código con Terraform](06-terraform.md)
-7. [Almacenamiento: EBS, EFS y NFS](07-almacenamiento.md)
+7. [Almacenamiento: EBS, EFS y NFS](07-almacenamiento.md) *(+ Complemento Curso AWS: Módulos 2 y 4)*
 8. [Práctica: conexión SSH y montaje de EBS](08-practica-ebs.md)
-
 9. [Taller de almacenamiento EBS y EFS](09-taller-ebs-efs.md)
+10. [Economía, Facturación y Soporte en AWS (Curso AWS — Módulo 2)](10-economia-facturacion.md)
+11. [Seguridad, IAM y Gobernanza en AWS (Curso AWS — Módulos 2 y 4)](11-seguridad-iam.md)
+
+## Actualización del 2026-11-21
+
+Se integraron y clasificaron los apuntes de los **Módulos 1 al 4 del Curso de AWS (AWS Academy)** registrados el 2026-11-21:
+- Se añadieron bloques complementarios en los temas `01`, `02`, `03`, `05` y `07` indicando que pertenecen al curso de AWS.
+- Se crearon los temas `10-economia-facturacion.md` y `11-seguridad-iam.md` con las consultas resueltas y el diagrama de flujo de componentes de IAM.
+- [Escribir nuevos apuntes](Apuntes%20de%20clase.md).
 
 ## Actualización del 2026-11-17
 
-Se incorporó la clase del 2026-11-12 al taller 09 y a los temas 03 y 07. [Escribir nuevos apuntes](Apuntes%20de%20clase.md). Las aclaraciones técnicas tienen enlaces a documentación de AWS.
+Se incorporó la clase del 2026-11-12 al taller 09 y a los temas 03 y 07. Las aclaraciones técnicas tienen enlaces a documentación de AWS.
 
 ## Cambios de organización
 
