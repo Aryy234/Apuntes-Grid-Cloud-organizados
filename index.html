@@ -1,6 +1,130 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computación Grid y Cloud — Apuntes</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:17px/1.7 system-ui,sans-serif;color:#203044;background:#f2f5f9}aside{position:fixed;width:285px;height:100vh;overflow:auto;background:#122b3a;color:white;padding:30px 22px}aside a{display:block;color:#d8e9f0;text-decoration:none;margin:14px 0;font-size:14px}main{margin-left:285px;max-width:1120px;padding:40px}header,article{background:white;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}h1,h2,h3{line-height:1.25;color:#124d64}h1{font-size:30px}h2{font-size:24px;margin-top:32px}h3{font-size:20px}a{color:#087795}img{max-width:100%;height:auto;border-radius:6px}figure{margin:24px 0}figcaption{font-size:12px;color:#607182}pre{padding:20px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13px/1.6 Consolas,monospace}code{font-size:.9em}p{margin:12px 0}.bullet{padding-left:16px}small{color:#607182}@media(max-width:850px){aside{position:static;width:auto;height:auto}main{margin:0;padding:14px}header,article{padding:22px}}@media print{aside{display:none}main{margin:0;padding:0}article{break-before:page}pre{white-space:pre-wrap}img{max-height:650px}}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px;text-align:left}th{background:#eef5f8}blockquote{border-left:4px solid #087795;margin:18px 0;padding:4px 18px;background:#f2f7fa}.diagram-box{background:#f8fbfd;border:1px solid #dce4eb;border-radius:10px;padding:18px;margin:18px 0;overflow-x:auto}</style></head><body><aside><strong>GRID & CLOUD</strong><p>Cuaderno de clases</p><a href="#01-fundamentos">1. Fundamentos de computación en la nube</a><a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a><a href="#04-user-data">4. Automatización inicial con User Data</a><a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a><a href="#06-terraform">6. Infraestructura como código con Terraform</a><a href="#07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a><a href="#08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a><a href="#10-economia-facturacion">10. Economía, Facturación y Soporte (Curso AWS)</a><a href="#11-seguridad-iam">11. Seguridad, IAM y Gobernanza (Curso AWS)</a></aside><main><header id="inicio"><small>CLASES Y CURSO AWS HASTA EL 21 DE NOVIEMBRE DE 2026</small><h1>Computación Grid y Cloud</h1><p>Once temas · Actualizado el 21 de noviembre de 2026</p><p>Incluye apuntes de clase, talleres prácticos e integración clasificada de los Módulos 1 al 4 del Curso de AWS Academy.</p><a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a></header><article id="01-fundamentos"><h1>1. Fundamentos de computación en la nube</h1>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Apuntes organizados de Computación Grid y Cloud: clases, talleres prácticos de AWS y Módulos 1 al 4 de AWS Academy.">
+  <title>Computación Grid y Cloud — Apuntes de Estudio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var saved = JSON.parse(localStorage.getItem('gridcloud_theme'));
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir índice de temas" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <span class="topbar-brand-mobile">Grid &amp; Cloud</span>
+      <span class="topbar-current" id="topbarCurrent">Computación Grid y Cloud</span>
+    </div>
+    <div class="topbar-actions">
+      <button type="button" class="search-trigger" data-open-search aria-label="Buscar en los apuntes">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Buscar…</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+      <button type="button" class="btn-pill" data-open-flashcards aria-label="Abrir modo repaso con flashcards">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        <span>Repaso</span>
+      </button>
+      <button type="button" class="icon-btn" id="themeToggle" aria-label="Cambiar tema claro u oscuro"></button>
+    </div>
+  </header>
+
+  <!-- Sidebar Drawer -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Índice de temas">
+    <div class="sidebar-header">
+      <a class="brand" href="#inicio">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+        </span>
+        <span class="brand-text">
+          <strong>GRID &amp; CLOUD</strong>
+          <span>Cuaderno interactivo</span>
+        </span>
+      </a>
+      <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    <div class="sidebar-progress">
+      <div class="progress-meta">
+        <span>Progreso de estudio</span>
+        <strong id="progressText">0 / 11</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="sidebar-filters" role="group" aria-label="Filtrar temas por categoría">
+      <button type="button" class="filter-chip active" data-filter="all">Todos</button>
+      <button type="button" class="filter-chip" data-filter="clase">Clases</button>
+      <button type="button" class="filter-chip" data-filter="practica">Prácticas</button>
+      <button type="button" class="filter-chip" data-filter="aws">AWS Academy</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" href="#01-fundamentos" data-cats="clase aws"><span class="nav-num">01</span><span>Fundamentos de computación en la nube</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#02-ec2" data-cats="clase aws"><span class="nav-num">02</span><span>Servicios de AWS y Amazon EC2</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#03-redes-seguridad" data-cats="clase aws"><span class="nav-num">03</span><span>Redes y seguridad: VPC y Security Groups</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#04-user-data" data-cats="clase practica"><span class="nav-num">04</span><span>Automatización inicial con User Data</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#05-herramientas-aws" data-cats="clase aws"><span class="nav-num">05</span><span>Consola, AWS CLI y SDK</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#06-terraform" data-cats="clase"><span class="nav-num">06</span><span>Infraestructura como código con Terraform</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#07-almacenamiento" data-cats="clase aws"><span class="nav-num">07</span><span>Almacenamiento: EBS, EFS y NFS</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#08-practica-ebs" data-cats="practica"><span class="nav-num">08</span><span>Práctica: conexión SSH y montaje de EBS</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#09-taller-ebs-efs" data-cats="practica"><span class="nav-num">09</span><span>Taller de almacenamiento EBS y EFS</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#10-economia-facturacion" data-cats="aws"><span class="nav-num">10</span><span>Economía, Facturación y Soporte (AWS)</span><span class="nav-check">✓</span></a>
+      <a class="nav-item" href="#11-seguridad-iam" data-cats="aws"><span class="nav-num">11</span><span>Seguridad, IAM y Gobernanza (AWS)</span><span class="nav-check">✓</span></a>
+    </nav>
+  </aside>
+
+  <!-- Main Study Area -->
+  <main class="main-content">
+    <section class="hero-card" id="inicio">
+      <div class="hero-eyebrow">Clases + Talleres + AWS Academy (Módulos 1–4)</div>
+      <h1>Computación Grid y Cloud</h1>
+      <p class="hero-subtitle">Cuaderno interactivo de estudio actualizado al 21 de noviembre de 2026. Incluye teoría de clase, comandos prácticos de laboratorio, diagramas ampliables y modo de autoevaluación.</p>
+      <div class="hero-stats">
+        <div class="stat-box">
+          <strong>11</strong>
+          <span>Temas organizados</span>
+        </div>
+        <div class="stat-box">
+          <strong id="heroProgressStat">0/11</strong>
+          <span>Temas estudiados</span>
+        </div>
+        <div class="stat-box">
+          <strong id="heroCardsStat">0/33</strong>
+          <span>Flashcards dominadas</span>
+        </div>
+        <div class="stat-box">
+          <strong>11 + SVG</strong>
+          <span>Imágenes y diagramas</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a class="hero-btn hero-btn-primary" href="#01-fundamentos">Empezar a estudiar</a>
+        <button type="button" class="hero-btn hero-btn-secondary" data-open-flashcards>Practicar con Flashcards</button>
+        <button type="button" class="hero-btn hero-btn-secondary" data-open-search>Buscar concepto (Ctrl+K)</button>
+      </div>
+    </section>
+<article id="01-fundamentos" class="topic-card" data-cats="clase aws" data-date="15/10/2026 · AWS Mód. 1 y 3"><h1>1. Fundamentos de computación en la nube</h1>
 <p>Clase: 15/10/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p>La computación en la nube permite acceder a recursos tecnológicos alojados en infraestructura remota. </p>
 <p>Tres conceptos principales:</p>
 <ul>
@@ -91,9 +215,8 @@
 <li><strong>Alta disponibilidad:</strong> Garantía de que el sistema permanezca operativo y accesible (cerca del 24/7) con un tiempo de inactividad mínimo ante cualquier circunstancia.</li>
 </ul>
 </article>
-<article id="02-ec2"><h1>2. Servicios de AWS y Amazon EC2</h1>
+<article id="02-ec2" class="topic-card" data-cats="clase aws" data-date="15/10/2026 · AWS Mód. 2"><h1>2. Servicios de AWS y Amazon EC2</h1>
 <p>Clase: 15/10/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <h2>Categorías:</h2>
 <p><img loading="lazy" src="imagenes/image9.png" alt="Material de clase — image9"> </p>
 <h3>Categoría Informática</h3>
@@ -137,9 +260,8 @@
 </table>
 <blockquote><p><strong>Nota sobre el Panel de Amazon EC2:</strong> El panel de EC2 solo muestra el <strong>estado operativo actual</strong> de tus instancias, volúmenes y límites en esa región. <strong>No</strong> sirve para consultar historiales de facturación (para eso se utiliza <strong>AWS Cost Explorer</strong>).</p></blockquote>
 </article>
-<article id="03-redes-seguridad"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
+<article id="03-redes-seguridad" class="topic-card" data-cats="clase aws" data-date="20/10/2026 · AWS Mód. 4"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
 <p>Clase: 20/10/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p><strong>VPC ID:</strong> Es el identificador único que AWS asigna a una Virtual Private Cloud, es decir, una red lógica aislada dentro de la nube donde despliegas tus recursos (servidores, bases de datos, etc.). Sirve para referenciar esa red específica en configuraciones, APIs y otros servicios. </p>
 <p><strong>Security Groups:</strong> </p>
 <p>Son firewalls virtuales que <em>controlan el tráfico de entrada y salida (se configuran)</em> de tus instancias (como EC2), permitiendo solo los puertos, protocolos y orígenes que definen. Son <em>stateful</em>: si permites una conexión de entrada, la respuesta sale automáticamente sin regla adicional.</p>
@@ -197,9 +319,8 @@
 <li><strong>Niveles:</strong> <em>AWS Shield Standard</em> (gratuito y activo por defecto en todas las cuentas) y <em>AWS Shield Advanced</em> (protección avanzada de pago).</li>
 </ul>
 </article>
-<article id="04-user-data"><h1>4. Automatización inicial con User Data</h1>
+<article id="04-user-data" class="topic-card" data-cats="clase practica" data-date="22/10/2026"><h1>4. Automatización inicial con User Data</h1>
 <p>Clase: 22/10/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p><strong>User Data:</strong> permite pasar un script o configuración a una instancia (en AWS EC2), que se ejecuta solo en el primer arranque.</p>
 <p><strong>Configuración:</strong></p>
 <pre><code class="language-bash">#!/bin/bash
@@ -248,9 +369,8 @@ EOF
 <p><strong>cloud-init.log</strong> (<code>/var/log/cloud-init.log</code>): Registro detallado de los eventos internos de cloud-init, el servicio que ejecuta la configuración inicial de la instancia; sirve para diagnosticar qué etapas se ejecutaron y cuáles fallaron.</p>
 <p><strong>cloud-init-output.log</strong> (<code>/var/log/cloud-init-output.log</code>): Captura la salida estándar y los errores de los comandos de tu script de User Data; es el primero que se revisa para depurar fallos del script.</p>
 </article>
-<article id="05-herramientas-aws"><h1>5. Consola, AWS CLI y SDK</h1>
+<article id="05-herramientas-aws" class="topic-card" data-cats="clase aws" data-date="27/10/2026 · AWS Mód. 1 y 4"><h1>5. Consola, AWS CLI y SDK</h1>
 <p>Clase: 27/10/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p><strong>Mecanismos de acceso e interacción con AWS</strong> (o <em>Herramientas de gestión e interfaces de AWS</em>)</p>
 <ul>
 <li><p><strong>AWS Web (Consola de administración):</strong> Interfaz gráfica accesible desde cualquier navegador para configurar y supervisar tus recursos visualmente. Es ideal para tareas exploratorias, monitoreo en tiempo real y administraciones manuales sin tocar la terminal.</p>
@@ -295,15 +415,13 @@ EOF
 </tbody>
 </table>
 </article>
-<article id="06-terraform"><h1>6. Infraestructura como código con Terraform</h1>
+<article id="06-terraform" class="topic-card" data-cats="clase" data-date="05/11/2026"><h1>6. Infraestructura como código con Terraform</h1>
 <p>Clase: 05/11/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p><strong>Terraform:</strong></p>
 <p>Es una herramienta de codigo abierto, IasCodigo permite definir crear, actualizar o eliminar (CRUD) mediante archivos de configuración, el archivo principal de terraform se llama main, su archivos extension .tf, permite automatizar, de manera declarativa intensiones no el paso a paso</p>
 </article>
-<article id="07-almacenamiento"><h1>7. Almacenamiento: EBS, EFS y NFS</h1>
+<article id="07-almacenamiento" class="topic-card" data-cats="clase aws" data-date="10/11/2026 · AWS Mód. 2 y 4"><h1>7. Almacenamiento: EBS, EFS y NFS</h1>
 <p>Clase: 10/11/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <p>Categorías de Almacenamiento:</p>
 <p>Persistente: Es un almacenamiento que perdura en el tiempo</p>
 <ul>
@@ -383,9 +501,8 @@ EOF
 <li>En AWS el almacenamiento se factura principalmente <strong>por GB almacenado al mes</strong> (según el tipo de disco o clase de almacenamiento), más posibles cargos por solicitudes o transferencia de datos hacia fuera de la región.</li>
 </ul>
 </article>
-<article id="08-practica-ebs"><h1>8. Práctica: conexión SSH y montaje de EBS</h1>
+<article id="08-practica-ebs" class="topic-card" data-cats="practica" data-date="10/11/2026"><h1>8. Práctica: conexión SSH y montaje de EBS</h1>
 <p>Clase: 10/11/2026</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <blockquote>
 <p>Antes de formatear, identifica el dispositivo correcto con <code>lsblk -f</code>. El comando <code>mkfs</code> elimina datos del volumen seleccionado. Los nombres de dispositivo pueden variar entre instancias.</p>
 </blockquote>
@@ -481,10 +598,9 @@ EOF
 </li>
 </ol>
 </article>
-<article id="09-taller-ebs-efs"><h1>9. Taller de almacenamiento EBS y EFS</h1>
+<article id="09-taller-ebs-efs" class="topic-card" data-cats="practica" data-date="12/11/2026 · Act. 17/11"><h1>9. Taller de almacenamiento EBS y EFS</h1>
 <p>Fecha de clase: 2026-11-12</p>
 <p>Última actualización: 2026-11-17</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <h2>1. Objetivo</h2>
 <p>Aprovisionar y configurar almacenamiento en bloque dedicado (<strong>Amazon EBS</strong>) y almacenamiento de archivos en red compartido (<strong>Amazon EFS</strong>) sobre instancias <strong>Amazon Linux 2023</strong>, aplicando reglas de seguridad mediante <strong>Security Groups</strong> y validando el acceso a los mismos archivos desde dos servidores EC2.</p>
 <hr>
@@ -652,9 +768,8 @@ cat /efs1/prueba.txt
 <li><a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</li>
 </ul>
 </article>
-<article id="10-economia-facturacion"><h1>10. Economía, Facturación y Soporte en AWS (Curso AWS — Módulo 2)</h1>
+<article id="10-economia-facturacion" class="topic-card" data-cats="aws" data-date="21/11/2026 · AWS Mód. 2"><h1>10. Economía, Facturación y Soporte en AWS (Curso AWS — Módulo 2)</h1>
 <p>Fecha de apuntes: 2026-11-21</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <blockquote><p><strong>Paréntesis:</strong> Estos apuntes pertenecen al <strong>Módulo 2 del curso de AWS (AWS Academy: Economía y Facturación de la Nube)</strong> y complementan los conceptos económicos vistos en <a href="#01-fundamentos">1. Fundamentos de computación en la nube</a> (CAPEX vs. OPEX y economías de escala) y <a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a>.</p></blockquote>
 <h2>1. Tres factores fundamentales de costo en AWS</h2>
 <p>La filosofía principal de AWS es <strong>pagar solo por lo que se utiliza</strong>, sin contratos obligatorios a largo plazo. Los tres impulsores de costo principales son:</p>
@@ -721,9 +836,8 @@ cat /efs1/prueba.txt
 </tbody>
 </table>
 </article>
-<article id="11-seguridad-iam"><h1>11. Seguridad, IAM y Gobernanza en AWS (Curso AWS — Módulos 2 y 4)</h1>
+<article id="11-seguridad-iam" class="topic-card" data-cats="aws" data-date="21/11/2026 · AWS Mód. 2 y 4"><h1>11. Seguridad, IAM y Gobernanza en AWS (Curso AWS — Módulos 2 y 4)</h1>
 <p>Fecha de apuntes: 2026-11-21</p>
-<p><a href="#inicio">Volver al índice</a></p>
 <blockquote><p><strong>Paréntesis:</strong> Estos apuntes pertenecen a los <strong>Módulos 2 y 4 del curso de AWS (AWS Academy: Seguridad en la nube de AWS y Gobernanza)</strong> y complementan los temas de <a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a> y <a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a>.</p></blockquote>
 <h2>1. Modelo de Responsabilidad Compartida de AWS</h2>
 <table>
@@ -772,7 +886,7 @@ cat /efs1/prueba.txt
 </ul>
 </blockquote>
 <div class="diagram-box">
-<svg viewBox="0 0 880 430" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo jerárquico de componentes AWS IAM">
+<svg viewBox="0 0 880 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo jerárquico de componentes AWS IAM">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 1 L 10 5 L 0 9 z" fill="#087795"/>
@@ -856,4 +970,98 @@ cat /efs1/prueba.txt
 <tr><td><strong>Programas de Conformidad</strong></td><td>Se clasifican en: 1. <strong>Certificaciones y acreditaciones</strong>, 2. <strong>Leyes, regulaciones y privacidad</strong>, y 3. <strong>Alineaciones y marcos de trabajo</strong>.</td></tr>
 </tbody>
 </table>
-</article></main></body></html>
+</article>
+  </main>
+
+  <!-- Floating Back to Top -->
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Volver arriba">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="searchModal" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <div class="modal-card">
+      <div class="search-input-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="searchInput" placeholder="Buscar conceptos, comandos o servicios AWS…" autocomplete="off">
+        <button type="button" class="icon-btn" id="searchClose" aria-label="Cerrar búsqueda">✕</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- Flashcards Study Modal -->
+  <div class="modal-overlay center-modal" id="flashcardsModal" role="dialog" aria-modal="true" aria-label="Modo repaso con flashcards">
+    <div class="modal-card flashcards-card">
+      <div class="modal-header">
+        <h2>Modo Repaso — Flashcards</h2>
+        <button type="button" class="icon-btn" id="flashcardsClose" aria-label="Cerrar modo repaso">✕</button>
+      </div>
+      <div class="flashcards-controls">
+        <select class="flashcards-select" id="fcTopicFilter" aria-label="Filtrar tarjetas por tema">
+          <option value="all">Todos los temas (33 tarjetas)</option>
+          <option value="01-fundamentos">01. Fundamentos Cloud</option>
+          <option value="02-ec2">02. Servicios AWS y EC2</option>
+          <option value="03-redes-seguridad">03. Redes y Seguridad</option>
+          <option value="04-user-data">04. User Data</option>
+          <option value="05-herramientas-aws">05. Consola, CLI y SDK</option>
+          <option value="06-terraform">06. Terraform</option>
+          <option value="07-almacenamiento">07. Almacenamiento</option>
+          <option value="08-practica-ebs">08. Práctica EBS</option>
+          <option value="09-taller-ebs-efs">09. Taller EBS y EFS</option>
+          <option value="10-economia-facturacion">10. Economía y Facturación</option>
+          <option value="11-seguridad-iam">11. Seguridad, IAM y Gobernanza</option>
+        </select>
+        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="fcOnlyPending"> Solo pendientes
+        </label>
+        <button type="button" class="fc-btn" id="fcShuffleBtn">🔀 Barajar</button>
+      </div>
+      <div class="flashcards-body">
+        <div class="flashcard-counter">
+          <span id="fcCounter">Tarjeta 1 de 33</span>
+          <strong id="fcKnownStats">Dominadas: 0 / 33</strong>
+        </div>
+        <div class="flashcard-scene">
+          <div class="flashcard-inner" id="fcCardInner">
+            <div class="flashcard-face flashcard-face-front">
+              <span class="flashcard-tag" id="fcFrontTag">Pregunta</span>
+              <p class="flashcard-question" id="fcQuestion"></p>
+              <span class="flashcard-tap-hint">Toca la tarjeta o pulsa Espacio para ver la respuesta</span>
+            </div>
+            <div class="flashcard-face flashcard-face-back">
+              <span class="flashcard-tag" id="fcBackTag">Respuesta</span>
+              <p class="flashcard-answer" id="fcAnswer"></p>
+              <span class="flashcard-tap-hint">Toca para volver a la pregunta</span>
+            </div>
+          </div>
+        </div>
+        <div class="flashcards-footer">
+          <div class="fc-btn-group">
+            <button type="button" class="fc-btn" id="fcPrevBtn">← Anterior</button>
+            <button type="button" class="fc-btn" id="fcFlipBtn">↻ Voltear</button>
+            <button type="button" class="fc-btn" id="fcNextBtn">Siguiente →</button>
+          </div>
+          <button type="button" class="fc-btn fc-btn-known" id="fcKnownBtn">○ Marcar dominada</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal (Images & Diagrams) -->
+  <div class="modal-overlay center-modal" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Visor ampliado">
+    <div class="lightbox-content">
+      <div class="lightbox-toolbar">
+        <button type="button" id="lightboxZoomOut" aria-label="Alejar">−</button>
+        <button type="button" id="lightboxZoomReset" aria-label="Restablecer zoom">100%</button>
+        <button type="button" id="lightboxZoomIn" aria-label="Acercar">+</button>
+        <button type="button" id="lightboxClose" aria-label="Cerrar visor">✕ Cerrar</button>
+      </div>
+      <div class="lightbox-stage" id="lightboxStage"></div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
