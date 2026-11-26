@@ -1,4 +1,4 @@
-# 10. Talleres prácticos de Terraform (EC2 y EFS)
+# 12. Talleres prácticos de Terraform (EC2 y EFS)
 
 Última actualización: 2026-11-26
 

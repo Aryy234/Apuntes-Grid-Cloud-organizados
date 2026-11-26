@@ -10,7 +10,7 @@ El sitio permite consultar los temas, diagramas e imágenes desde el navegador (
 
 ## Archivos del repositorio
 
-- [Índice de temas](LEEME.md): acceso a los apuntes organizados en Markdown (`01-*.md` a `10-*.md`).
+- [Índice de temas](LEEME.md): acceso a los apuntes organizados en Markdown (`01-*.md` a `12-*.md`).
 - [Apuntes de clase](Apuntes%20de%20clase.md): archivo de entrada para añadir nuevas clases por fecha.
 - [Versión HTML](index.html): página publicada en Vercel (generada automáticamente).
 - [Script de construcción y sincronización](scripts/construir.mjs): regenera `index.html` desde todos los temas Markdown y mantiene sincronizado `../cloud-u1-ps-ae/documentacion.md`.
@@ -25,5 +25,5 @@ El sitio permite consultar los temas, diagramas e imágenes desde el navegador (
    ```
    Esto actualiza automáticamente:
    - **`index.html`** (menú lateral, buscador, contenido de todos los temas y diagramas SVG offline).
-   - **`../cloud-u1-ps-ae/documentacion.md`** (documentación centralizada de Terraform sincronizada a partir de `06-terraform.md` y `10-talleres-terraform.md`, si el repositorio vecino existe en la misma carpeta padre).
+   - **`../cloud-u1-ps-ae/documentacion.md`** (documentación centralizada de Terraform sincronizada a partir de `06-terraform.md` y `12-talleres-terraform.md`, si el repositorio vecino existe en la misma carpeta padre).
 3. Haz `git commit` y `git push` para que Vercel publique los cambios en la web.

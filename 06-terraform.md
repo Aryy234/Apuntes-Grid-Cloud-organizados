@@ -187,6 +187,6 @@ flowchart LR
 
 ## Conceptos relacionados
 
-- [Talleres prácticos de Terraform: Taller 8 (EC2) y Taller 12 (EC2 + SG EFS)](10-talleres-terraform.md).
+- [Talleres prácticos de Terraform: Taller 8 (EC2) y Taller 12 (EC2 + SG EFS)](12-talleres-terraform.md).
 - [Redes y seguridad: VPC y Security Groups](03-redes-seguridad.md).
 - [Consola, AWS CLI y SDK](05-herramientas-aws.md).

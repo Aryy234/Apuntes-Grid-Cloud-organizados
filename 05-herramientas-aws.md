@@ -26,3 +26,18 @@ aws ec2 run-instances --image-id ami-XXXXXXXX --instance-type t3.micro --key-nam
 * --count: Número de servidores que se van a crear.
 
 * **SDK (Software Development Kit):** Conjunto de librerías para lenguajes específicos (Python, Node.js, Java) que integra AWS dentro de tus programas. Facilita que tus aplicaciones se conecten, envíen datos o controlen la infraestructura desde su propio código.
+
+---
+
+## Complemento — Curso AWS Academy (Módulos 1 y 4)
+
+*(Apuntes del curso oficial de AWS Academy que complementan los mecanismos de acceso e interacción).*
+
+### Tipos de credenciales y acceso para un usuario IAM (Módulo 4)
+
+Cuando se crea un usuario en AWS IAM, se le pueden habilitar dos formas de acceso independientes, cada una con sus propias credenciales:
+
+| Tipo de acceso | Herramientas que habilita | Credenciales requeridas |
+| --- | --- | --- |
+| **Acceso a la Consola de Administración** | Navegador web (interfaz gráfica de AWS). | 1. **ID de cuenta** (12 dígitos) o alias.<br>2. **Nombre de usuario IAM**.<br>3. **Contraseña IAM**.<br>4. *(Recomendado)* Código **MFA** (autenticación multifactor). |
+| **Acceso mediante programación** | **AWS CLI**, **AWS SDK** y llamadas directas a la **API** (en formato XML/JSON). | 1. **ID de clave de acceso** (*Access Key ID*).<br>2. **Clave de acceso secreta** (*Secret Access Key*). *(Nota: en tus apuntes figuraba como «clave remota», su nombre oficial es **Secret Access Key**)*. |
