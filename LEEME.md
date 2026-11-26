@@ -21,7 +21,7 @@ Abre **index.html** en el navegador para leer todos los temas. También puedes c
 
 ## Actualización del 2026-11-26
 
-Se amplió el tema [06-terraform.md](06-terraform.md) con teoría HCL, estado y guía de comandos, y se incorporó el tema [12-talleres-terraform.md](12-talleres-terraform.md) documentando los talleres prácticos (`taller8-ae2` y `taller12-efs-ae`) del repositorio `cloud-u1-ps-ae`. Además, se añadió `scripts/construir.mjs` para regenerar `index.html` (manteniendo el diseño interactivo con flashcards, búsqueda y diagramas SVG) y sincronizar automáticamente la documentación con `cloud-u1-ps-ae`.
+Se amplió el tema [06-terraform.md](06-terraform.md) con teoría HCL, estado, rol de `variables.tf` y `outputs.tf`, explicación de **dependencia cíclica (`Error: Cycle`)** y guía de comandos; se reforzó [03-redes-seguridad.md](03-redes-seguridad.md) con **stateful vs. stateless** y **`0.0.0.0/0` vs. `0.0.0.0`**; y se incorporó [12-talleres-terraform.md](12-talleres-terraform.md) documentando los talleres prácticos (`taller8-ae2` y `taller12-efs-ae`) del repositorio `cloud-u1-ps-ae`. Además, `scripts/construir.mjs` regenera `index.html` (con flashcards, búsqueda y diagramas SVG) y sincroniza automáticamente la documentación con `cloud-u1-ps-ae`.
 
 ## Actualización del 2026-11-21
 

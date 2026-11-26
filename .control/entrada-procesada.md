@@ -23,9 +23,9 @@ Este apartado lo mantiene el asistente al actualizar los documentos organizados.
 
 - Archivo de entrada creado: 2026-11-17.
 - Última clase incluida en la organización inicial: 2026-11-10.
-- Clases procesadas desde este archivo: 2026-11-12 — Taller de almacenamiento EBS y EFS; 2026-11-21 — Apuntes de Curso AWS (Módulos 1 al 4).
-- Última actualización de los documentos organizados: 2026-11-21.
-- Archivos actualizados: 01-fundamentos.md, 02-ec2.md, 03-redes-seguridad.md, 05-herramientas-aws.md, 07-almacenamiento.md, 09-taller-ebs-efs.md, 10-economia-facturacion.md y 11-seguridad-iam.md; índice y HTML regenerados.
+- Clases procesadas desde este archivo: 2026-11-12 — Taller de almacenamiento EBS y EFS; 2026-11-21 — Apuntes de Curso AWS (Módulos 1 al 4); 2026-11-26 — Aclaraciones de Terraform y Redes (variables.tf, outputs.tf, stateful/stateless, 0.0.0.0/0 y dependencia cíclica).
+- Última actualización de los documentos organizados: 2026-11-26.
+- Archivos actualizados: 03-redes-seguridad.md, 06-terraform.md, 12-talleres-terraform.md, LEEME.md, assets/app.js y scripts/construir.mjs; índice, documentación de Terraform y HTML regenerados.
 - Se conserva una copia de referencia en `.control/entrada-procesada.md` para detectar futuras correcciones, incluso en fechas anteriores.
 - En cada actualización se registrarán las fechas incorporadas o corregidas. La última fecha no será el único criterio: también se revisarán cambios en clases anteriores.
 
@@ -560,3 +560,17 @@ AWS Artifact
     Proporciona: informes de seguridad y conformidad
     Acceso a descargas: Certificaciones, Informes del sector de tarjetas de pago
 ---
+
+### 2026-11-26 — Aclaraciones de Terraform y Redes
+
+**Tipo de entrada:** ampliación y revisión de dudas de Terraform (Taller 12) y Security Groups.
+
+#### Dudas y notas registradas
+
+- ¿Qué son los archivos `variables.tf`? (investigar esta parte).
+- `outputs.tf`: lo que quiero imprimir en consola como salida.
+- Explicar de mejor manera qué es *stateful* y *stateless*.
+- ¿Qué quiere decir `0.0.0.0` (y `0.0.0.0/0`)?
+- ¿Qué es dependencia cíclica en el contexto de Terraform? *(Ejemplo planteado para revisar: primero crear instancias sin security groups y después colocar los security groups).*
+
+> *Procesado el 2026-11-26: integrado y corregido en `03-redes-seguridad.md`, `06-terraform.md` y `12-talleres-terraform.md`.*

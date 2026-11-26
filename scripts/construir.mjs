@@ -40,7 +40,7 @@ const TOPIC_META = {
   },
   "03-redes-seguridad": {
     cats: "clase aws",
-    date: "20/10/2026 · AWS Mód. 4",
+    date: "20/10/2026 · AWS Mód. 4 · Act. 26/11",
     navTitle: "Redes y seguridad: VPC y Security Groups",
     fcLabel: "03. Redes y Seguridad",
   },
@@ -317,6 +317,64 @@ const SVG_DIAGRAMS = {
   <text x="228" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#087795">Salida a Internet: Todo tráfico (ip_protocol = "-1") hacia 0.0.0.0/0</text>
 </svg>
 </div>`,
+
+  "dependencia-ciclica": `<div class="diagram-box">
+<svg viewBox="0 0 920 250" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dependencia cíclica en Terraform con reglas inline versus solución con reglas desacopladas">
+  <defs>
+    <marker id="arr-err" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#b42318"/>
+    </marker>
+    <marker id="arr-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#1e6b43"/>
+    </marker>
+  </defs>
+
+  <!-- Panel izquierdo: Error: Cycle -->
+  <rect x="10" y="12" width="420" height="226" rx="12" fill="#fff5f5" stroke="#d92d20" stroke-width="1.8"/>
+  <text x="220" y="38" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#b42318">✕ Error: Cycle (con reglas inline)</text>
+
+  <rect x="30" y="76" width="160" height="84" rx="10" fill="#ffffff" stroke="#b42318" stroke-width="1.8"/>
+  <text x="110" y="106" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#7a150f">SG Instancias</text>
+  <text x="110" y="126" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">egress inline pide</text>
+  <text x="110" y="143" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#b42318">SG_EFS.id</text>
+
+  <rect x="250" y="76" width="160" height="84" rx="10" fill="#ffffff" stroke="#b42318" stroke-width="1.8"/>
+  <text x="330" y="106" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#7a150f">SG EFS</text>
+  <text x="330" y="126" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">ingress inline pide</text>
+  <text x="330" y="143" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#b42318">SG_EC2.id</text>
+
+  <path d="M 190 98 L 246 98" stroke="#b42318" stroke-width="2" marker-end="url(#arr-err)"/>
+  <path d="M 250 138 L 194 138" stroke="#b42318" stroke-width="2" marker-end="url(#arr-err)"/>
+
+  <text x="220" y="194" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7a150f">Bucle cerrado: ninguno puede crearse primero</text>
+  <text x="220" y="214" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">Terraform aborta al construir el grafo (DAG)</text>
+
+  <!-- Panel derecho: Solución desacoplada -->
+  <rect x="450" y="12" width="460" height="226" rx="12" fill="#f2fbf5" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="680" y="38" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#124229">✓ Solución Taller 12 (reglas separadas)</text>
+
+  <rect x="476" y="56" width="182" height="58" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.8"/>
+  <text x="567" y="81" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#122b3a">1. SG Instancias (vacío)</text>
+  <text x="567" y="99" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#465b6e">Se crea sin depender de EFS</text>
+
+  <rect x="702" y="56" width="182" height="58" rx="9" fill="#e6f4ea" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="793" y="81" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#124229">1. SG EFS (vacío)</text>
+  <text x="793" y="99" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">Se crea sin depender de EC2</text>
+
+  <path d="M 567 114 L 567 148" stroke="#1e6b43" stroke-width="2" marker-end="url(#arr-ok)"/>
+  <path d="M 793 114 L 793 148" stroke="#1e6b43" stroke-width="2" marker-end="url(#arr-ok)"/>
+  <path d="M 750 114 L 615 148" stroke="#1e6b43" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arr-ok)"/>
+  <path d="M 610 114 L 745 148" stroke="#1e6b43" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arr-ok)"/>
+
+  <rect x="476" y="152" width="182" height="64" rx="9" fill="#ffffff" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="567" y="177" text-anchor="middle" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#124229">egress_rule: salida_efs</text>
+  <text x="567" y="197" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">2. Conecta SG EC2 → SG EFS</text>
+
+  <rect x="702" y="152" width="182" height="64" rx="9" fill="#ffffff" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="793" y="177" text-anchor="middle" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#124229">ingress_rule: entrada_efs</text>
+  <text x="793" y="197" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">2. Acepta SG EC2 en SG EFS</text>
+</svg>
+</div>`,
 };
 
 // ---------- Utilidades HTML y Markdown ----------
@@ -362,7 +420,7 @@ function renderInline(text) {
     return `<a href="${href}">${label}</a>`;
   });
 
-  work = work.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  work = work.replace(/\*\*((?:(?!\*\*).)+)\*\*/g, "<strong>$1</strong>");
   work = work.replace(/\*([^*]+)\*/g, "<em>$1</em>");
 
   work = work.replace(/\u0000BR(\d+)\u0000/g, (_, idx) => brTokens[Number(idx)]);
@@ -765,7 +823,7 @@ ${navItems}
           <span>Flashcards dominadas</span>
         </div>
         <div class="stat-box">
-          <strong>11 + 5 SVG</strong>
+          <strong>11 + ${Object.keys(SVG_DIAGRAMS).length} SVG</strong>
           <span>Imágenes y diagramas</span>
         </div>
       </div>

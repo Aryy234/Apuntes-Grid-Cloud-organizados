@@ -92,6 +92,8 @@ flowchart LR
 | `entrada_efs` | `ingress_rule` | Asociada al SG de EFS. Permite entrada `tcp` puerto `2049` **únicamente** desde recursos que pertenezcan al SG de instancias (`referenced_security_group_id = aws_security_group.mi-sg-efs-instancias-14.id`). |
 
 > **¿Por qué el SG de EFS no necesita reglas de salida?** Porque los Security Groups de AWS son **stateful**: al autorizar la entrada desde las EC2 por el puerto `2049`, el tráfico de respuesta queda permitido automáticamente.
+>
+> **¿Por qué separar las reglas en recursos independientes?** Además de seguir la buena práctica de AWS, **evita una dependencia cíclica (`Error: Cycle`)**: si `mi-sg-efs-instancias-14` y `mi-sg-efs-14` tuvieran reglas *inline* apuntándose mutuamente, Terraform no sabría cuál crear primero. Creándolos vacíos y añadiendo las reglas aparte se rompe el ciclo (ver [Tema 6 — Dependencia cíclica](06-terraform.md)).
 
 #### 3. Instancias EC2 (`aws_instance.mi_instancia-efs`)
 

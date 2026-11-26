@@ -110,11 +110,11 @@
           <span>Temas estudiados</span>
         </div>
         <div class="stat-box">
-          <strong id="heroCardsStat">0/36</strong>
+          <strong id="heroCardsStat">0/39</strong>
           <span>Flashcards dominadas</span>
         </div>
         <div class="stat-box">
-          <strong>11 + 5 SVG</strong>
+          <strong>11 + 6 SVG</strong>
           <span>Imágenes y diagramas</span>
         </div>
       </div>
@@ -263,26 +263,45 @@
 <p><strong>Nota sobre el Panel de Amazon EC2:</strong> El panel de EC2 solo muestra el <strong>estado operativo actual</strong> de tus instancias, volúmenes y límites en esa región. <strong>No</strong> sirve para consultar historiales de facturación (para eso se utiliza <strong>AWS Cost Explorer</strong>).</p>
 </blockquote>
 </article>
-<article id="03-redes-seguridad" class="topic-card" data-cats="clase aws" data-date="20/10/2026 · AWS Mód. 4"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
+<article id="03-redes-seguridad" class="topic-card" data-cats="clase aws" data-date="20/10/2026 · AWS Mód. 4 · Act. 26/11"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
 <p>Clase: 20/10/2026</p>
 <p><strong>VPC ID:</strong> Es el identificador único que AWS asigna a una Virtual Private Cloud, es decir, una red lógica aislada dentro de la nube donde despliegas tus recursos (servidores, bases de datos, etc.). Sirve para referenciar esa red específica en configuraciones, APIs y otros servicios.</p>
 <p><strong>Security Groups:</strong></p>
 <p>Son firewalls virtuales que <em>controlan el tráfico de entrada y salida (se configuran)</em> de tus instancias (como EC2), permitiendo solo los puertos, protocolos y orígenes que definen. Son <em>stateful</em>: si permites una conexión de entrada, la respuesta sale automáticamente sin regla adicional.</p>
 <p><strong>Regla de entrada (Inbound):</strong> Define qué tráfico externo puede llegar a tu instancia, indicando protocolo, puerto y origen; por ejemplo, SSH (TCP puerto 22) permite conectarte de forma remota a un servidor Linux, idealmente restringido a tu IP.</p>
 <p><strong>Regla de salida (Outbound):</strong> Define qué tráfico puede salir de tu instancia hacia otros destinos (internet, otras redes o servicios); por defecto en AWS permite todo el tráfico saliente. La regla de salida que se crea por defecto es la de internet</p>
-<h2>Ampliación de clase — 2026-11-12</h2>
-<p>Última actualización: 2026-11-17</p>
-<h3>Stateful y stateless</h3>
+<h2>Ampliación de clase — 2026-11-12 y 2026-11-26</h2>
+<p>Última actualización: 2026-11-26</p>
+<h3>Stateful vs. Stateless (con memoria vs. sin memoria)</h3>
+<p><em>(Nota ortográfica: se escribe <strong>stateful</strong>, con una sola <code>l</code>.)</em></p>
+<p>La diferencia entre ambos mecanismos es si el firewall <strong>recuerda las conexiones activas</strong> (mantiene una tabla de estado) o si evalúa cada paquete por separado:</p>
 <table>
-<thead><tr><th>Control</th><th>Comportamiento</th><th>Tráfico de respuesta</th></tr></thead>
+<thead><tr><th>Característica</th><th><strong>Stateful</strong> (Con estado)</th><th><strong>Stateless</strong> (Sin estado)</th></tr></thead>
 <tbody>
-<tr><td>Security Group</td><td>Stateful: sigue el estado de las conexiones.</td><td>La respuesta de una conexión permitida se autoriza automáticamente.</td></tr>
-<tr><td>Network ACL</td><td>Stateless: evalúa entrada y salida por separado.</td><td>Deben permitirse ambos sentidos, incluidos los puertos de retorno necesarios.</td></tr>
+<tr><td><strong>Servicio en AWS</strong></td><td><strong>Security Group</strong> (a nivel de instancia / interfaz de red).</td><td><strong>Network ACL (NACL)</strong> (a nivel de subred).</td></tr>
+<tr><td><strong>¿Tiene memoria?</strong></td><td><strong>Sí.</strong> Registra las conexiones permitidas.</td><td><strong>No.</strong> Evalúa cada paquete como si fuera nuevo.</td></tr>
+<tr><td><strong>Tráfico de respuesta</strong></td><td><strong>Automático:</strong> si entra una petición permitida, la respuesta puede salir aunque no exista regla de salida para ella.</td><td><strong>Manual:</strong> debes permitir explícitamente la entrada <strong>y</strong> también la salida de retorno (puertos efímeros <code>1024–65535</code>).</td></tr>
+<tr><td><strong>Tipo de reglas</strong></td><td>Solo reglas de <strong>permitir (<code>Allow</code>)</strong>; todo lo demás se bloquea por defecto.</td><td>Reglas numeradas de <strong>permitir (<code>Allow</code>) y denegar (<code>Deny</code>)</strong>.</td></tr>
+<tr><td><strong>Analogía rápida</strong></td><td>Un guardia con registro: si te dejó entrar, te deja salir automáticamente.</td><td>Un peaje sin memoria: revisa permiso al entrar y vuelve a revisarlo al salir.</td></tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Ejemplo real del Taller 12:</strong> El Security Group del EFS (<code>mi-sg-efs-14</code>) solo define una regla de <strong>entrada</strong> (<code>TCP 2049</code> desde las EC2) y <strong>ninguna regla de salida</strong>. Aun así el EFS responde a las instancias porque el Security Group es <em>stateful</em>.</p>
+</blockquote>
+<h3>¿Qué significa <code>0.0.0.0/0</code> y <code>0.0.0.0</code>?</h3>
+<p>Conviene distinguir la notación CIDR usada en AWS/Terraform (<code>0.0.0.0/0</code>) de la dirección sin máscara (<code>0.0.0.0</code>):</p>
+<ul>
+<li><p><strong><code>0.0.0.0/0</code> (Notación CIDR — «cualquier dirección IPv4»):</strong> El prefijo <code>/0</code> indica que <strong>0 bits están fijos</strong>, por lo que abarca todo el rango IPv4 (<code>0.0.0.0</code> a <code>255.255.255.255</code>). En la práctica se traduce como <strong>«todo Internet / cualquier origen o destino»</strong>.</p>
+<ul>
+<li>En <strong>entrada (<code>ingress</code>)</strong>: acepta tráfico desde cualquier IPv4 (normal para puertos web públicos <code>80</code>/<code>443</code>; evitarlo en producción para SSH <code>22</code> o NFS <code>2049</code>).</li>
+<li>En <strong>salida (<code>egress</code>)</strong>: permite que la instancia salga hacia cualquier IPv4 (por ejemplo, descargar paquetes o actualizaciones).</li>
+<li><strong>Matiz clave:</strong> Abrir <code>0.0.0.0/0</code> en un Security Group <strong>no crea acceso a Internet por sí solo</strong> si la instancia está en una subred privada sin Internet Gateway ni IP pública; simplemente no filtra ninguna IPv4.</li>
+<li><strong>Comparación útil:</strong> Una única IP exacta usa <code>/32</code> (ej. <code>203.0.113.10/32</code> para solo tu equipo); el equivalente de <code>0.0.0.0/0</code> en IPv6 es <code>::/0</code>.</li>
+</ul></li>
+<li><strong><code>0.0.0.0</code> (sin <code>/0</code>, en servidores o aplicaciones):</strong> Cuando un servidor web o proceso escucha (<em>bind</em>) en <code>0.0.0.0:80</code>, significa que acepta conexiones en <strong>todas las interfaces de red</strong> de esa máquina (a diferencia de <code>127.0.0.1</code>, que solo responde en local).</li>
+</ul>
 <h3>Permitir NFS desde otro Security Group</h3>
-<p>En el grupo del destino de montaje EFS, permite entrada TCP 2049 con el grupo de EC2 como origen. En EC2, permite la salida correspondiente. La referencia al grupo evita enumerar individualmente las IP de las instancias asociadas; también deben cumplirse las rutas y los demás controles de red.</p>
-<p><code>0.0.0.0/0</code> abarca todas las direcciones IPv4. Una regla así no crea por sí sola acceso desde Internet: también depende de la conectividad. En este taller, restringe SSH a tu IP y NFS al grupo de EC2.</p>
+<p>En el grupo del destino de montaje EFS, permite entrada <code>TCP 2049</code> usando como origen el <strong>ID del Security Group de las EC2</strong> (nunca <code>0.0.0.0/0</code>). En las EC2, permite la salida correspondiente. Referenciar otro Security Group evita listar IPs una por una y otorga acceso automático si agregas más instancias con ese mismo grupo.</p>
 <p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
 <p>Fuentes: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html" target="_blank" rel="noopener noreferrer">AWS: Security Groups y ACL</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html" target="_blank" rel="noopener noreferrer">AWS: seguridad de red EFS</a>.</p>
 <hr>
@@ -445,13 +464,19 @@ EOF
 <table>
 <thead><tr><th>Archivo / Carpeta</th><th>¿Para qué sirve?</th><th>¿Se sube a Git?</th></tr></thead>
 <tbody>
-<tr><td><code>*.tf</code> (<code>main.tf</code>, <code>variable.tf</code>, <code>outputs.tf</code>)</td><td>Código fuente HCL. Terraform lee <strong>todos</strong> los <code>.tf</code> del directorio como un único conjunto.</td><td><strong>Sí</strong></td></tr>
+<tr><td><code>main.tf</code></td><td>Archivo principal con los recursos (<code>resource</code>) y el proveedor (<code>provider</code>).</td><td><strong>Sí</strong></td></tr>
+<tr><td><code>variables.tf</code></td><td>Declara las <strong>variables de entrada</strong> (<code>variable</code>) para parametrizar el proyecto sin escribir valores fijos. <em>(Convención oficial en plural; Terraform lee cualquier <code>*.tf</code>, por eso <code>variable.tf</code> también funciona).</em></td><td><strong>Sí</strong></td></tr>
+<tr><td><code>outputs.tf</code></td><td>Declara las <strong>salidas</strong> (<code>output</code>) que se muestran en consola al desplegar y se exponen para otros módulos o scripts.</td><td><strong>Sí</strong></td></tr>
+<tr><td><code>terraform.tfvars</code> <em>(opcional)</em></td><td>Asigna valores concretos a las variables definidas en <code>variables.tf</code> (por ejemplo, distintos valores para desarrollo vs. producción).</td><td>Depende (no si tiene secretos)</td></tr>
 <tr><td><code>.terraform/</code></td><td>Carpeta oculta donde <code>terraform init</code> descarga el plugin del proveedor (ej. <code>hashicorp/aws</code>).</td><td><strong>No</strong></td></tr>
 <tr><td><code>.terraform.lock.hcl</code></td><td>Archivo candado que fija la versión exacta del proveedor para despliegues reproducibles.</td><td><strong>Sí</strong> (recomendado)</td></tr>
 <tr><td><code>terraform.tfstate</code></td><td><strong>Archivo de estado.</strong> Mapea tu código con los recursos reales en AWS (IDs, IPs, etc.). Permite saber qué actualizar o destruir.</td><td><strong>No</strong> (puede contener datos sensibles)</td></tr>
 <tr><td><code>terraform.tfstate.backup</code></td><td>Respaldo automático del estado inmediatamente anterior al último cambio.</td><td><strong>No</strong></td></tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Regla clave de organización:</strong> Terraform lee <strong>todos los archivos <code>.tf</code></strong> de la carpeta como un solo bloque lógico. Separar en <code>main.tf</code>, <code>variables.tf</code> y <code>outputs.tf</code> no cambia la ejecución, pero mantiene el código limpio, reutilizable y fácil de mantener.</p>
+</blockquote>
 <hr>
 <h2>2. Anatomía del código HCL (Bloques fundamentales)</h2>
 <h3>2.1 Bloque <code>provider</code> (Proveedor)</h3>
@@ -487,8 +512,8 @@ EOF
 <tr><td><code>aws_instance</code></td><td>EC2</td><td>Aprovisiona una máquina virtual (instancia EC2) con AMI, tamaño, llave SSH y red.</td></tr>
 </tbody>
 </table>
-<h3>2.3 Bloque <code>variable</code> (Variables de entrada)</h3>
-<p>Permite <strong>parametrizar</strong> el proyecto para evitar valores fijos (<em>hardcoded</em>) en <code>main.tf</code> y reutilizar la misma infraestructura cambiando solo parámetros.</p>
+<h3>2.3 Archivo <code>variables.tf</code> y bloque <code>variable</code> (Variables de entrada)</h3>
+<p>El archivo <strong><code>variables.tf</code></strong> centraliza los parámetros configurables del proyecto para evitar valores fijos (<em>hardcoded</em>) en <code>main.tf</code> y reutilizar la misma infraestructura cambiando solo datos (región, AMI, tipo de instancia, llave SSH o cantidad).</p>
 <pre><code class="language-hcl">variable &quot;cantidad_instancias&quot; {
   description = &quot;Cantidad de instancias&quot;
   type        = number
@@ -504,11 +529,15 @@ EOF
 <tr><td><code>default</code></td><td>No</td><td>Valor por defecto. Si se omite, Terraform lo pedirá por terminal al ejecutar <code>plan</code> o <code>apply</code>.</td></tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Tip:</strong> Puedes sobrescribir cualquier variable desde la terminal sin editar archivos: <code>terraform apply -var=&quot;cantidad_instancias=3&quot;</code>.</p>
-</blockquote>
-<h3>2.4 Bloque <code>output</code> (Salidas)</h3>
-<p>Expone en la terminal valores generados por AWS al terminar el despliegue (IDs, IPs públicas, zonas de disponibilidad) sin tener que buscarlos manualmente en la consola web.</p>
+<p><strong>¿Cómo recibe sus valores una variable?</strong> (de menor a mayor prioridad):</p>
+<ol>
+<li>Valor <code>default</code> dentro de <code>variables.tf</code>.</li>
+<li>Variables de entorno (<code>TF_VAR_&lt;nombre&gt;</code>).</li>
+<li>Archivo <code>terraform.tfvars</code> (se carga automáticamente si existe).</li>
+<li>Bandera en terminal: <code>terraform apply -var=&quot;cantidad_instancias=3&quot;</code>.</li>
+</ol>
+<h3>2.4 Archivo <code>outputs.tf</code> y bloque <code>output</code> (Salidas)</h3>
+<p>El archivo <strong><code>outputs.tf</code></strong> define qué valores generados por AWS quieres <strong>imprimir en consola</strong> al terminar <code>terraform apply</code> (o volver a consultar con <code>terraform output</code>), sin tener que buscarlos en la consola web. Además, permite <strong>exponer esos datos</strong> para que otros módulos de Terraform o scripts externos los consuman.</p>
 <pre><code class="language-hcl">output &quot;ip_publica_instancias&quot; {
   description = &quot;Direcciones IP públicas de las instancias creadas&quot;
   value       = aws_instance.mi_instancia-efs[*].public_ip
@@ -520,15 +549,92 @@ EOF
 <tr><td><code>&quot;nombre&quot;</code></td><td>Sí</td><td>Nombre con el que se imprimirá la salida en terminal.</td></tr>
 <tr><td><code>description</code></td><td>No</td><td>Explica qué información devuelve la salida.</td></tr>
 <tr><td><code>value</code></td><td>Sí</td><td>Atributo o expresión de los recursos que se quiere mostrar.</td></tr>
+<tr><td><code>sensitive</code></td><td>No</td><td>Si es <code>true</code>, oculta el valor en la consola (útil para contraseñas o tokens).</td></tr>
 </tbody>
 </table>
 <h3>2.5 Expresiones y conceptos clave en HCL</h3>
 <ul>
 <li><strong>Referencias y dependencias implícitas:</strong> Al escribir <code>vpc_security_group_ids = [aws_security_group.mi-sg.id]</code>, Terraform detecta automáticamente que <strong>primero debe crear el Security Group</strong> y luego la instancia EC2, sin definir el orden a mano.</li>
 <li><strong>Meta-argumento <code>count</code> e interpolación <code>${...}</code>:</strong> Con <code>count = var.cantidad_instancias</code>, Terraform crea <em>N</em> copias del recurso usando un índice <code>count.index</code> que inicia en <code>0</code>. Al escribir <code>&quot;Mi instancia EFS - ${count.index + 1}&quot;</code>, genera nombres numerados (<code>1</code>, <code>2</code>, ...).</li>
-<li>*<em>Expresión </em>Splat<em> (<code>[*]</code>):</em>* Cuando un recurso usa <code>count</code>, se convierte en una lista. La sintaxis <code>aws_instance.mi_instancia-efs[*].public_ip</code> recorre todas las instancias y extrae una lista con el atributo <code>public_ip</code> de cada una.</li>
+<li><strong>Expresión <em>Splat</em> (<code>[*]</code>):</strong> Cuando un recurso usa <code>count</code>, se convierte en una lista. La sintaxis <code>aws_instance.mi_instancia-efs[*].public_ip</code> recorre todas las instancias y extrae una lista con el atributo <code>public_ip</code> de cada una.</li>
 <li><strong>Funciones nativas (<code>length()</code>):</strong> <code>length(aws_instance.mi_instancia-efs)</code> devuelve cuántos elementos fueron creados en esa lista de instancias.</li>
 </ul>
+<h3>2.6 Dependencia lineal vs. Dependencia cíclica (<code>Error: Cycle</code>)</h3>
+<p>Internamente, Terraform construye un <strong>grafo de dependencias</strong> (DAG) para saber en qué orden crear y destruir recursos.</p>
+<ul>
+<li><p><strong>Dependencia lineal (normal):</strong> El recurso <code>B</code> necesita un dato de <code>A</code>, pero <code>A</code> no necesita nada de <code>B</code> (<code>A -&gt; B</code>).</p>
+<ul>
+<li><em>Ejemplo:</em> <code>aws_instance</code> usa <code>aws_security_group.mi-sg.id</code>. Terraform crea primero el Security Group y luego la instancia EC2.</li>
+</ul></li>
+<li><strong>Dependencia cíclica (error):</strong> Dos o más recursos <strong>se necesitan mutuamente para poder crearse</strong> (<code>A &lt;-&gt; B</code>). Terraform no puede decidir cuál va primero y aborta con <code>Error: Cycle</code>.</li>
+</ul>
+<h4>¿Dónde ocurre en nuestro contexto (Taller 12: EC2 + EFS)?</h4>
+<p>Ocurre cuando <strong>dos Security Groups se referencian entre sí mediante reglas inline</strong> (dentro de cada bloque <code>aws_security_group</code>):</p>
+<ol>
+<li><code>SG_Instancias</code> define un <code>egress</code> hacia <code>SG_EFS.id</code> (necesita que <code>SG_EFS</code> exista primero).</li>
+<li><code>SG_EFS</code> define un <code>ingress</code> desde <code>SG_Instancias.id</code> (necesita que <code>SG_Instancias</code> exista primero).</li>
+</ol>
+<div class="diagram-box">
+<svg viewBox="0 0 920 250" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dependencia cíclica en Terraform con reglas inline versus solución con reglas desacopladas">
+  <defs>
+    <marker id="arr-err" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#b42318"/>
+    </marker>
+    <marker id="arr-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#1e6b43"/>
+    </marker>
+  </defs>
+
+  <!-- Panel izquierdo: Error: Cycle -->
+  <rect x="10" y="12" width="420" height="226" rx="12" fill="#fff5f5" stroke="#d92d20" stroke-width="1.8"/>
+  <text x="220" y="38" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#b42318">✕ Error: Cycle (con reglas inline)</text>
+
+  <rect x="30" y="76" width="160" height="84" rx="10" fill="#ffffff" stroke="#b42318" stroke-width="1.8"/>
+  <text x="110" y="106" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#7a150f">SG Instancias</text>
+  <text x="110" y="126" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">egress inline pide</text>
+  <text x="110" y="143" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#b42318">SG_EFS.id</text>
+
+  <rect x="250" y="76" width="160" height="84" rx="10" fill="#ffffff" stroke="#b42318" stroke-width="1.8"/>
+  <text x="330" y="106" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#7a150f">SG EFS</text>
+  <text x="330" y="126" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">ingress inline pide</text>
+  <text x="330" y="143" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#b42318">SG_EC2.id</text>
+
+  <path d="M 190 98 L 246 98" stroke="#b42318" stroke-width="2" marker-end="url(#arr-err)"/>
+  <path d="M 250 138 L 194 138" stroke="#b42318" stroke-width="2" marker-end="url(#arr-err)"/>
+
+  <text x="220" y="194" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7a150f">Bucle cerrado: ninguno puede crearse primero</text>
+  <text x="220" y="214" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6e302c">Terraform aborta al construir el grafo (DAG)</text>
+
+  <!-- Panel derecho: Solución desacoplada -->
+  <rect x="450" y="12" width="460" height="226" rx="12" fill="#f2fbf5" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="680" y="38" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#124229">✓ Solución Taller 12 (reglas separadas)</text>
+
+  <rect x="476" y="56" width="182" height="58" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.8"/>
+  <text x="567" y="81" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#122b3a">1. SG Instancias (vacío)</text>
+  <text x="567" y="99" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#465b6e">Se crea sin depender de EFS</text>
+
+  <rect x="702" y="56" width="182" height="58" rx="9" fill="#e6f4ea" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="793" y="81" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#124229">1. SG EFS (vacío)</text>
+  <text x="793" y="99" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">Se crea sin depender de EC2</text>
+
+  <path d="M 567 114 L 567 148" stroke="#1e6b43" stroke-width="2" marker-end="url(#arr-ok)"/>
+  <path d="M 793 114 L 793 148" stroke="#1e6b43" stroke-width="2" marker-end="url(#arr-ok)"/>
+  <path d="M 750 114 L 615 148" stroke="#1e6b43" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arr-ok)"/>
+  <path d="M 610 114 L 745 148" stroke="#1e6b43" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arr-ok)"/>
+
+  <rect x="476" y="152" width="182" height="64" rx="9" fill="#ffffff" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="567" y="177" text-anchor="middle" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#124229">egress_rule: salida_efs</text>
+  <text x="567" y="197" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">2. Conecta SG EC2 → SG EFS</text>
+
+  <rect x="702" y="152" width="182" height="64" rx="9" fill="#ffffff" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="793" y="177" text-anchor="middle" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#124229">ingress_rule: entrada_efs</text>
+  <text x="793" y="197" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#2c5e43">2. Acepta SG EC2 en SG EFS</text>
+</svg>
+</div>
+<p><strong>Solución (aplicada en el Taller 12):</strong> Crear primero ambos Security Groups <strong>vacíos</strong> (sin reglas <em>inline</em>) y después agregar las reglas como <strong>recursos separados</strong> (<code>aws_vpc_security_group_ingress_rule</code> y <code>aws_vpc_security_group_egress_rule</code>). Así ambos IDs ya existen cuando se crean las reglas y el ciclo desaparece.</p>
+<blockquote>
+<p><strong>Corrección importante sobre EC2 y Security Groups:</strong> Crear una instancia EC2 que referencia un Security Group <strong>NO es una dependencia cíclica</strong>, sino una dependencia lineal (<code>SG -&gt; EC2</code>): no hace falta crear la instancia sin SG y asociarlo después, porque el SG no depende de la instancia. La estrategia de «crear primero los recursos base vacíos y vincularlos después» aplica precisamente al caso de <strong>dos Security Groups que se referencian mutuamente</strong> (o si una regla del SG intentara leer la IP privada de la propia instancia que usa ese SG).</p>
+</blockquote>
 <hr>
 <h2>3. Guía de comandos en terminal (Ciclo de vida)</h2>
 <p>Todos los comandos de Terraform se ejecutan <strong>dentro de la carpeta del proyecto</strong> que contiene los archivos <code>.tf</code>.</p>
@@ -973,11 +1079,11 @@ cat /efs1/prueba.txt
 <hr>
 <h2>3. Costo Total de Propiedad (TCO) y Calculadora de Precios</h2>
 <ul>
-<li><p>*<em>Costo Total de Propiedad (TCO — </em>Total Cost of Ownership<em>):<strong> Es una estimación financiera que identifica tanto los </strong>costos directos<strong> (servidores, licencias) como los </strong>costos indirectos</em>* (electricidad, refrigeración, espacio físico, personal de mantenimiento) de mantener un sistema local frente a llevarlo a la nube.</p>
+<li><p><strong>Costo Total de Propiedad (TCO — <em>Total Cost of Ownership</em>):</strong> Es una estimación financiera que identifica tanto los <strong>costos directos</strong> (servidores, licencias) como los <strong>costos indirectos</strong> (electricidad, refrigeración, espacio físico, personal de mantenimiento) de mantener un sistema local frente a llevarlo a la nube.</p>
 <ul>
 <li><strong>Para qué es útil:</strong> Para comparar una infraestructura <em>on-premises</em> contra AWS, presupuestar cargas de trabajo y construir un <strong>caso de negocio</strong> para la gerencia.</li>
 </ul></li>
-<li>*<em>Calculadora de precios de AWS (</em>AWS Pricing Calculator<em>):<strong> Herramienta web gratuita que permite crear </strong>estimaciones detalladas del costo mensual</em>* de arquitecturas y casos prácticos antes de desplegarlos en AWS.</li>
+<li><strong>Calculadora de precios de AWS (<em>AWS Pricing Calculator</em>):</strong> Herramienta web gratuita que permite crear <strong>estimaciones detalladas del costo mensual</strong> de arquitecturas y casos prácticos antes de desplegarlos en AWS.</li>
 </ul>
 <hr>
 <h2>4. Servicios sin costo adicional vs. recursos que sí cobran</h2>
@@ -1146,7 +1252,7 @@ cat /efs1/prueba.txt
 <hr>
 <h3>D. Usuario Raíz (Root User) y MFA</h3>
 <ul>
-<li>*<em>Usuario Raíz (</em>Root User<em>):<strong> Se crea automáticamente al abrir la cuenta de AWS (con el correo y contraseña iniciales) y tiene </strong>acceso total e ilimitado</em>*.</li>
+<li><strong>Usuario Raíz (<em>Root User</em>):</strong> Se crea automáticamente al abrir la cuenta de AWS (con el correo y contraseña iniciales) y tiene <strong>acceso total e ilimitado</strong>.</li>
 <li><p><strong>Prácticas recomendadas obligatorias para el Usuario Raíz:</strong></p>
 <ol>
 <li><strong>NO usarlo</strong> para las tareas cotidianas.</li>
@@ -1343,6 +1449,7 @@ cat /efs1/prueba.txt
 </table>
 <blockquote>
 <p><strong>¿Por qué el SG de EFS no necesita reglas de salida?</strong> Porque los Security Groups de AWS son <strong>stateful</strong>: al autorizar la entrada desde las EC2 por el puerto <code>2049</code>, el tráfico de respuesta queda permitido automáticamente.</p>
+<p><strong>¿Por qué separar las reglas en recursos independientes?</strong> Además de seguir la buena práctica de AWS, <strong>evita una dependencia cíclica (<code>Error: Cycle</code>)</strong>: si <code>mi-sg-efs-instancias-14</code> y <code>mi-sg-efs-14</code> tuvieran reglas <em>inline</em> apuntándose mutuamente, Terraform no sabría cuál crear primero. Creándolos vacíos y añadiendo las reglas aparte se rompe el ciclo (ver <a href="#06-terraform">Tema 6 — Dependencia cíclica</a>).</p>
 </blockquote>
 <h4>3. Instancias EC2 (<code>aws_instance.mi_instancia-efs</code>)</h4>
 <table>
@@ -1446,7 +1553,7 @@ git rm --cached mi-primera-llaves-ae.pem
       </div>
       <div class="flashcards-controls">
         <select class="flashcards-select" id="fcTopicFilter" aria-label="Filtrar tarjetas por tema">
-          <option value="all">Todos los temas (36 tarjetas)</option>
+          <option value="all">Todos los temas (39 tarjetas)</option>
           <option value="01-fundamentos">01. Fundamentos Cloud</option>
           <option value="02-ec2">02. Servicios AWS y EC2</option>
           <option value="03-redes-seguridad">03. Redes y Seguridad</option>
@@ -1467,8 +1574,8 @@ git rm --cached mi-primera-llaves-ae.pem
       </div>
       <div class="flashcards-body">
         <div class="flashcard-counter">
-          <span id="fcCounter">Tarjeta 1 de 36</span>
-          <strong id="fcKnownStats">Dominadas: 0 / 36</strong>
+          <span id="fcCounter">Tarjeta 1 de 39</span>
+          <strong id="fcKnownStats">Dominadas: 0 / 39</strong>
         </div>
         <div class="flashcard-scene">
           <div class="flashcard-inner" id="fcCardInner">

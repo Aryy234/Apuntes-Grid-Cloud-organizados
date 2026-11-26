@@ -38,7 +38,7 @@
       .replace(/[\u0300-\u036f]/g, '');
 
   /* ========================================================================
-     Flashcards Bank (36 tarjetas: 3 por cada uno de los 12 temas)
+     Flashcards Bank (39 tarjetas distribuidas en los 12 temas)
      ======================================================================== */
   const FLASHCARDS = [
     // Tema 01
@@ -107,6 +107,13 @@
       q: '¿Para qué sirve AWS Shield y qué niveles ofrece?',
       a: 'Es el servicio administrado de protección contra ataques DDoS. Tiene dos niveles: Shield Standard (gratuito y activo por defecto en todas las cuentas) y Shield Advanced (protección avanzada de pago).'
     },
+    {
+      id: 'fc-03-4',
+      topicId: '03-redes-seguridad',
+      topicLabel: '3. Redes y Seguridad',
+      q: '¿Qué significa 0.0.0.0/0 en un Security Group y en qué se diferencia de /32 y de 0.0.0.0?',
+      a: '0.0.0.0/0 representa cualquier dirección IPv4 (0 bits fijos = todo Internet). Una IP única usa /32 (ej. tu IP/32). Sin máscara, 0.0.0.0 en un servidor significa escuchar en todas sus interfaces de red.'
+    },
     // Tema 04
     {
       id: 'fc-04-1',
@@ -172,6 +179,20 @@
       topicLabel: '6. Terraform',
       q: '¿Qué operaciones de ciclo de vida permite automatizar Terraform sobre infraestructura?',
       a: 'Permite definir, crear, actualizar y eliminar (CRUD) infraestructura como código (IaC) de forma automatizada.'
+    },
+    {
+      id: 'fc-06-4',
+      topicId: '06-terraform',
+      topicLabel: '6. Terraform',
+      q: '¿Para qué sirven variables.tf y outputs.tf en un proyecto de Terraform?',
+      a: 'variables.tf declara parámetros de entrada (evita valores fijos en main.tf y permite cambiar valores con default, terraform.tfvars o -var). outputs.tf imprime en consola y expone valores creados por AWS (IPs, IDs, AZ).'
+    },
+    {
+      id: 'fc-06-5',
+      topicId: '06-terraform',
+      topicLabel: '6. Terraform',
+      q: '¿Qué es una dependencia cíclica (Error: Cycle) en Terraform y cómo se resuelve entre dos Security Groups?',
+      a: 'Ocurre cuando dos recursos se necesitan mutuamente para crearse (A <-> B), por ejemplo dos SG con reglas inline apuntándose entre sí. Se resuelve creando ambos SG vacíos y separando las reglas en recursos aws_vpc_security_group_*_rule.'
     },
     // Tema 07
     {

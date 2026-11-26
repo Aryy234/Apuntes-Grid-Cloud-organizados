@@ -14,22 +14,40 @@ Son firewalls virtuales que *controlan el tráfico de entrada y salida (se confi
 
 **Regla de salida (Outbound):** Define qué tráfico puede salir de tu instancia hacia otros destinos (internet, otras redes o servicios); por defecto en AWS permite todo el tráfico saliente. La regla de salida que se crea por defecto es la de internet
 
-## Ampliación de clase — 2026-11-12
+## Ampliación de clase — 2026-11-12 y 2026-11-26
 
-Última actualización: 2026-11-17
+Última actualización: 2026-11-26
 
-### Stateful y stateless
+### Stateful vs. Stateless (con memoria vs. sin memoria)
 
-| Control | Comportamiento | Tráfico de respuesta |
-| --- | --- | --- |
-| Security Group | Stateful: sigue el estado de las conexiones. | La respuesta de una conexión permitida se autoriza automáticamente. |
-| Network ACL | Stateless: evalúa entrada y salida por separado. | Deben permitirse ambos sentidos, incluidos los puertos de retorno necesarios. |
+*(Nota ortográfica: se escribe **stateful**, con una sola `l`.)*
+
+La diferencia entre ambos mecanismos es si el firewall **recuerda las conexiones activas** (mantiene una tabla de estado) o si evalúa cada paquete por separado:
+
+| Característica | **Stateful** (Con estado) | **Stateless** (Sin estado) |
+| :--- | :--- | :--- |
+| **Servicio en AWS** | **Security Group** (a nivel de instancia / interfaz de red). | **Network ACL (NACL)** (a nivel de subred). |
+| **¿Tiene memoria?** | **Sí.** Registra las conexiones permitidas. | **No.** Evalúa cada paquete como si fuera nuevo. |
+| **Tráfico de respuesta** | **Automático:** si entra una petición permitida, la respuesta puede salir aunque no exista regla de salida para ella. | **Manual:** debes permitir explícitamente la entrada **y** también la salida de retorno (puertos efímeros `1024–65535`). |
+| **Tipo de reglas** | Solo reglas de **permitir (`Allow`)**; todo lo demás se bloquea por defecto. | Reglas numeradas de **permitir (`Allow`) y denegar (`Deny`)**. |
+| **Analogía rápida** | Un guardia con registro: si te dejó entrar, te deja salir automáticamente. | Un peaje sin memoria: revisa permiso al entrar y vuelve a revisarlo al salir. |
+
+> **Ejemplo real del Taller 12:** El Security Group del EFS (`mi-sg-efs-14`) solo define una regla de **entrada** (`TCP 2049` desde las EC2) y **ninguna regla de salida**. Aun así el EFS responde a las instancias porque el Security Group es *stateful*.
+
+### ¿Qué significa `0.0.0.0/0` y `0.0.0.0`?
+
+Conviene distinguir la notación CIDR usada en AWS/Terraform (`0.0.0.0/0`) de la dirección sin máscara (`0.0.0.0`):
+
+- **`0.0.0.0/0` (Notación CIDR — «cualquier dirección IPv4»):** El prefijo `/0` indica que **0 bits están fijos**, por lo que abarca todo el rango IPv4 (`0.0.0.0` a `255.255.255.255`). En la práctica se traduce como **«todo Internet / cualquier origen o destino»**.
+  - En **entrada (`ingress`)**: acepta tráfico desde cualquier IPv4 (normal para puertos web públicos `80`/`443`; evitarlo en producción para SSH `22` o NFS `2049`).
+  - En **salida (`egress`)**: permite que la instancia salga hacia cualquier IPv4 (por ejemplo, descargar paquetes o actualizaciones).
+  - **Matiz clave:** Abrir `0.0.0.0/0` en un Security Group **no crea acceso a Internet por sí solo** si la instancia está en una subred privada sin Internet Gateway ni IP pública; simplemente no filtra ninguna IPv4.
+  - **Comparación útil:** Una única IP exacta usa `/32` (ej. `203.0.113.10/32` para solo tu equipo); el equivalente de `0.0.0.0/0` en IPv6 es `::/0`.
+- **`0.0.0.0` (sin `/0`, en servidores o aplicaciones):** Cuando un servidor web o proceso escucha (*bind*) en `0.0.0.0:80`, significa que acepta conexiones en **todas las interfaces de red** de esa máquina (a diferencia de `127.0.0.1`, que solo responde en local).
 
 ### Permitir NFS desde otro Security Group
 
-En el grupo del destino de montaje EFS, permite entrada TCP 2049 con el grupo de EC2 como origen. En EC2, permite la salida correspondiente. La referencia al grupo evita enumerar individualmente las IP de las instancias asociadas; también deben cumplirse las rutas y los demás controles de red.
-
-`0.0.0.0/0` abarca todas las direcciones IPv4. Una regla así no crea por sí sola acceso desde Internet: también depende de la conectividad. En este taller, restringe SSH a tu IP y NFS al grupo de EC2.
+En el grupo del destino de montaje EFS, permite entrada `TCP 2049` usando como origen el **ID del Security Group de las EC2** (nunca `0.0.0.0/0`). En las EC2, permite la salida correspondiente. Referenciar otro Security Group evita listar IPs una por una y otorga acceso automático si agregas más instancias con ese mismo grupo.
 
 [Ver taller completo](09-taller-ebs-efs.md).
 
