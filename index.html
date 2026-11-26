@@ -1,25 +1,122 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computación Grid y Cloud — Apuntes</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:17px/1.7 system-ui,sans-serif;color:#203044;background:#f2f5f9}aside{position:fixed;width:285px;height:100vh;overflow:auto;background:#122b3a;color:white;padding:30px 22px}aside a{display:block;color:#d8e9f0;text-decoration:none;margin:14px 0;font-size:14px}main{margin-left:285px;max-width:1120px;padding:40px}header,article{background:white;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}h1,h2,h3{line-height:1.25;color:#124d64}h1{font-size:30px}h2{font-size:24px;margin-top:32px}h3{font-size:20px}a{color:#087795}img{max-width:100%;height:auto;border-radius:6px}figure{margin:24px 0}figcaption{font-size:12px;color:#607182}pre{padding:20px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13px/1.6 Consolas,monospace}code{font-size:.9em}p{margin:12px 0}.bullet{padding-left:16px}small{color:#607182}@media(max-width:850px){aside{position:static;width:auto;height:auto}main{margin:0;padding:14px}header,article{padding:22px}}@media print{aside{display:none}main{margin:0;padding:0}article{break-before:page}pre{white-space:pre-wrap}img{max-height:650px}}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{border:1px solid #dce4eb;padding:10px;text-align:left}th{background:#eef5f8}blockquote{border-left:4px solid #087795;margin:18px 0;padding:4px 18px;background:#f2f7fa}</style></head><body><aside><strong>GRID & CLOUD</strong><p>Cuaderno de clases</p><a href="#01-fundamentos">1. Fundamentos de computación en la nube</a><a href="#02-ec2">2. Servicios de AWS y Amazon EC2</a><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a><a href="#04-user-data">4. Automatización inicial con User Data</a><a href="#05-herramientas-aws">5. Consola, AWS CLI y SDK</a><a href="#06-terraform">6. Infraestructura como código con Terraform</a><a href="#07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a><a href="#08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a></aside><main><header id="inicio"><small>CLASES HASTA EL 12 DE NOVIEMBRE DE 2026</small><h1>Computación Grid y Cloud</h1><p>Nueve temas · Actualizado el 17 de noviembre de 2026</p><p>Imágenes originales y ejemplos de clase. El taller incluye aclaraciones técnicas con sus fuentes.</p><a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a></header><article id="01-fundamentos"><h1>1. Fundamentos de computación en la nube</h1>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Computación Grid y Cloud — Apuntes</title>
+  <style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font:17px/1.7 system-ui,-apple-system,Segoe UI,sans-serif;color:#203044;background:#f2f5f9}
+    aside{position:fixed;width:295px;height:100vh;overflow:auto;background:#122b3a;color:#fff;padding:28px 20px}
+    aside strong{letter-spacing:.06em;font-size:15px}
+    aside p{margin:4px 0 16px;color:#9fc0d1;font-size:13.5px}
+    .buscador-wrap{margin:0 0 16px}
+    #buscador{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #2b4c60;background:#0d202c;color:#fff;font-size:13.5px;outline:none}
+    #buscador::placeholder{color:#89a7b8}
+    #buscador:focus{border-color:#38bdf8}
+    #estado-busqueda{display:block;margin-top:6px;font-size:12px;color:#9fc0d1;min-height:16px}
+    aside a{display:block;color:#d8e9f0;text-decoration:none;margin:8px 0;padding:6px 10px;border-radius:7px;font-size:13.8px;line-height:1.35;transition:background .15s}
+    aside a:hover,aside a.activo{background:#1c4157;color:#fff}
+    aside a.oculto{display:none}
+    main{margin-left:295px;max-width:1120px;padding:38px}
+    header,article{background:#fff;padding:34px;border-radius:14px;margin-bottom:24px;border:1px solid #dde5ed}
+    h1,h2,h3,h4{line-height:1.25;color:#124d64}
+    h1{font-size:30px;margin-top:0}
+    h2{font-size:23px;margin-top:30px}
+    h3{font-size:19px;margin-top:22px}
+    h4{font-size:16.5px;margin-top:18px;color:#1c5f78}
+    a{color:#087795}
+    img{max-width:100%;height:auto;border-radius:6px}
+    figure{margin:24px 0}
+    figure.diagrama{background:#f8fbfd;border:1px solid #d5e3ec;border-radius:10px;padding:16px;text-align:center}
+    figure.diagrama svg{max-width:100%;height:auto;display:block;margin:0 auto}
+    figcaption{font-size:12.5px;color:#54677a;margin-top:10px}
+    pre{padding:18px;overflow:auto;background:#142a39;color:#e5f1f7;border-radius:8px;font:13.5px/1.6 Consolas,monospace}
+    code{font-family:Consolas,monospace;font-size:.88em;background:#edf3f7;color:#12384b;padding:2px 5px;border-radius:4px}
+    pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
+    p{margin:12px 0}
+    ul,ol{padding-left:24px}
+    li{margin:6px 0}
+    hr{border:0;border-top:1px solid #e2e9f0;margin:24px 0}
+    small{color:#607182}
+    .header-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
+    .header-links a{background:#eef5f8;padding:6px 12px;border-radius:7px;text-decoration:none;font-size:14px;font-weight:600}
+    .header-links a:hover{background:#dfeef5}
+    table{border-collapse:collapse;width:100%;display:block;overflow:auto;margin:16px 0}
+    th,td{border:1px solid #dce4eb;padding:10px 12px;text-align:left;vertical-align:top}
+    th{background:#eef5f8;color:#12384b}
+    blockquote{border-left:4px solid #087795;margin:18px 0;padding:6px 18px;background:#f2f7fa;border-radius:0 8px 8px 0}
+    article.resaltado{border-color:#087795;box-shadow:0 0 0 2px rgba(8,119,149,.12)}
+    @media(max-width:850px){
+      aside{position:static;width:auto;height:auto}
+      main{margin:0;padding:14px}
+      header,article{padding:22px}
+    }
+    @media print{
+      aside{display:none}
+      main{margin:0;padding:0;max-width:none}
+      article{break-before:page;border:none;padding:0}
+      pre{white-space:pre-wrap}
+      img{max-height:650px}
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <strong>GRID &amp; CLOUD</strong>
+    <p>Cuaderno de clases (10 temas)</p>
+    <div class="buscador-wrap">
+      <input type="search" id="buscador" placeholder="Buscar concepto (ej. egress, count, NFS)..." aria-label="Buscar en apuntes">
+      <small id="estado-busqueda"></small>
+    </div>
+    <nav id="menu-temas">
+    <a href="#01-fundamentos" data-target="01-fundamentos">1. Fundamentos de computación en la nube</a>
+    <a href="#02-ec2" data-target="02-ec2">2. Servicios de AWS y Amazon EC2</a>
+    <a href="#03-redes-seguridad" data-target="03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a>
+    <a href="#04-user-data" data-target="04-user-data">4. Automatización inicial con User Data</a>
+    <a href="#05-herramientas-aws" data-target="05-herramientas-aws">5. Consola, AWS CLI y SDK</a>
+    <a href="#06-terraform" data-target="06-terraform">6. Infraestructura como código con Terraform</a>
+    <a href="#07-almacenamiento" data-target="07-almacenamiento">7. Almacenamiento: EBS, EFS y NFS</a>
+    <a href="#08-practica-ebs" data-target="08-practica-ebs">8. Práctica: conexión SSH y montaje de EBS</a>
+    <a href="#09-taller-ebs-efs" data-target="09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS</a>
+    <a href="#10-talleres-terraform" data-target="10-talleres-terraform">10. Talleres prácticos de Terraform (EC2 y EFS)</a>
+    </nav>
+  </aside>
+  <main>
+    <header id="inicio">
+      <small>APUNTES Y TALLERES DE AWS &amp; TERRAFORM</small>
+      <h1>Computación Grid y Cloud</h1>
+      <p>10 temas · Actualizado el 26 de noviembre de 2026</p>
+      <p>Imágenes originales, ejemplos de clase, diagramas offline y talleres prácticos de Terraform sincronizados con el repositorio de código.</p>
+      <div class="header-links">
+        <a href="Apuntes%20de%20clase.md">Archivo principal para nuevos apuntes</a>
+        <a href="https://github.com/Aryy234/cloud-u1-ps-ae" target="_blank" rel="noopener noreferrer">Repositorio de talleres Terraform (GitHub)</a>
+      </div>
+    </header>
+  <article id="01-fundamentos">
+<h1>1. Fundamentos de computación en la nube</h1>
 <p>Clase: 15/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
-<p>La computación en la nube permite acceder a recursos tecnológicos alojados en infraestructura remota. </p>
+<p>La computación en la nube permite acceder a recursos tecnológicos alojados en infraestructura remota.</p>
 <p>Tres conceptos principales:</p>
 <ul>
-<li>aprovisionamiento de recursos/servicios tecnológicos bajo un esquema <em>bajo demanda</em>   </li>
-<li>a <em>través de una red</em> (internet)   </li>
+<li>aprovisionamiento de recursos/servicios tecnológicos bajo un esquema <em>bajo demanda</em></li>
+<li>a <em>través de una red</em> (internet)</li>
 <li>bajo un esquema <em>pago por uso</em></li>
 </ul>
 <h2><strong>Modelos de Servicio en la Nube:</strong></h2>
 <ul>
-<li><strong>IaaS:</strong> infraestructura como servicio: permite aprovisionar recursos tecnológicos, por ejemplo, un servidor virtual  </li>
-<li><strong>PaaS:</strong> Plataforma como servicio, me otorga una plataforma de alguna solución tecnológica, por ejemplo me brinda herramientas como base de datos, API etc etc  </li>
+<li><strong>IaaS:</strong> infraestructura como servicio: permite aprovisionar recursos tecnológicos, por ejemplo, un servidor virtual</li>
+<li><strong>PaaS:</strong> Plataforma como servicio, me otorga una plataforma de alguna solución tecnológica, por ejemplo me brinda herramientas como base de datos, API etc etc</li>
 <li><strong>SaaS:</strong> Software como servicio, por ejemplo el gmail, outlook, utilizado por usuarios finales</li>
 </ul>
-<p><img loading="lazy" src="imagenes/image1.png" alt="Material de clase — image1"> </p>
+<p><img loading="lazy" src="imagenes/image1.png" alt="Material de clase — image1"></p>
 <h2><strong>Modelos de Implementación.</strong></h2>
 <ul>
-<li><strong>Nube Pública:</strong> se despliega y yo puedo acceder a través de internet desde cualquier región geográfica  </li>
-<li><strong>Nube Privada:</strong> (<em>soberanía de los datos:</em> hay políticas que los datos no salgan del país) se despliega y yo puedo acceder a través de INTRANET pero solo dentro de una región geográfica y de una empresa, un ejemplo AWS outposts  </li>
-<li><strong>Nube Híbrida:</strong> mezcla de pública y privada dependiendo de los intereses del cliente   </li>
+<li><strong>Nube Pública:</strong> se despliega y yo puedo acceder a través de internet desde cualquier región geográfica</li>
+<li><strong>Nube Privada:</strong> (<em>soberanía de los datos:</em> hay políticas que los datos no salgan del país) se despliega y yo puedo acceder a través de INTRANET pero solo dentro de una región geográfica y de una empresa, un ejemplo AWS outposts</li>
+<li><strong>Nube Híbrida:</strong> mezcla de pública y privada dependiendo de los intereses del cliente</li>
 <li><strong>Nube Comunitaria:</strong> servidores, almacenamiento, aplicaciones y servicios— que son gestionados de manera conjunta por un grupo de usuarios con intereses alineados.</li>
 </ul>
 <p><img loading="lazy" src="imagenes/image2.png" alt="Material de clase — image2"></p>
@@ -31,53 +128,51 @@
 <p>Costos continuos y recurrentes del día a día necesarios para mantener la operación en marcha.</p>
 <p>Se deduce por completo en el estado de resultados dentro del mismo período fiscal en que ocurre.</p>
 <h3>1. Cambiar gastos de capital por gastos variables</h3>
-<p><img loading="lazy" src="imagenes/image3.png" alt="Material de clase — image3"> </p>
+<p><img loading="lazy" src="imagenes/image3.png" alt="Material de clase — image3"></p>
 <h3>2. Economías de escala</h3>
-<p><img loading="lazy" src="imagenes/image4.png" alt="Material de clase — image4"> </p>
+<p><img loading="lazy" src="imagenes/image4.png" alt="Material de clase — image4"></p>
 <h3>3. Obtener recursos bajo demanda</h3>
 <p>Obtener recursos bajo demanda</p>
-<p><img loading="lazy" src="imagenes/image5.png" alt="Material de clase — image5"> </p>
+<p><img loading="lazy" src="imagenes/image5.png" alt="Material de clase — image5"></p>
 <h3>4. Aumentar la velocidad y la agilidad</h3>
-<p><img loading="lazy" src="imagenes/image6.png" alt="Material de clase — image6"> </p>
+<p><img loading="lazy" src="imagenes/image6.png" alt="Material de clase — image6"></p>
 <h3>5. Reducir la operación y el mantenimiento de centros de datos</h3>
-<p><img loading="lazy" src="imagenes/image7.png" alt="Material de clase — image7"> </p>
+<p><img loading="lazy" src="imagenes/image7.png" alt="Material de clase — image7"></p>
 <h3>6. Adquirir escala mundial en minutos</h3>
 <p><img loading="lazy" src="imagenes/image8.png" alt="Material de clase — image8"></p>
-</article>
-<article id="02-ec2"><h1>2. Servicios de AWS y Amazon EC2</h1>
+  </article>
+  <article id="02-ec2">
+<h1>2. Servicios de AWS y Amazon EC2</h1>
 <p>Clase: 15/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <h2>Categorías:</h2>
-<p><img loading="lazy" src="imagenes/image9.png" alt="Material de clase — image9"> </p>
+<p><img loading="lazy" src="imagenes/image9.png" alt="Material de clase — image9"></p>
 <h3>Categoría Informática</h3>
 <p>Un ejemplo</p>
 <p><strong>EC2 (Amazon Elastic Compute Cloud):</strong> Servicio de computación en la nube que permite crear y administrar <strong>servidores virtuales (llamados instancias)</strong> bajo demanda con capacidad de cómputo escalable.</p>
 <ul>
-<li><p><strong>Nombre completo:</strong> Amazon Elastic Compute Cloud.</p>
-</li>
-<li><p><strong>Función principal:</strong> Permite aprovisionar máquinas virtuales en minutos con la configuración que elijas de CPU, memoria RAM, almacenamiento y sistema operativo (Linux, Windows, etc.).</p>
-</li>
-<li><p><strong>Elasticidad:</strong> Puedes aumentar o reducir la potencia y cantidad de servidores según el tráfico o la demanda de tu aplicación.</p>
-</li>
-<li><p><strong>Modelo de cobro:</strong> Pago por uso (por segundo o por hora), convirtiendo los costos de infraestructura física (CAPEX) en gastos operativos variables (OPEX).</p>
-</li>
+<li><strong>Nombre completo:</strong> Amazon Elastic Compute Cloud.</li>
+<li><strong>Función principal:</strong> Permite aprovisionar máquinas virtuales en minutos con la configuración que elijas de CPU, memoria RAM, almacenamiento y sistema operativo (Linux, Windows, etc.).</li>
+<li><strong>Elasticidad:</strong> Puedes aumentar o reducir la potencia y cantidad de servidores según el tráfico o la demanda de tu aplicación.</li>
+<li><strong>Modelo de cobro:</strong> Pago por uso (por segundo o por hora), convirtiendo los costos de infraestructura física (CAPEX) en gastos operativos variables (OPEX).</li>
 </ul>
 <p><strong>Los AMIs (Amazon Machine Image):</strong> son imágenes de máquina virtual preconfiguradas que incluyen el sistema operativo y el software necesario para lanzar instancias en la nube. Sirven como plantillas reutilizables para desplegar servidores idénticos de forma rápida y consistente.</p>
-<p><strong>Instancias:</strong> Son entornos virtuales o físicos donde se ejecutan las cargas de trabajo, definidos por la conformación de la familia (tipo de hardware) y el tamaño (capacidad de recursos).  </p>
+<p><strong>Instancias:</strong> Son entornos virtuales o físicos donde se ejecutan las cargas de trabajo, definidos por la conformación de la familia (tipo de hardware) y el tamaño (capacidad de recursos).</p>
 <p>La conformación determina cuántos recursos (CPU, memoria) se asignan según la familia y el tamaño elegido.</p>
-<p><strong>Familia:</strong> Define el tipo de procesador y la cantidad de memoria que tendrá la instancia, agrupando configuraciones según el caso de uso (cómputo, memoria, propósito general).  </p>
+<p><strong>Familia:</strong> Define el tipo de procesador y la cantidad de memoria que tendrá la instancia, agrupando configuraciones según el caso de uso (cómputo, memoria, propósito general).</p>
 <p>Cada familia ofrece perfiles específicos de CPU y RAM para optimizar rendimiento y costo.</p>
-<p><strong>Pares de claves:</strong> Son el mecanismo de autenticación basado en criptografía asimétrica, donde se crean una llave pública y una privada para acceder a las instancias.  </p>
+<p><strong>Pares de claves:</strong> Son el mecanismo de autenticación basado en criptografía asimétrica, donde se crean una llave pública y una privada para acceder a las instancias.</p>
 <p>La llave pública se instala en la instancia y la privada la guarda el usuario para autenticarse de forma segura sin contraseña.</p>
-<p><strong>GP e IO — aclaración:</strong> En el apartado de almacenamiento, gp2/gp3 e io1/io2 son tipos de volúmenes EBS, no familias de instancias EC2.  </p>
+<p><strong>GP e IO — aclaración:</strong> En el apartado de almacenamiento, gp2/gp3 e io1/io2 son tipos de volúmenes EBS, no familias de instancias EC2.</p>
 <p>Los volúmenes de propósito general sirven para cargas variadas; los de IOPS aprovisionadas se orientan a cargas que requieren rendimiento de entrada/salida consistente.</p>
 <p><img loading="lazy" src="imagenes/image10.png" alt="Material de clase — image10"></p>
-</article>
-<article id="03-redes-seguridad"><h1>3. Redes y seguridad: VPC y Security Groups</h1>
+  </article>
+  <article id="03-redes-seguridad">
+<h1>3. Redes y seguridad: VPC y Security Groups</h1>
 <p>Clase: 20/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
-<p><strong>VPC ID:</strong> Es el identificador único que AWS asigna a una Virtual Private Cloud, es decir, una red lógica aislada dentro de la nube donde despliegas tus recursos (servidores, bases de datos, etc.). Sirve para referenciar esa red específica en configuraciones, APIs y otros servicios. </p>
-<p><strong>Security Groups:</strong> </p>
+<p><strong>VPC ID:</strong> Es el identificador único que AWS asigna a una Virtual Private Cloud, es decir, una red lógica aislada dentro de la nube donde despliegas tus recursos (servidores, bases de datos, etc.). Sirve para referenciar esa red específica en configuraciones, APIs y otros servicios.</p>
+<p><strong>Security Groups:</strong></p>
 <p>Son firewalls virtuales que <em>controlan el tráfico de entrada y salida (se configuran)</em> de tus instancias (como EC2), permitiendo solo los puertos, protocolos y orígenes que definen. Son <em>stateful</em>: si permites una conexión de entrada, la respuesta sale automáticamente sin regla adicional.</p>
 <p><strong>Regla de entrada (Inbound):</strong> Define qué tráfico externo puede llegar a tu instancia, indicando protocolo, puerto y origen; por ejemplo, SSH (TCP puerto 22) permite conectarte de forma remota a un servidor Linux, idealmente restringido a tu IP.</p>
 <p><strong>Regla de salida (Outbound):</strong> Define qué tráfico puede salir de tu instancia hacia otros destinos (internet, otras redes o servicios); por defecto en AWS permite todo el tráfico saliente. La regla de salida que se crea por defecto es la de internet</p>
@@ -85,31 +180,20 @@
 <p>Última actualización: 2026-11-17</p>
 <h3>Stateful y stateless</h3>
 <table>
-<thead>
-<tr>
-<th>Control</th>
-<th>Comportamiento</th>
-<th>Tráfico de respuesta</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Security Group</td>
-<td>Stateful: sigue el estado de las conexiones.</td>
-<td>La respuesta de una conexión permitida se autoriza automáticamente.</td>
-</tr>
-<tr>
-<td>Network ACL</td>
-<td>Stateless: evalúa entrada y salida por separado.</td>
-<td>Deben permitirse ambos sentidos, incluidos los puertos de retorno necesarios.</td>
-</tr>
-</tbody></table>
+<thead><tr><th style="text-align:left">Control</th><th style="text-align:left">Comportamiento</th><th style="text-align:left">Tráfico de respuesta</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left">Security Group</td><td style="text-align:left">Stateful: sigue el estado de las conexiones.</td><td style="text-align:left">La respuesta de una conexión permitida se autoriza automáticamente.</td></tr>
+<tr><td style="text-align:left">Network ACL</td><td style="text-align:left">Stateless: evalúa entrada y salida por separado.</td><td style="text-align:left">Deben permitirse ambos sentidos, incluidos los puertos de retorno necesarios.</td></tr>
+</tbody>
+</table>
 <h3>Permitir NFS desde otro Security Group</h3>
 <p>En el grupo del destino de montaje EFS, permite entrada TCP 2049 con el grupo de EC2 como origen. En EC2, permite la salida correspondiente. La referencia al grupo evita enumerar individualmente las IP de las instancias asociadas; también deben cumplirse las rutas y los demás controles de red.</p>
 <p><code>0.0.0.0/0</code> abarca todas las direcciones IPv4. Una regla así no crea por sí sola acceso desde Internet: también depende de la conectividad. En este taller, restringe SSH a tu IP y NFS al grupo de EC2.</p>
 <p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
-<p>Fuentes: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html">AWS: Security Groups y ACL</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: seguridad de red EFS</a>.</p>
-</article>
-<article id="04-user-data"><h1>4. Automatización inicial con User Data</h1>
+<p>Fuentes: <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html" target="_blank" rel="noopener noreferrer">AWS: Security Groups y ACL</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html" target="_blank" rel="noopener noreferrer">AWS: seguridad de red EFS</a>.</p>
+  </article>
+  <article id="04-user-data">
+<h1>4. Automatización inicial con User Data</h1>
 <p>Clase: 22/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <p><strong>User Data:</strong> permite pasar un script o configuración a una instancia (en AWS EC2), que se ejecuta solo en el primer arranque.</p>
@@ -156,112 +240,325 @@ sudo tee /var/www/html/index.html &gt; /dev/null &lt;&lt; EOF
 &lt;/html&gt;
 EOF
 </code></pre>
-<p> Las “instrucciones” son comandos automáticos (bash o cloud-config) como instalar paquetes, crear usuarios o levantar servicios, para que la instancia se configure sola.</p>
+<p>Las “instrucciones” son comandos automáticos (bash o cloud-config) como instalar paquetes, crear usuarios o levantar servicios, para que la instancia se configure sola.</p>
 <p><strong>cloud-init.log</strong> (<code>/var/log/cloud-init.log</code>): Registro detallado de los eventos internos de cloud-init, el servicio que ejecuta la configuración inicial de la instancia; sirve para diagnosticar qué etapas se ejecutaron y cuáles fallaron.</p>
 <p><strong>cloud-init-output.log</strong> (<code>/var/log/cloud-init-output.log</code>): Captura la salida estándar y los errores de los comandos de tu script de User Data; es el primero que se revisa para depurar fallos del script.</p>
-</article>
-<article id="05-herramientas-aws"><h1>5. Consola, AWS CLI y SDK</h1>
+  </article>
+  <article id="05-herramientas-aws">
+<h1>5. Consola, AWS CLI y SDK</h1>
 <p>Clase: 27/10/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <p><strong>Mecanismos de acceso e interacción con AWS</strong> (o <em>Herramientas de gestión e interfaces de AWS</em>)</p>
 <ul>
-<li><p><strong>AWS Web (Consola de administración):</strong> Interfaz gráfica accesible desde cualquier navegador para configurar y supervisar tus recursos visualmente. Es ideal para tareas exploratorias, monitoreo en tiempo real y administraciones manuales sin tocar la terminal.</p>
-</li>
+<li><strong>AWS Web (Consola de administración):</strong> Interfaz gráfica accesible desde cualquier navegador para configurar y supervisar tus recursos visualmente. Es ideal para tareas exploratorias, monitoreo en tiempo real y administraciones manuales sin tocar la terminal.</li>
 <li><p><strong>AWS CLI por consola:</strong> Herramienta que permite interactuar con los servicios de AWS ejecutando comandos directos en la terminal. Permite automatizar despliegues por medio de scripts y ejecutar operaciones repetitivas con rapidez.</p>
 <ul>
-<li>Configuración inicial  <ul>
-<li>access key  </li>
-<li>secret key  </li>
+<li><p>Configuración inicial</p>
+<ul>
+<li>access key</li>
+<li>secret key</li>
 <li>session token</li>
-</ul>
-</li>
-</ul>
-</li>
+</ul></li>
+</ul></li>
 </ul>
 <pre><code class="language-bash">aws ec2 run-instances --image-id ami-XXXXXXXX --instance-type t3.micro --key-name MiKeyPair --count 1
 </code></pre>
 <ul>
-<li><p>--image-id: Sistema operativo que usará el servidor (ID de la AMI).  </p>
-</li>
-<li><p>--instance-type: Capacidad de hardware (CPU y RAM, ej. t3.micro).  </p>
-</li>
-<li><p>--key-name: Nombre de tu clave SSH registrada en AWS (sin extensión .pem).  </p>
-</li>
-<li><p>--count: Número de servidores que se van a crear.</p>
-</li>
-<li><p><strong>SDK (Software Development Kit):</strong> Conjunto de librerías para lenguajes específicos (Python, Node.js, Java) que integra AWS dentro de tus programas. Facilita que tus aplicaciones se conecten, envíen datos o controlen la infraestructura desde su propio código.</p>
-</li>
+<li>--image-id: Sistema operativo que usará el servidor (ID de la AMI).</li>
+<li>--instance-type: Capacidad de hardware (CPU y RAM, ej. t3.micro).</li>
+<li>--key-name: Nombre de tu clave SSH registrada en AWS (sin extensión .pem).</li>
+<li>--count: Número de servidores que se van a crear.</li>
+<li><strong>SDK (Software Development Kit):</strong> Conjunto de librerías para lenguajes específicos (Python, Node.js, Java) que integra AWS dentro de tus programas. Facilita que tus aplicaciones se conecten, envíen datos o controlen la infraestructura desde su propio código.</li>
 </ul>
-</article>
-<article id="06-terraform"><h1>6. Infraestructura como código con Terraform</h1>
+  </article>
+  <article id="06-terraform">
+<h1>6. Infraestructura como código con Terraform</h1>
 <p>Clase: 05/11/2026</p>
+<p>Última actualización: 2026-11-26</p>
 <p><a href="#inicio">Volver al índice</a></p>
-<p><strong>Terraform:</strong></p>
-<p>Es una herramienta de codigo abierto, IasCodigo permite definir crear, actualizar o eliminar (CRUD) mediante archivos de configuración, el archivo principal de terraform se llama main, su archivos extension .tf, permite automatizar, de manera declarativa intensiones no el paso a paso</p>
-</article>
-<article id="07-almacenamiento"><h1>7. Almacenamiento: EBS, EFS y NFS</h1>
+<p><strong>Terraform</strong> es una herramienta de código abierto de <strong>Infraestructura como Código (IaC)</strong> creada por HashiCorp. Permite definir, crear, actualizar y eliminar (CRUD) recursos en la nube mediante archivos de configuración (extensión <code>.tf</code>, normalmente con <code>main.tf</code> como archivo principal) de manera <strong>declarativa</strong>: defines tus intenciones (el <em>estado deseado</em>), no el paso a paso manual.</p>
+<hr>
+<h2>1. ¿Cómo funciona internamente?</h2>
+<p>En lugar de entrar a la consola web de AWS y hacer clic para crear servidores o firewalls, escribes archivos <code>.tf</code> en lenguaje <strong>HCL</strong> (<em>HashiCorp Configuration Language</em>). Terraform se comunica con las APIs de AWS mediante un plugin llamado <strong>Provider</strong> y registra todo lo que crea en un <strong>archivo de estado</strong>.</p>
+<figure class="diagrama"><svg viewBox="0 0 880 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flujo interno de Terraform">
+  <defs>
+    <marker id="arr-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1 L10 5 L0 9 z" fill="#087795"/>
+    </marker>
+  </defs>
+  <rect x="12" y="24" width="175" height="68" rx="10" fill="#eef5f8" stroke="#124d64" stroke-width="1.8"/>
+  <text x="99" y="53" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#122b3a">Archivos .tf</text>
+  <text x="99" y="73" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#465b6e">Código deseado (HCL)</text>
+
+  <line x1="187" y1="58" x2="233" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-t)"/>
+
+  <rect x="238" y="24" width="165" height="68" rx="10" fill="#122b3a" stroke="#122b3a" stroke-width="1.8"/>
+  <text x="320" y="53" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#ffffff">Terraform CLI</text>
+  <text x="320" y="73" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#cfe4ee">Planifica y aplica</text>
+
+  <line x1="403" y1="58" x2="449" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-t)"/>
+
+  <rect x="454" y="24" width="175" height="68" rx="10" fill="#eef5f8" stroke="#124d64" stroke-width="1.8"/>
+  <text x="541" y="53" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#122b3a">Provider AWS</text>
+  <text x="541" y="73" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#465b6e">Plugin en .terraform/</text>
+
+  <line x1="629" y1="58" x2="675" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-t)"/>
+
+  <rect x="680" y="24" width="188" height="68" rx="10" fill="#e6f4ea" stroke="#1e6b43" stroke-width="1.8"/>
+  <text x="774" y="53" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#124229">API de AWS</text>
+  <text x="774" y="73" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#2c5e43">EC2, SG y recursos reales</text>
+
+  <line x1="320" y1="97" x2="320" y2="128" stroke="#087795" stroke-width="2" marker-start="url(#arr-t)" marker-end="url(#arr-t)"/>
+
+  <rect x="195" y="133" width="250" height="58" rx="10" fill="#fff7e6" stroke="#b36b00" stroke-width="1.8"/>
+  <text x="320" y="158" text-anchor="middle" font-family="Consolas,monospace" font-size="13.5" font-weight="700" fill="#6e4100">terraform.tfstate</text>
+  <text x="320" y="177" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#7c5218">Estado actual (IDs, IPs, mapeo real)</text>
+</svg><figcaption>Flujo interno de Terraform: código HCL, Provider AWS, API real y archivo de estado.</figcaption></figure>
+<h3>Archivos especiales que genera Terraform</h3>
+<table>
+<thead><tr><th style="text-align:left">Archivo / Carpeta</th><th style="text-align:left">¿Para qué sirve?</th><th style="text-align:left">¿Se sube a Git?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>*.tf</code> (<code>main.tf</code>, <code>variable.tf</code>, <code>outputs.tf</code>)</td><td style="text-align:left">Código fuente HCL. Terraform lee <strong>todos</strong> los <code>.tf</code> del directorio como un único conjunto.</td><td style="text-align:left"><strong>Sí</strong></td></tr>
+<tr><td style="text-align:left"><code>.terraform/</code></td><td style="text-align:left">Carpeta oculta donde <code>terraform init</code> descarga el plugin del proveedor (ej. <code>hashicorp/aws</code>).</td><td style="text-align:left"><strong>No</strong></td></tr>
+<tr><td style="text-align:left"><code>.terraform.lock.hcl</code></td><td style="text-align:left">Archivo candado que fija la versión exacta del proveedor para despliegues reproducibles.</td><td style="text-align:left"><strong>Sí</strong> (recomendado)</td></tr>
+<tr><td style="text-align:left"><code>terraform.tfstate</code></td><td style="text-align:left"><strong>Archivo de estado.</strong> Mapea tu código con los recursos reales en AWS (IDs, IPs, etc.). Permite saber qué actualizar o destruir.</td><td style="text-align:left"><strong>No</strong> (puede contener datos sensibles)</td></tr>
+<tr><td style="text-align:left"><code>terraform.tfstate.backup</code></td><td style="text-align:left">Respaldo automático del estado inmediatamente anterior al último cambio.</td><td style="text-align:left"><strong>No</strong></td></tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Anatomía del código HCL (Bloques fundamentales)</h2>
+<h3>2.1 Bloque <code>provider</code> (Proveedor)</h3>
+<p>Define <strong>con qué nube o plataforma</strong> se conecta Terraform y en qué región operará.</p>
+<pre><code class="language-hcl">provider &quot;aws&quot; {
+  region = &quot;us-east-1&quot;
+}
+</code></pre>
+<ul>
+<li><code>&quot;aws&quot;</code>: nombre del proveedor oficial de Amazon Web Services.</li>
+<li><code>region</code>: región geográfica de despliegue (<code>us-east-1</code> = Norte de Virginia).</li>
+</ul>
+<h3>2.2 Bloque <code>resource</code> (Recurso)</h3>
+<p>Es el bloque principal. Cada <code>resource</code> declara <strong>un objeto real de infraestructura</strong> en AWS (una instancia EC2, un Security Group, una regla de red, etc.).</p>
+<pre><code class="language-hcl">resource &quot;&lt;TIPO_DE_RECURSO&gt;&quot; &quot;&lt;NOMBRE_LOCAL&gt;&quot; {
+  argumento_1 = &quot;valor_1&quot;
+  argumento_2 = &quot;valor_2&quot;
+}
+</code></pre>
+<p>Es clave distinguir <strong>tres nombres distintos</strong>:</p>
+<ol>
+<li><strong>Tipo de recurso (<code>&lt;TIPO_DE_RECURSO&gt;</code>):</strong> Definido por el proveedor AWS (no se puede inventar). Indica <em>qué servicio de AWS</em> se creará (<code>aws_instance</code>, <code>aws_security_group</code>, etc.).</li>
+<li><strong>Nombre local (<code>&lt;NOMBRE_LOCAL&gt;</code>):</strong> Lo eliges libremente. Solo existe <strong>dentro de Terraform</strong> para referenciar el recurso desde otros bloques (ej. <code>mi_instancia</code>, <code>mi-sg</code>).</li>
+<li><strong>Nombre en AWS (<code>name</code> o <code>tags.Name</code>):</strong> Es el argumento interno que define cómo aparecerá el recurso en la consola web de AWS.</li>
+</ol>
+<h4>Tipos de <code>resource</code> usados en los talleres de clase</h4>
+<table>
+<thead><tr><th style="text-align:left">Tipo de recurso</th><th style="text-align:left">Servicio AWS</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>aws_security_group</code></td><td style="text-align:left">EC2 / VPC</td><td style="text-align:left">Crea un firewall virtual que agrupa reglas de tráfico entrante y saliente.</td></tr>
+<tr><td style="text-align:left"><code>aws_vpc_security_group_ingress_rule</code></td><td style="text-align:left">EC2 / VPC</td><td style="text-align:left">Crea una <strong>regla de entrada</strong> desacoplada y la vincula a un Security Group (práctica recomendada por AWS).</td></tr>
+<tr><td style="text-align:left"><code>aws_vpc_security_group_egress_rule</code></td><td style="text-align:left">EC2 / VPC</td><td style="text-align:left">Crea una <strong>regla de salida</strong> desacoplada y la vincula a un Security Group.</td></tr>
+<tr><td style="text-align:left"><code>aws_instance</code></td><td style="text-align:left">EC2</td><td style="text-align:left">Aprovisiona una máquina virtual (instancia EC2) con AMI, tamaño, llave SSH y red.</td></tr>
+</tbody>
+</table>
+<h3>2.3 Bloque <code>variable</code> (Variables de entrada)</h3>
+<p>Permite <strong>parametrizar</strong> el proyecto para evitar valores fijos (<em>hardcoded</em>) en <code>main.tf</code> y reutilizar la misma infraestructura cambiando solo parámetros.</p>
+<pre><code class="language-hcl">variable &quot;cantidad_instancias&quot; {
+  description = &quot;Cantidad de instancias&quot;
+  type        = number
+  default     = 2
+}
+</code></pre>
+<table>
+<thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Obligatorio</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>&quot;nombre&quot;</code></td><td style="text-align:left">Sí</td><td style="text-align:left">Identificador de la variable. Se lee en el código como <code>var.&lt;nombre&gt;</code> (ej. <code>var.cantidad_instancias</code>).</td></tr>
+<tr><td style="text-align:left"><code>description</code></td><td style="text-align:left">No (recomendado)</td><td style="text-align:left">Documenta qué valor representa la variable.</td></tr>
+<tr><td style="text-align:left"><code>type</code></td><td style="text-align:left">No (recomendado)</td><td style="text-align:left">Restringe el tipo de dato: <code>string</code>, <code>number</code>, <code>bool</code>, <code>list(...)</code>, <code>map(...)</code>, etc.</td></tr>
+<tr><td style="text-align:left"><code>default</code></td><td style="text-align:left">No</td><td style="text-align:left">Valor por defecto. Si se omite, Terraform lo pedirá por terminal al ejecutar <code>plan</code> o <code>apply</code>.</td></tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Tip:</strong> Puedes sobrescribir cualquier variable desde la terminal sin editar archivos: <code>terraform apply -var=&quot;cantidad_instancias=3&quot;</code>.</p>
+</blockquote>
+<h3>2.4 Bloque <code>output</code> (Salidas)</h3>
+<p>Expone en la terminal valores generados por AWS al terminar el despliegue (IDs, IPs públicas, zonas de disponibilidad) sin tener que buscarlos manualmente en la consola web.</p>
+<pre><code class="language-hcl">output &quot;ip_publica_instancias&quot; {
+  description = &quot;Direcciones IP públicas de las instancias creadas&quot;
+  value       = aws_instance.mi_instancia-efs[*].public_ip
+}
+</code></pre>
+<table>
+<thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Obligatorio</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>&quot;nombre&quot;</code></td><td style="text-align:left">Sí</td><td style="text-align:left">Nombre con el que se imprimirá la salida en terminal.</td></tr>
+<tr><td style="text-align:left"><code>description</code></td><td style="text-align:left">No</td><td style="text-align:left">Explica qué información devuelve la salida.</td></tr>
+<tr><td style="text-align:left"><code>value</code></td><td style="text-align:left">Sí</td><td style="text-align:left">Atributo o expresión de los recursos que se quiere mostrar.</td></tr>
+</tbody>
+</table>
+<h3>2.5 Expresiones y conceptos clave en HCL</h3>
+<ul>
+<li><strong>Referencias y dependencias implícitas:</strong> Al escribir <code>vpc_security_group_ids = [aws_security_group.mi-sg.id]</code>, Terraform detecta automáticamente que <strong>primero debe crear el Security Group</strong> y luego la instancia EC2, sin definir el orden a mano.</li>
+<li><strong>Meta-argumento <code>count</code> e interpolación <code>${...}</code>:</strong> Con <code>count = var.cantidad_instancias</code>, Terraform crea <em>N</em> copias del recurso usando un índice <code>count.index</code> que inicia en <code>0</code>. Al escribir <code>&quot;Mi instancia EFS - ${count.index + 1}&quot;</code>, genera nombres numerados (<code>1</code>, <code>2</code>, ...).</li>
+<li>*<em>Expresión </em>Splat<em> (<code>[*]</code>):</em>* Cuando un recurso usa <code>count</code>, se convierte en una lista. La sintaxis <code>aws_instance.mi_instancia-efs[*].public_ip</code> recorre todas las instancias y extrae una lista con el atributo <code>public_ip</code> de cada una.</li>
+<li><strong>Funciones nativas (<code>length()</code>):</strong> <code>length(aws_instance.mi_instancia-efs)</code> devuelve cuántos elementos fueron creados en esa lista de instancias.</li>
+</ul>
+<hr>
+<h2>3. Guía de comandos en terminal (Ciclo de vida)</h2>
+<p>Todos los comandos de Terraform se ejecutan <strong>dentro de la carpeta del proyecto</strong> que contiene los archivos <code>.tf</code>.</p>
+<figure class="diagrama"><svg viewBox="0 0 920 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ciclo de comandos de Terraform">
+  <defs>
+    <marker id="arr-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#087795"/>
+    </marker>
+  </defs>
+  <g font-family="system-ui,sans-serif" text-anchor="middle">
+    <rect x="8" y="24" width="114" height="68" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.6"/>
+    <text x="65" y="51" font-size="11.5" font-weight="700" fill="#087795">PASO 0</text>
+    <text x="65" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#122b3a">aws configure</text>
+
+    <line x1="122" y1="58" x2="136" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="140" y="24" width="112" height="68" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.6"/>
+    <text x="196" y="51" font-size="11.5" font-weight="700" fill="#087795">PASO 1</text>
+    <text x="196" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#122b3a">init</text>
+
+    <line x1="252" y1="58" x2="266" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="270" y="24" width="124" height="68" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.6"/>
+    <text x="332" y="51" font-size="11.5" font-weight="700" fill="#087795">PASO 2</text>
+    <text x="332" y="72" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#122b3a">fmt / validate</text>
+
+    <line x1="394" y1="58" x2="408" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="412" y="24" width="112" height="68" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.6"/>
+    <text x="468" y="51" font-size="11.5" font-weight="700" fill="#087795">PASO 3</text>
+    <text x="468" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#122b3a">plan</text>
+
+    <line x1="524" y1="58" x2="538" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="542" y="24" width="112" height="68" rx="9" fill="#122b3a" stroke="#122b3a" stroke-width="1.6"/>
+    <text x="598" y="51" font-size="11.5" font-weight="700" fill="#7fd1e6">PASO 4</text>
+    <text x="598" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#ffffff">apply</text>
+
+    <line x1="654" y1="58" x2="668" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="672" y="24" width="118" height="68" rx="9" fill="#eef5f8" stroke="#124d64" stroke-width="1.6"/>
+    <text x="731" y="51" font-size="11.5" font-weight="700" fill="#087795">PASO 5</text>
+    <text x="731" y="72" font-family="Consolas,monospace" font-size="11.5" font-weight="700" fill="#122b3a">output / show</text>
+
+    <line x1="790" y1="58" x2="804" y2="58" stroke="#087795" stroke-width="2" marker-end="url(#arr-c)"/>
+
+    <rect x="808" y="24" width="104" height="68" rx="9" fill="#fdecec" stroke="#b42318" stroke-width="1.6"/>
+    <text x="860" y="51" font-size="11.5" font-weight="700" fill="#b42318">PASO 6</text>
+    <text x="860" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#7a150f">destroy</text>
+  </g>
+</svg><figcaption>Ciclo de vida de los comandos en terminal desde la autenticación hasta la destrucción.</figcaption></figure>
+<ol>
+<li><p><strong>Configurar credenciales de AWS</strong></p>
+<pre><code class="language-bash">aws configure
+</code></pre>
+<ul>
+<li>Guarda <code>AWS Access Key ID</code>, <code>AWS Secret Access Key</code>, región (<code>us-east-1</code>) y formato (<code>json</code>). En AWS Academy / Learner Lab recuerda incluir también el <code>aws_session_token</code> en <code>~/.aws/credentials</code>.</li>
+</ul></li>
+<li><p><strong>Inicializar el proyecto (primera vez o al agregar proveedores)</strong></p>
+<pre><code class="language-bash">terraform init
+</code></pre>
+<ul>
+<li>Descarga el plugin del proveedor AWS en <code>.terraform/</code> y crea <code>.terraform.lock.hcl</code>.</li>
+</ul></li>
+<li><p><strong>Formatear y validar sintaxis (sin tocar AWS)</strong></p>
+<pre><code class="language-bash">terraform fmt
+terraform validate
+</code></pre>
+<ul>
+<li><code>fmt</code> indenta y ordena el código automáticamente; <code>validate</code> verifica que la sintaxis HCL y las referencias sean válidas.</li>
+</ul></li>
+<li><p><strong>Previsualizar el plan de ejecución</strong></p>
+<pre><code class="language-bash">terraform plan
+</code></pre>
+<ul>
+<li><p>Compara tus <code>.tf</code> contra <code>terraform.tfstate</code> y AWS. Símbolos del plan:</p>
+<ul>
+<li><code>+</code> (<strong>create</strong>): se creará un recurso nuevo.</li>
+<li><code>~</code> (<strong>update in-place</strong>): se modificará sin destruirlo.</li>
+<li><code>-</code> (<strong>destroy</strong>): se eliminará.</li>
+<li><code>-/+</code> (<strong>replace</strong>): se destruirá y recreará (ej. al cambiar la AMI de una EC2).</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Aplicar los cambios en AWS</strong></p>
+<pre><code class="language-bash">terraform apply
+</code></pre>
+<ul>
+<li>Muestra el plan, pide confirmación (<code>yes</code>), crea los recursos en AWS, actualiza <code>terraform.tfstate</code> e imprime los <code>outputs</code>. (Con <code>-auto-approve</code> omite la confirmación manual).</li>
+</ul></li>
+<li><p><strong>Inspeccionar el despliegue actual</strong></p>
+<pre><code class="language-bash">terraform output
+terraform state list
+terraform show
+</code></pre>
+<ul>
+<li><code>output</code> vuelve a mostrar las salidas (como IPs públicas); <code>state list</code> enumera los recursos gestionados; <code>show</code> muestra todos los atributos guardados en el estado.</li>
+</ul></li>
+<li><p><strong>Destruir la infraestructura al terminar el laboratorio</strong></p>
+<pre><code class="language-bash">terraform destroy
+</code></pre>
+<ul>
+<li>Elimina todos los recursos registrados en el estado respetando el orden inverso de dependencias. Es fundamental ejecutarlo al terminar cada práctica para evitar costos o consumo de créditos.</li>
+</ul></li>
+</ol>
+<hr>
+<h2>Conceptos relacionados</h2>
+<ul>
+<li><a href="#10-talleres-terraform">Talleres prácticos de Terraform: Taller 8 (EC2) y Taller 12 (EC2 + SG EFS)</a>.</li>
+<li><a href="#03-redes-seguridad">Redes y seguridad: VPC y Security Groups</a>.</li>
+<li><a href="#05-herramientas-aws">Consola, AWS CLI y SDK</a>.</li>
+</ul>
+  </article>
+  <article id="07-almacenamiento">
+<h1>7. Almacenamiento: EBS, EFS y NFS</h1>
 <p>Clase: 10/11/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <p>Categorías de Almacenamiento:</p>
 <p>Persistente: Es un almacenamiento que perdura en el tiempo</p>
 <ul>
-<li>Storage EC2:  <ul>
-<li>Amazon <strong>EBS (Elastic Block Store)</strong>, servicio de almacenamiento persistente por bloques independientes que trabajan en conjunto  <ul>
-<li><strong>gp3 o gp2</strong> (propósito general; gp3 corresponde a la tercera generación): se usa para cualquier cosa, para ámbitos generales  </li>
+<li><p>Storage EC2:</p>
+<ul>
+<li><p>Amazon <strong>EBS (Elastic Block Store)</strong>, servicio de almacenamiento persistente por bloques independientes que trabajan en conjunto</p>
+<ul>
+<li><strong>gp3 o gp2</strong> (propósito general; gp3 corresponde a la tercera generación): se usa para cualquier cosa, para ámbitos generales</li>
 <li><strong>io1 e io2</strong> (input-output de primera o segunda generación): tipos de volúmenes de alto rendimiento por ejemplo para instalar recursos como base de datos ejemplo un CRUD, optimizada para la escritura y lectura</li>
-</ul>
-</li>
-<li>Amazon <strong>EFS (Elastic File System)</strong>, servicio administrado, permite  varias instancias almacenen de manera compartida sobre este sistema de almacenamiento de red a través del protocolo NFS.  <ul>
-<li><strong>NFS</strong> (<strong>Network File System</strong> o <em>Sistema de Archivos de Red</em>) es un protocolo distribuido de nivel de aplicación basado en la arquitectura cliente-servidor, que permite a un equipo acceder, leer y escribir archivos y directorios remotos a través de una red IP como si estuvieran almacenados en su propio disco local.   </li>
-<li><img loading="lazy" src="imagenes/image11.png" alt="Material de clase — image11">  </li>
+</ul></li>
+<li><p>Amazon <strong>EFS (Elastic File System)</strong>, servicio administrado, permite  varias instancias almacenen de manera compartida sobre este sistema de almacenamiento de red a través del protocolo NFS.</p>
+<ul>
+<li><strong>NFS</strong> (<strong>Network File System</strong> o <em>Sistema de Archivos de Red</em>) es un protocolo distribuido de nivel de aplicación basado en la arquitectura cliente-servidor, que permite a un equipo acceder, leer y escribir archivos y directorios remotos a través de una red IP como si estuvieran almacenados en su propio disco local.</li>
+<li><img loading="lazy" src="imagenes/image11.png" alt="Material de clase — image11"></li>
 <li>Network es un punto de acceso a cada una de las zonas de disponibilidad</li>
+</ul></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>No Persistente: (Efímero) es volátil mientras el proceso está en ejecución existe y si se termina también se termina o borra ese almacenamiento </p>
+<p>No Persistente: (Efímero) es volátil mientras el proceso está en ejecución existe y si se termina también se termina o borra ese almacenamiento</p>
 <p>Recuerda tenemos que montar un disco cuando colocamos un nuevo disco en el servidor</p>
 <h2>Ampliación de clase — 2026-11-12</h2>
 <p>Última actualización: 2026-11-17</p>
 <h3>EBS frente a EFS</h3>
 <table>
-<thead>
-<tr>
-<th>Aspecto</th>
-<th>EBS</th>
-<th>EFS</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Tipo</td>
-<td>Almacenamiento en bloques.</td>
-<td>Sistema de archivos compartido.</td>
-</tr>
-<tr>
-<td>Uso en el taller</td>
-<td>Volumen de 10 GiB de la instancia 1, montado en /disco2.</td>
-<td>Mismo sistema de archivos montado en /efs1 de las dos instancias.</td>
-</tr>
-<tr>
-<td>Preparación</td>
-<td>Identificar el volumen; formatear solo si está vacío y sin sistema de archivos.</td>
-<td>Instalar amazon-efs-utils y montar por red con TLS.</td>
-</tr>
-<tr>
-<td>Acceso</td>
-<td>Volumen dedicado en este ejercicio; Multi-Attach es una opción específica de io1/io2.</td>
-<td>Varios clientes acceden a los mismos archivos mediante NFS.</td>
-</tr>
-</tbody></table>
+<thead><tr><th style="text-align:left">Aspecto</th><th style="text-align:left">EBS</th><th style="text-align:left">EFS</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left">Tipo</td><td style="text-align:left">Almacenamiento en bloques.</td><td style="text-align:left">Sistema de archivos compartido.</td></tr>
+<tr><td style="text-align:left">Uso en el taller</td><td style="text-align:left">Volumen de 10 GiB de la instancia 1, montado en /disco2.</td><td style="text-align:left">Mismo sistema de archivos montado en /efs1 de las dos instancias.</td></tr>
+<tr><td style="text-align:left">Preparación</td><td style="text-align:left">Identificar el volumen; formatear solo si está vacío y sin sistema de archivos.</td><td style="text-align:left">Instalar amazon-efs-utils y montar por red con TLS.</td></tr>
+<tr><td style="text-align:left">Acceso</td><td style="text-align:left">Volumen dedicado en este ejercicio; Multi-Attach es una opción específica de io1/io2.</td><td style="text-align:left">Varios clientes acceden a los mismos archivos mediante NFS.</td></tr>
+</tbody>
+</table>
 <h3>NFS y archivos compartidos</h3>
 <p>NFS permite montar un sistema de archivos remoto como un directorio local. Para EFS, la conectividad NFS utiliza TCP 2049. Leer desde la segunda instancia el archivo escrito en la primera verifica acceso al mismo almacenamiento, no una copia sincronizada entre discos.</p>
 <h3>Elasticidad y disponibilidad</h3>
 <p>EFS administra la infraestructura y ajusta el almacenamiento a los archivos guardados. La facturación puede incluir otros componentes además de capacidad. EFS Regional guarda datos en varias zonas de disponibilidad; EFS One Zone usa una sola. No todos los sistemas EFS tienen la misma distribución entre zonas.</p>
 <p><a href="#09-taller-ebs-efs">Ver taller completo</a>.</p>
-<p>Fuentes: <a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html">AWS: Multi-Attach de EBS</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</p>
-</article>
-<article id="08-practica-ebs"><h1>8. Práctica: conexión SSH y montaje de EBS</h1>
+<p>Fuentes: <a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html" target="_blank" rel="noopener noreferrer">AWS: Multi-Attach de EBS</a>, <a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html" target="_blank" rel="noopener noreferrer">AWS: destinos de montaje EFS</a>.</p>
+  </article>
+  <article id="08-practica-ebs">
+<h1>8. Práctica: conexión SSH y montaje de EBS</h1>
 <p>Clase: 10/11/2026</p>
 <p><a href="#inicio">Volver al índice</a></p>
 <blockquote>
@@ -269,12 +566,12 @@ EOF
 </blockquote>
 <h2>1. Conexión a la instancia EC2</h2>
 <ol>
-<li><strong>Conectar por SSH a Amazon Linux 2023</strong><pre><code class="language-bash">ssh -i &quot;mi-primera-llaves-ae.pem&quot; ec2-user@ec2-54-87-193-187.compute-1.amazonaws.com
+<li><p><strong>Conectar por SSH a Amazon Linux 2023</strong></p>
+<pre><code class="language-bash">ssh -i &quot;mi-primera-llaves-ae.pem&quot; ec2-user@ec2-54-87-193-187.compute-1.amazonaws.com
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Inicia una sesión remota segura por SSH hacia la instancia utilizando tu archivo de llave privada (<code>.pem</code>).</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <hr>
 <h2>2. Inspección de discos disponibles</h2>
@@ -284,22 +581,19 @@ EOF
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Muestra los discos y particiones conectados al servidor con su tamaño (<code>20G</code> en <code>xvda</code> y <code>10G</code> en <code>xvdb</code>), tipo y punto de montaje.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Verificar sistemas de archivos y UUID</strong></p>
 <pre><code class="language-bash">lsblk -f
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Lista los dispositivos junto con su tipo de sistema de archivos (<code>FSTYPE</code>), identificador <code>UUID</code> y espacio disponible. Permite comprobar que el disco nuevo (<code>xvdb</code>) está vacío y sin formato.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Consultar metadatos del nuevo disco</strong></p>
 <pre><code class="language-bash">sudo blkid /dev/sdb
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Consulta el <code>UUID</code> y formato del disco <code>/dev/sdb</code>. Al estar recién creado, no devuelve información.</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <hr>
 <h2>3. Formateo y montaje del nuevo volumen</h2>
@@ -309,22 +603,19 @@ EOF
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Crea la carpeta <code>/disco2</code> con permisos de administrador, la cual funcionará como punto de montaje para acceder al disco.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Formatear el volumen con sistema de archivos XFS</strong></p>
 <pre><code class="language-bash">sudo mkfs -t xfs /dev/sdb
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Formatea el disco <code>/dev/sdb</code> asignándole el sistema de archivos <strong>XFS</strong> <em>(sin este paso previo, <code>mount</code> arroja error de superbloque/formato inválido)</em>.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Montar el disco en el sistema</strong></p>
 <pre><code class="language-bash">sudo mount /dev/sdb /disco2
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Vincula el disco ya formateado dentro de <code>/disco2</code> para que el sistema operativo pueda leer y escribir en él.</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <hr>
 <h2>4. Verificación y prueba de escritura</h2>
@@ -334,32 +625,29 @@ EOF
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Muestra el espacio libre y usado de todos los discos en formato legible (<code>GB</code>/<code>MB</code>) junto con su sistema de archivos (<code>xfs</code>), confirmando que <code>/disco2</code> está activo <em>(reemplaza a <code>df</code> y corrige el error de escritura <code>df -ht</code>)</em>.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Crear un archivo de prueba en el volumen</strong></p>
 <pre><code class="language-bash">echo &quot;texto de prueba&quot; | sudo tee /disco2/prueba.txt
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Crea el archivo <code>prueba.txt</code> dentro del nuevo disco con permisos de administrador y escribe una línea de texto para validar la escritura.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Leer el archivo creado</strong></p>
 <pre><code class="language-bash">cat /disco2/prueba.txt
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Muestra en pantalla el contenido de <code>prueba.txt</code> para confirmar que los datos se guardaron correctamente.</li>
-</ul>
-</li>
+</ul></li>
 <li><p><strong>Verificación final de montaje y formato</strong></p>
 <pre><code class="language-bash">lsblk -f
 </code></pre>
 <ul>
 <li><strong>Para qué sirve:</strong> Comprueba que <code>xvdb</code> ya cuenta con formato <code>xfs</code>, un <code>UUID</code> propio asignado y punto de montaje activo en <code>/disco2</code>.</li>
-</ul>
-</li>
+</ul></li>
 </ol>
-</article>
-<article id="09-taller-ebs-efs"><h1>9. Taller de almacenamiento EBS y EFS</h1>
+  </article>
+  <article id="09-taller-ebs-efs">
+<h1>9. Taller de almacenamiento EBS y EFS</h1>
 <p>Fecha de clase: 2026-11-12</p>
 <p>Última actualización: 2026-11-17</p>
 <p><a href="#inicio">Volver al índice</a></p>
@@ -376,27 +664,27 @@ EOF
 <h2>3. Fase 1: Configuración en la Consola Web de AWS</h2>
 <h3>A. Configurar los Security Groups (VPC / EC2)</h3>
 <ol>
-<li><strong>Security Group para las instancias EC2 (<code>sg-ec2</code>):</strong><ul>
+<li><p><strong>Security Group para las instancias EC2 (<code>sg-ec2</code>):</strong></p>
+<ul>
 <li><strong>Regla de entrada:</strong> Puerto <code>22</code> (SSH) desde tu IP pública actual (<code>/32</code>) para conectarte por terminal.</li>
-</ul>
-</li>
-<li><strong>Security Group para el EFS (<code>sge-efs-ae</code>):</strong><ul>
+</ul></li>
+<li><p><strong>Security Group para el EFS (<code>sge-efs-ae</code>):</strong></p>
+<ul>
 <li><strong>Regla de entrada:</strong> Tipo <code>NFS</code> (Puerto <code>TCP 2049</code>) poniendo como <strong>Origen</strong> el ID del Security Group de tus EC2 (<code>sg-ec2</code>).</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <h3>B. Lanzar las dos instancias EC2 (Amazon Linux 2023)</h3>
 <ol>
-<li><strong>Instancia 1 (Principal):</strong><ul>
+<li><p><strong>Instancia 1 (Principal):</strong></p>
+<ul>
 <li>Seleccionar <strong>Amazon Linux 2023</strong>, tipo <code>t3.micro</code> y tu par de claves (<code>.pem</code>).</li>
 <li>En <strong>Configuración de red</strong>, elegir la VPC por defecto y asignar <code>sg-ec2</code>.</li>
 <li>En <strong>Configurar almacenamiento</strong>, mantener el disco raíz (<code>8 GiB</code>) y hacer clic en <strong>Agregar nuevo volumen</strong> para añadir un disco EBS de <strong><code>10 GiB</code></strong>.</li>
-</ul>
-</li>
-<li><strong>Instancia 2 (Secundaria):</strong><ul>
+</ul></li>
+<li><p><strong>Instancia 2 (Secundaria):</strong></p>
+<ul>
 <li>Lanzar una segunda instancia <strong>Amazon Linux 2023</strong> en la <strong>misma VPC</strong>, con el <strong>mismo Security Group (<code>sg-ec2</code>)</strong> y la misma llave <code>.pem</code>.</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <h3>C. Crear el Sistema de Archivos EFS</h3>
 <ol>
@@ -418,12 +706,10 @@ lsblk -f
 </code></pre>
 <blockquote>
 <p><em>Nota:</em> En instancias <code>t3</code>, los volúmenes se presentan como dispositivos NVMe. <code>/dev/nvme1n1</code> es solo el nombre del ejemplo: confirma el dispositivo y su tamaño con <code>lsblk</code> y el sistema de archivos con <code>lsblk -f</code> antes de continuar.</p>
-</blockquote>
-</li>
+</blockquote></li>
 <li><p><strong>Crear la carpeta que servirá como punto de montaje:</strong></p>
 <pre><code class="language-bash">sudo mkdir -p /disco2
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Formatear únicamente el volumen nuevo y vacío con XFS:</strong></p>
 <blockquote>
 <p><code>mkfs</code> puede destruir los datos existentes. No lo ejecutes sobre el disco raíz ni sobre un volumen que ya contenga datos. Sustituye el dispositivo del ejemplo por el que hayas identificado.</p>
@@ -432,18 +718,15 @@ lsblk -f
 </code></pre>
 <blockquote>
 <p><em>Importante:</em> Un volumen nuevo sin sistema de archivos necesita formateo para este uso. Uno restaurado desde una instantánea puede estar ya formateado: no lo vuelvas a formatear.</p>
-</blockquote>
-</li>
+</blockquote></li>
 <li><p><strong>Montar el disco en la carpeta <code>/disco2</code>:</strong></p>
 <pre><code class="language-bash">sudo mount /dev/nvme1n1 /disco2
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Comprobar el montaje y realizar prueba de escritura:</strong></p>
 <pre><code class="language-bash">df -hT
 echo &quot;texto de prueba&quot; | sudo tee /disco2/prueba.txt
 cat /disco2/prueba.txt
-</code></pre>
-</li>
+</code></pre></li>
 </ol>
 <hr>
 <h2>5. Fase 3: Instalar y Montar Amazon EFS en Instancia 1</h2>
@@ -452,19 +735,16 @@ cat /disco2/prueba.txt
 <li><p><strong>Instalar la librería oficial de utilidades EFS y crear la carpeta <code>/efs1</code>:</strong></p>
 <pre><code class="language-bash">sudo dnf install -y amazon-efs-utils
 sudo mkdir -p /efs1
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Montar el EFS usando su ID (cifrado con TLS):</strong></p>
 <p>El ID mostrado es el ejemplo de clase. Sustitúyelo en ambas instancias por el ID de tu sistema de archivos.</p>
 <pre><code class="language-bash">sudo mount -t efs -o tls fs-02d737f8f33137fd6:/ /efs1
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Verificar el montaje y crear un archivo compartido:</strong></p>
 <pre><code class="language-bash">df -hT /efs1
 echo &quot;Hola desde EC2 en Amazon EFS&quot; | sudo tee /efs1/prueba.txt
 cat /efs1/prueba.txt
-</code></pre>
-</li>
+</code></pre></li>
 </ol>
 <hr>
 <h2>6. Fase 4: Conectar la Instancia 2 y Comprobar el Acceso Compartido</h2>
@@ -474,48 +754,30 @@ cat /efs1/prueba.txt
 <pre><code class="language-bash">sudo dnf install -y amazon-efs-utils
 sudo mkdir -p /efs1
 sudo mount -t efs -o tls fs-02d737f8f33137fd6:/ /efs1
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Listar y leer el archivo creado desde la Instancia 1:</strong></p>
 <pre><code class="language-bash">ls -la /efs1
 cat /efs1/prueba.txt
-</code></pre>
-</li>
+</code></pre></li>
 <li><p><strong>Escribir desde la Instancia 2 para validar lectura y escritura compartidas:</strong></p>
 <pre><code class="language-bash">echo &quot;Hola desde la segunda instancia&quot; | sudo tee -a /efs1/prueba.txt
 cat /efs1/prueba.txt
 </code></pre>
 <blockquote>
 <p>Al ejecutar <code>cat /efs1/prueba.txt</code> nuevamente en la <strong>Instancia 1</strong>, deben verse ambas líneas tras completar la escritura. Se accede al mismo sistema de archivos; no se sincronizan dos discos locales.</p>
-</blockquote>
-</li>
+</blockquote></li>
 </ol>
 <hr>
 <h2>7. Resumen de Comandos Útiles de Verificación</h2>
 <table>
-<thead>
-<tr>
-<th align="left">Comando</th>
-<th align="left">Función</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>lsblk -f</code></td>
-<td align="left">Lista discos conectados, formato (<code>xfs</code>), <code>UUID</code> y puntos de montaje.</td>
-</tr>
-<tr>
-<td align="left"><code>df -hT</code></td>
-<td align="left">Muestra el espacio usado/disponible en GB/MB y el tipo de sistema (<code>xfs</code>, <code>nfs4</code>).</td>
-</tr>
-<tr>
-<td align="left"><code>ls -la /efs1</code></td>
-<td align="left">Lista todos los archivos (incluidos ocultos) y permisos dentro del EFS.</td>
-</tr>
-<tr>
-<td align="left"><code>cat /efs1/prueba.txt</code></td>
-<td align="left">Muestra en pantalla el contenido del archivo de texto.</td>
-</tr>
-</tbody></table>
+<thead><tr><th style="text-align:left">Comando</th><th style="text-align:left">Función</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>lsblk -f</code></td><td style="text-align:left">Lista discos conectados, formato (<code>xfs</code>), <code>UUID</code> y puntos de montaje.</td></tr>
+<tr><td style="text-align:left"><code>df -hT</code></td><td style="text-align:left">Muestra el espacio usado/disponible en GB/MB y el tipo de sistema (<code>xfs</code>, <code>nfs4</code>).</td></tr>
+<tr><td style="text-align:left"><code>ls -la /efs1</code></td><td style="text-align:left">Lista todos los archivos (incluidos ocultos) y permisos dentro del EFS.</td></tr>
+<tr><td style="text-align:left"><code>cat /efs1/prueba.txt</code></td><td style="text-align:left">Muestra en pantalla el contenido del archivo de texto.</td></tr>
+</tbody>
+</table>
 <h2>8. Alcance del taller</h2>
 <p>Los comandos realizan montajes manuales. Para volver a montar automáticamente después de un reinicio se requiere una configuración adicional, como <code>/etc/fstab</code>. Un montaje manual no implica que los datos almacenados se borren al reiniciar.</p>
 <h2>9. Conceptos relacionados</h2>
@@ -525,8 +787,282 @@ cat /efs1/prueba.txt
 </ul>
 <h2>Fuentes de las aclaraciones</h2>
 <ul>
-<li><a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-using-volumes.html">AWS: preparar y montar volúmenes EBS</a>.</li>
-<li><a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html">AWS: reglas de red para EFS</a>.</li>
-<li><a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html">AWS: destinos de montaje EFS</a>.</li>
+<li><a href="https://docs.aws.amazon.com/ebs/latest/userguide/ebs-using-volumes.html" target="_blank" rel="noopener noreferrer">AWS: preparar y montar volúmenes EBS</a>.</li>
+<li><a href="https://docs.aws.amazon.com/efs/latest/ug/network-access.html" target="_blank" rel="noopener noreferrer">AWS: reglas de red para EFS</a>.</li>
+<li><a href="https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html" target="_blank" rel="noopener noreferrer">AWS: destinos de montaje EFS</a>.</li>
 </ul>
-</article></main></body></html>
+  </article>
+  <article id="10-talleres-terraform">
+<h1>10. Talleres prácticos de Terraform (EC2 y EFS)</h1>
+<p>Última actualización: 2026-11-26</p>
+<p><a href="#inicio">Volver al índice</a></p>
+<p>Análisis práctico del repositorio de código <a href="https://github.com/Aryy234/cloud-u1-ps-ae" target="_blank" rel="noopener noreferrer">Aryy234/cloud-u1-ps-ae</a>, mostrando la evolución real entre <strong><code>taller8-ae2</code></strong> (despliegue básico en un solo archivo) y <strong><code>taller12-efs-ae</code></strong> (arquitectura modular con variables, outputs, <code>count</code> y reglas de red entre Security Groups para Amazon EFS).</p>
+<blockquote>
+<p>Si necesitas repasar qué son <code>provider</code>, <code>resource</code>, <code>variable</code>, <code>output</code> o los comandos de terminal, consulta primero el tema <a href="#06-terraform">6. Infraestructura como código con Terraform</a>.</p>
+</blockquote>
+<hr>
+<h2>1. Taller 8 (<code>taller8-ae2</code>): EC2 y Security Group básico</h2>
+<p><strong>Archivo:</strong> <code>taller8-ae2/main.tf</code> <strong>Objetivo:</strong> Primer despliegue en AWS con Terraform creando 1 instancia EC2 y 1 Security Group con reglas embebidas (<em>inline</em>) y valores fijos.</p>
+<figure class="diagrama"><svg viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arquitectura del Taller 8">
+  <defs>
+    <marker id="arr-8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#087795"/>
+    </marker>
+    <marker id="arr-8w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#b36b00"/>
+    </marker>
+  </defs>
+  <rect x="16" y="42" width="160" height="74" rx="10" fill="#f2f5f9" stroke="#607182" stroke-width="1.8"/>
+  <text x="96" y="73" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#203044">Internet</text>
+  <text x="96" y="94" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#607182">0.0.0.0/0</text>
+
+  <line x1="176" y1="64" x2="342" y2="64" stroke="#087795" stroke-width="2" marker-end="url(#arr-8)"/>
+  <text x="259" y="54" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#087795">Entrada: TCP 22 (SSH) y 80 (HTTP)</text>
+
+  <rect x="348" y="34" width="224" height="90" rx="10" fill="#eef5f8" stroke="#124d64" stroke-width="1.8"/>
+  <text x="460" y="61" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#124d64">Security Group (mi-sg)</text>
+  <text x="460" y="81" text-anchor="middle" font-family="Consolas,monospace" font-size="11.5" fill="#203044">mi-security-group-terraform</text>
+  <text x="460" y="102" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#465b6e">Reglas inline (ingress / egress)</text>
+
+  <line x1="572" y1="79" x2="626" y2="79" stroke="#087795" stroke-width="2" marker-end="url(#arr-8)"/>
+
+  <rect x="632" y="34" width="232" height="90" rx="10" fill="#122b3a" stroke="#122b3a" stroke-width="1.8"/>
+  <text x="748" y="62" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#ffffff">EC2: MiInstanciaTerraForm2</text>
+  <text x="748" y="83" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#8fd6ea">t2.micro · us-east-1</text>
+  <text x="748" y="103" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" fill="#cfe4ee">1 instancia (mi_instancia)</text>
+
+  <path d="M 748 124 L 748 164 L 96 164 L 96 122" fill="none" stroke="#b36b00" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-8w)"/>
+  <text x="422" y="156" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#8f5400">Salida (egress): solo TCP 80 (HTTP) hacia 0.0.0.0/0</text>
+</svg><figcaption>Arquitectura del Taller 8 (taller8-ae2): 1 instancia EC2 con Security Group de reglas embebidas.</figcaption></figure>
+<h3>A. Recurso <code>aws_security_group</code> — Nombre local: <code>mi-sg</code></h3>
+<table>
+<thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Valor en el proyecto</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>name</code></td><td style="text-align:left"><code>&quot;mi-security-group-terraform&quot;</code></td><td style="text-align:left">Nombre visible del Security Group en la consola de AWS.</td></tr>
+<tr><td style="text-align:left"><code>description</code></td><td style="text-align:left"><code>&quot;grupo de seguridad para mi terraform&quot;</code></td><td style="text-align:left">Descripción del propósito del grupo.</td></tr>
+<tr><td style="text-align:left"><code>vpc_id</code></td><td style="text-align:left"><code>&quot;vpc-09ffffa328714b7dd&quot;</code></td><td style="text-align:left">ID de la VPC donde se crea el Security Group.</td></tr>
+<tr><td style="text-align:left"><code>ingress</code> (SSH)</td><td style="text-align:left"><code>from_port = 22</code>, <code>to_port = 22</code>, <code>protocol = &quot;tcp&quot;</code>, <code>cidr_blocks = [&quot;0.0.0.0/0&quot;]</code></td><td style="text-align:left">Permite conexiones SSH entrantes desde cualquier dirección IPv4.</td></tr>
+<tr><td style="text-align:left"><code>ingress</code> (HTTP)</td><td style="text-align:left"><code>from_port = 80</code>, <code>to_port = 80</code>, <code>protocol = &quot;tcp&quot;</code>, <code>cidr_blocks = [&quot;0.0.0.0/0&quot;]</code></td><td style="text-align:left">Permite tráfico web HTTP entrante desde cualquier IPv4.</td></tr>
+<tr><td style="text-align:left"><code>egress</code> (HTTP)</td><td style="text-align:left"><code>from_port = 80</code>, <code>to_port = 80</code>, <code>protocol = &quot;tcp&quot;</code>, <code>cidr_blocks = [&quot;0.0.0.0/0&quot;]</code></td><td style="text-align:left">Permite tráfico saliente únicamente por el puerto 80 TCP.</td></tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Observación técnica (<code>egress</code> en Taller 8):</strong> Al permitir salida solo por el puerto <code>80</code>, la instancia no podría resolver DNS (puerto <code>53</code>) ni descargar paquetes por HTTPS (puerto <code>443</code>). En Terraform, a diferencia de la consola de AWS, no se crea automáticamente la regla de &quot;toda salida&quot; cuando defines <code>egress</code> manualmente. Esto se corrige en el Taller 12.</p>
+</blockquote>
+<h3>B. Recurso <code>aws_instance</code> — Nombre local: <code>mi_instancia</code></h3>
+<table>
+<thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Valor en el proyecto</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>ami</code></td><td style="text-align:left"><code>&quot;ami-0c230065b91270bc6&quot;</code></td><td style="text-align:left">Imagen del sistema operativo (AMI) que usará el servidor.</td></tr>
+<tr><td style="text-align:left"><code>instance_type</code></td><td style="text-align:left"><code>&quot;t2.micro&quot;</code></td><td style="text-align:left">Capacidad de hardware virtual (vCPU y RAM).</td></tr>
+<tr><td style="text-align:left"><code>key_name</code></td><td style="text-align:left"><code>&quot;mi-primera-llaves-ae&quot;</code></td><td style="text-align:left">Nombre del par de llaves SSH registrado en AWS para iniciar sesión.</td></tr>
+<tr><td style="text-align:left"><code>tags</code></td><td style="text-align:left"><code>{ Name = &quot;MiInstanciaTerraForm2&quot; }</code></td><td style="text-align:left">Etiqueta que asigna el nombre visible de la instancia en EC2.</td></tr>
+<tr><td style="text-align:left"><code>vpc_security_group_ids</code></td><td style="text-align:left"><code>[aws_security_group.mi-sg.id]</code></td><td style="text-align:left">Vincula el Security Group mediante una <strong>referencia dinámica</strong> (dependencia implícita).</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Taller 12 (<code>taller12-efs-ae</code>): Múltiples EC2 y red para Amazon EFS</h2>
+<p><strong>Archivos:</strong> <code>taller12-efs-ae/main.tf</code>, <code>variable.tf</code> y <code>outputs.tf</code> <strong>Objetivo:</strong> Aplicar buenas prácticas separando archivos, parametrizando con variables, desplegando 2 instancias con <code>count</code>, devolviendo outputs y configurando dos Security Groups comunicados por el puerto NFS <code>2049</code>.</p>
+<blockquote>
+<p><strong>Alcance actual del código:</strong> <code>taller12-efs-ae</code> crea los Security Groups (para EC2 y para EFS) y las 2 instancias EC2, pero todavía no declara el recurso de almacenamiento EFS (<code>aws_efs_file_system</code> ni <code>aws_efs_mount_target</code>). Si el EFS se crea aparte en consola AWS, se asocia al Security Group <code>mi-security-group-terraform-efs</code> generado aquí.</p>
+</blockquote>
+<figure class="diagrama"><svg viewBox="0 0 920 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arquitectura del Taller 12">
+  <defs>
+    <marker id="arr-12" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#087795"/>
+    </marker>
+    <marker id="arr-12g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L10 5 L0 9 z" fill="#1e6b43"/>
+    </marker>
+  </defs>
+
+  <rect x="12" y="68" width="132" height="72" rx="10" fill="#f2f5f9" stroke="#607182" stroke-width="1.8"/>
+  <text x="78" y="99" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#203044">Internet</text>
+  <text x="78" y="119" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#607182">0.0.0.0/0</text>
+
+  <line x1="144" y1="94" x2="246" y2="94" stroke="#087795" stroke-width="2" marker-end="url(#arr-12)"/>
+  <text x="195" y="84" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#087795">SSH · TCP 22</text>
+
+  <rect x="252" y="18" width="248" height="176" rx="12" fill="#eef5f8" stroke="#124d64" stroke-width="2"/>
+  <text x="376" y="42" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#124d64">SG Instancias (mi-sg-efs-instancias-14)</text>
+
+  <rect x="274" y="56" width="204" height="54" rx="8" fill="#122b3a"/>
+  <text x="376" y="79" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#ffffff">Mi instancia EFS - 1</text>
+  <text x="376" y="97" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#8fd6ea">count.index = 0 · t2.micro</text>
+
+  <rect x="274" y="122" width="204" height="54" rx="8" fill="#122b3a"/>
+  <text x="376" y="145" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#ffffff">Mi instancia EFS - 2</text>
+  <text x="376" y="163" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#8fd6ea">count.index = 1 · t2.micro</text>
+
+  <line x1="500" y1="106" x2="646" y2="106" stroke="#1e6b43" stroke-width="2.2" marker-end="url(#arr-12g)"/>
+  <text x="573" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#1e6b43">NFS · TCP 2049</text>
+  <text x="573" y="124" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10.8" fill="#2c5e43">referenced_security_group_id</text>
+
+  <rect x="652" y="34" width="256" height="144" rx="12" fill="#e6f4ea" stroke="#1e6b43" stroke-width="2"/>
+  <text x="780" y="60" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#124229">SG EFS (mi-sg-efs-14)</text>
+  <text x="780" y="79" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.2" fill="#2c5e43">Entrada 2049 solo desde SG Instancias</text>
+  <rect x="676" y="95" width="208" height="64" rx="8" fill="#ffffff" stroke="#1e6b43" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="780" y="122" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#124229">Amazon EFS</text>
+  <text x="780" y="142" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.2" fill="#465b6e">(Destino previsto / Mount Targets)</text>
+
+  <path d="M 376 194 L 376 242 L 78 242 L 78 146" fill="none" stroke="#087795" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-12)"/>
+  <text x="228" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#087795">Salida a Internet: Todo tráfico (ip_protocol = "-1") hacia 0.0.0.0/0</text>
+</svg><figcaption>Arquitectura del Taller 12 (taller12-efs-ae): 2 instancias EC2 con Security Groups desacoplados comunicados por NFS (TCP 2049).</figcaption></figure>
+<h3>A. Archivo <code>variable.tf</code> (Parámetros de entrada)</h3>
+<table>
+<thead><tr><th style="text-align:left">Variable</th><th style="text-align:left">Tipo (<code>type</code>)</th><th style="text-align:left">Valor por defecto (<code>default</code>)</th><th style="text-align:left">Uso en <code>main.tf</code></th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>region</code></td><td style="text-align:left"><code>string</code></td><td style="text-align:left"><code>&quot;us-east-1&quot;</code></td><td style="text-align:left"><code>provider &quot;aws&quot;</code> (<code>region</code>)</td></tr>
+<tr><td style="text-align:left"><code>ami_id</code></td><td style="text-align:left"><code>string</code></td><td style="text-align:left"><code>&quot;ami-0c230065b91270bc6&quot;</code></td><td style="text-align:left"><code>aws_instance</code> (<code>ami</code>)</td></tr>
+<tr><td style="text-align:left"><code>tipo_instancia</code></td><td style="text-align:left"><code>string</code></td><td style="text-align:left"><code>&quot;t2.micro&quot;</code></td><td style="text-align:left"><code>aws_instance</code> (<code>instance_type</code>)</td></tr>
+<tr><td style="text-align:left"><code>nombre_llave</code></td><td style="text-align:left"><code>string</code></td><td style="text-align:left"><code>&quot;mi-primera-llaves-ae&quot;</code></td><td style="text-align:left"><code>aws_instance</code> (<code>key_name</code>)</td></tr>
+<tr><td style="text-align:left"><code>cantidad_instancias</code></td><td style="text-align:left"><code>number</code></td><td style="text-align:left"><code>2</code></td><td style="text-align:left"><code>aws_instance</code> (<code>count</code>)</td></tr>
+</tbody>
+</table>
+<h3>B. Archivo <code>main.tf</code> (Security Groups, Reglas e Instancias)</h3>
+<h4>1. Security Groups base (sin reglas <em>inline</em>)</h4>
+<ul>
+<li><strong><code>aws_security_group.mi-sg-efs-instancias-14</code></strong> (<code>name = &quot;mi-security-group-terraform-efs-instancias&quot;</code>): protege las instancias EC2 dentro de <code>vpc-09ffffa328714b7dd</code>.</li>
+<li><strong><code>aws_security_group.mi-sg-efs-14</code></strong> (<code>name = &quot;mi-security-group-terraform-efs&quot;</code>): protege los <em>Mount Targets</em> de EFS en la misma VPC.</li>
+</ul>
+<h4>2. Reglas independientes (<code>aws_vpc_security_group_*_rule</code>)</h4>
+<table>
+<thead><tr><th style="text-align:left">Recurso</th><th style="text-align:left">Tipo</th><th style="text-align:left">Configuración y propósito</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>entrada_ssh_instancias</code></td><td style="text-align:left"><code>ingress_rule</code></td><td style="text-align:left">Asociada al SG de instancias. Abre <code>tcp</code> puerto <code>22</code> desde <code>cidr_ipv4 = &quot;0.0.0.0/0&quot;</code> para acceso SSH.</td></tr>
+<tr><td style="text-align:left"><code>salida_efs</code></td><td style="text-align:left"><code>egress_rule</code></td><td style="text-align:left">Asociada al SG de instancias. Permite salida <code>tcp</code> puerto <code>2049</code> (NFS) cuyo destino es <code>referenced_security_group_id = aws_security_group.mi-sg-efs-14.id</code>.</td></tr>
+<tr><td style="text-align:left"><code>salida_internet</code></td><td style="text-align:left"><code>egress_rule</code></td><td style="text-align:left">Asociada al SG de instancias. Permite salida libre a Internet (<code>ip_protocol = &quot;-1&quot;</code>, todos los protocolos y puertos, hacia <code>0.0.0.0/0</code>) para instalar <code>amazon-efs-utils</code> y actualizaciones.</td></tr>
+<tr><td style="text-align:left"><code>entrada_efs</code></td><td style="text-align:left"><code>ingress_rule</code></td><td style="text-align:left">Asociada al SG de EFS. Permite entrada <code>tcp</code> puerto <code>2049</code> <strong>únicamente</strong> desde recursos que pertenezcan al SG de instancias (<code>referenced_security_group_id = aws_security_group.mi-sg-efs-instancias-14.id</code>).</td></tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>¿Por qué el SG de EFS no necesita reglas de salida?</strong> Porque los Security Groups de AWS son <strong>stateful</strong>: al autorizar la entrada desde las EC2 por el puerto <code>2049</code>, el tráfico de respuesta queda permitido automáticamente.</p>
+</blockquote>
+<h4>3. Instancias EC2 (<code>aws_instance.mi_instancia-efs</code>)</h4>
+<table>
+<thead><tr><th style="text-align:left">Campo</th><th style="text-align:left">Valor en el proyecto</th><th style="text-align:left">¿Para qué sirve?</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>ami</code></td><td style="text-align:left"><code>var.ami_id</code></td><td style="text-align:left">Sistema operativo parametrizado.</td></tr>
+<tr><td style="text-align:left"><code>instance_type</code></td><td style="text-align:left"><code>var.tipo_instancia</code></td><td style="text-align:left">Tipo de servidor parametrizado (<code>t2.micro</code>).</td></tr>
+<tr><td style="text-align:left"><code>key_name</code></td><td style="text-align:left"><code>var.nombre_llave</code></td><td style="text-align:left">Llave SSH parametrizada.</td></tr>
+<tr><td style="text-align:left"><code>count</code></td><td style="text-align:left"><code>var.cantidad_instancias</code></td><td style="text-align:left">Crea <code>2</code> instancias idénticas con índices <code>0</code> y <code>1</code>.</td></tr>
+<tr><td style="text-align:left"><code>tags</code></td><td style="text-align:left"><code>{ Name = &quot;Mi instancia EFS - ${count.index + 1}&quot; }</code></td><td style="text-align:left">Interpola el índice para nombrarlas <code>Mi instancia EFS - 1</code> y <code>Mi instancia EFS - 2</code>.</td></tr>
+<tr><td style="text-align:left"><code>vpc_security_group_ids</code></td><td style="text-align:left"><code>[aws_security_group.mi-sg-efs-instancias-14.id]</code></td><td style="text-align:left">Asigna el Security Group de instancias a cada máquina.</td></tr>
+</tbody>
+</table>
+<h3>C. Archivo <code>outputs.tf</code> (Salidas en terminal)</h3>
+<table>
+<thead><tr><th style="text-align:left">Output</th><th style="text-align:left">Expresión (<code>value</code>)</th><th style="text-align:left">Resultado devuelto</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><code>ids_instancias</code></td><td style="text-align:left"><code>aws_instance.mi_instancia-efs[*].id</code></td><td style="text-align:left">Lista con los IDs de todas las instancias creadas.</td></tr>
+<tr><td style="text-align:left"><code>cantidad_instancias</code></td><td style="text-align:left"><code>length(aws_instance.mi_instancia-efs)</code></td><td style="text-align:left">Total numérico de instancias (<code>2</code>).</td></tr>
+<tr><td style="text-align:left"><code>ip_publica_instancias</code></td><td style="text-align:left"><code>aws_instance.mi_instancia-efs[*].public_ip</code></td><td style="text-align:left">Lista con las IPs públicas para conectarte por SSH.</td></tr>
+<tr><td style="text-align:left"><code>zona_disponibilidad</code></td><td style="text-align:left"><code>aws_instance.mi_instancia-efs[*].availability_zone</code></td><td style="text-align:left">Lista con la zona de disponibilidad (AZ) de cada instancia.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>3. Comparativa Evolutiva: Taller 8 vs. Taller 12</h2>
+<table>
+<thead><tr><th style="text-align:left">Aspecto</th><th style="text-align:left">Taller 8 (<code>taller8-ae2</code>)</th><th style="text-align:left">Taller 12 (<code>taller12-efs-ae</code>)</th><th style="text-align:left">Mejora lograda</th></tr></thead>
+<tbody>
+<tr><td style="text-align:left"><strong>Organización</strong></td><td style="text-align:left">Todo en <code>main.tf</code></td><td style="text-align:left"><code>main.tf</code>, <code>variable.tf</code>, <code>outputs.tf</code></td><td style="text-align:left">Separación clara de responsabilidades.</td></tr>
+<tr><td style="text-align:left"><strong>Parametrización</strong></td><td style="text-align:left">Valores fijos (<em>hardcoded</em>)</td><td style="text-align:left">Variables tipadas con valores <code>default</code></td><td style="text-align:left">Reutilización sin modificar <code>main.tf</code>.</td></tr>
+<tr><td style="text-align:left"><strong>Reglas de SG</strong></td><td style="text-align:left">Bloques <em>inline</em> <code>ingress</code>/<code>egress</code></td><td style="text-align:left">Recursos <code>aws_vpc_security_group_*_rule</code></td><td style="text-align:left">Evita recreaciones accidentales y sigue el estándar actual de AWS.</td></tr>
+<tr><td style="text-align:left"><strong>Seguridad entre servicios</strong></td><td style="text-align:left">Solo CIDR <code>0.0.0.0/0</code></td><td style="text-align:left">Referencia entre Security Groups (<code>referenced_security_group_id</code>)</td><td style="text-align:left">Principio de mínimo privilegio entre EC2 y EFS.</td></tr>
+<tr><td style="text-align:left"><strong>Salida a Internet</strong></td><td style="text-align:left">Limitada al puerto 80 TCP</td><td style="text-align:left">Todo el tráfico (<code>ip_protocol = &quot;-1&quot;</code>)</td><td style="text-align:left">Permite DNS, HTTPS e instalación de paquetes.</td></tr>
+<tr><td style="text-align:left"><strong>Escalabilidad</strong></td><td style="text-align:left">1 instancia fija</td><td style="text-align:left">Múltiples instancias con <code>count</code> y <code>${count.index + 1}</code></td><td style="text-align:left">Escalar consiste en cambiar un número.</td></tr>
+<tr><td style="text-align:left"><strong>Visibilidad</strong></td><td style="text-align:left">Sin <code>outputs</code></td><td style="text-align:left">4 <code>outputs</code> con <code>[*]</code> y <code>length()</code></td><td style="text-align:left">IPs y metadatos directos en terminal.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>4. Buenas prácticas y mejoras pendientes del repositorio</h2>
+<ol>
+<li><p><strong>No versionar archivos sensibles en Git:</strong></p>
+<ul>
+<li>Nunca subir archivos <code>.pem</code> (llaves privadas) ni <code>terraform.tfstate</code> / <code>terraform.tfstate.backup</code> a GitHub.</li>
+<li><p>Si ya fueron rastreados antes de actualizar <code>.gitignore</code>, se retiran del índice sin borrarlos localmente con:</p>
+<pre><code class="language-bash">git rm --cached taller12-efs-ae/terraform.tfstate taller12-efs-ae/terraform.tfstate.backup
+git rm --cached mi-primera-llaves-ae.pem
+</code></pre></li>
+</ul></li>
+<li><p><strong>Parametrizar <code>vpc_id</code> y convención de nombres:</strong></p>
+<ul>
+<li>Mover <code>vpc_id = &quot;vpc-09ffffa328714b7dd&quot;</code> a una variable (o consultar la VPC por defecto con <code>data &quot;aws_vpc&quot; &quot;default&quot; { default = true }</code>).</li>
+<li>Por convención estándar de Terraform, el archivo de variables suele nombrarse en plural (<code>variables.tf</code>).</li>
+</ul></li>
+<li><p><strong>Seguridad SSH en producción:</strong></p>
+<ul>
+<li>En laboratorios se suele abrir SSH a <code>0.0.0.0/0</code>, pero en entornos reales debe restringirse a tu IP pública (<code>&lt;TU_IP&gt;/32</code>) o usar AWS Systems Manager Session Manager.</li>
+</ul></li>
+<li><p><strong>Nota sobre <code>salida_efs</code> vs. <code>salida_internet</code>:</strong></p>
+<ul>
+<li>Como <code>salida_internet</code> permite <code>ip_protocol = &quot;-1&quot;</code> hacia <code>0.0.0.0/0</code>, ya cubre el tráfico saliente al puerto <code>2049</code>. Conservar <code>salida_efs</code> es útil a nivel didáctico y protege la arquitectura si luego restringes la salida a Internet.</li>
+</ul></li>
+<li><p><strong>Siguiente paso lógico en Terraform para EFS:</strong></p>
+<ul>
+<li>Declarar <code>aws_efs_file_system</code> y <code>aws_efs_mount_target</code> (asociándole <code>aws_security_group.mi-sg-efs-14.id</code>) para automatizar también el sistema de archivos sin pasar por la consola web.</li>
+</ul></li>
+</ol>
+<hr>
+<h2>Conceptos relacionados</h2>
+<ul>
+<li><a href="#06-terraform">6. Infraestructura como código con Terraform (teoría y comandos)</a>.</li>
+<li><a href="#03-redes-seguridad">3. Redes y seguridad: VPC y Security Groups</a>.</li>
+<li><a href="#09-taller-ebs-efs">9. Taller de almacenamiento EBS y EFS (montaje Linux paso a paso)</a>.</li>
+<li><a href="https://github.com/Aryy234/cloud-u1-ps-ae" target="_blank" rel="noopener noreferrer">Repositorio de código en GitHub (cloud-u1-ps-ae)</a>.</li>
+</ul>
+  </article>
+  </main>
+  <script>
+    (function () {
+      const input = document.getElementById("buscador");
+      const estado = document.getElementById("estado-busqueda");
+      const links = Array.from(document.querySelectorAll("#menu-temas a"));
+      const articles = Array.from(document.querySelectorAll("main article"));
+
+      function normalizar(t) {
+        return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+
+      input.addEventListener("input", () => {
+        const q = normalizar(input.value.trim());
+        let coincidencias = 0;
+        let primero = null;
+
+        articles.forEach((art, idx) => {
+          const match = !q || normalizar(art.textContent).includes(q);
+          links[idx].classList.toggle("oculto", !match);
+          art.classList.toggle("resaltado", Boolean(q) && match);
+          if (match) {
+            coincidencias++;
+            if (!primero) primero = art;
+          }
+        });
+
+        estado.textContent = q
+          ? (coincidencias ? coincidencias + " tema(s) con coincidencias" : "Sin coincidencias")
+          : "";
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const primero = links.find((a) => !a.classList.contains("oculto"));
+          if (primero) primero.click();
+        }
+      });
+
+      if ("IntersectionObserver" in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              links.forEach((a) => a.classList.toggle("activo", a.dataset.target === id));
+            }
+          });
+        }, { rootMargin: "-20% 0px -70% 0px" });
+        articles.forEach((art) => obs.observe(art));
+      }
+    })();
+  </script>
+</body>
+</html>

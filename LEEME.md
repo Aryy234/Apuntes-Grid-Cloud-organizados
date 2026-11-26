@@ -1,6 +1,6 @@
 # Computación Grid y Cloud
 
-Apuntes organizados · 15 de octubre al 12 de noviembre de 2026
+Apuntes organizados · 15 de octubre al 26 de noviembre de 2026
 
 Abre **index.html** en el navegador para leer todos los temas. También puedes consultar cada archivo Markdown por separado. Mantén la carpeta `imagenes` junto a los documentos; contiene las 11 imágenes originales, sin pérdida de calidad. No se necesita conexión a internet.
 
@@ -14,8 +14,12 @@ Abre **index.html** en el navegador para leer todos los temas. También puedes c
 6. [Infraestructura como código con Terraform](06-terraform.md)
 7. [Almacenamiento: EBS, EFS y NFS](07-almacenamiento.md)
 8. [Práctica: conexión SSH y montaje de EBS](08-practica-ebs.md)
-
 9. [Taller de almacenamiento EBS y EFS](09-taller-ebs-efs.md)
+10. [Talleres prácticos de Terraform (EC2 y EFS)](10-talleres-terraform.md)
+
+## Actualización del 2026-11-26
+
+Se amplió el tema [06-terraform.md](06-terraform.md) con teoría HCL, estado y guía de comandos, y se incorporó el tema [10-talleres-terraform.md](10-talleres-terraform.md) documentando los talleres prácticos (`taller8-ae2` y `taller12-efs-ae`) del repositorio `cloud-u1-ps-ae`. Además, se añadió `scripts/construir.mjs` para regenerar `index.html` y mantener sincronizada la documentación de ambos repositorios con un solo comando.
 
 ## Actualización del 2026-11-17
 
